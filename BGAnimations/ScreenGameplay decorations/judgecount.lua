@@ -1456,9 +1456,7 @@ local t = Def.ActorFrame {
                 InitCommand=cmd(x,graphx-graphwidth+2;y,65;zoom,0.4;horizalign,left;maxwidth,(graphwidth-30)/0.4);
 				BeginCommand=cmd(queuecommand,"Set");
 				SetCommand=function(self)
-					if graphmode == 'DP' then
-						self:settext(p1name);
-					end;
+					self:settext(p1name);
 				end;
         };
 		LoadFont("Common Normal") .. { --Pacemaker TargetScore

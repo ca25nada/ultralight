@@ -1,6 +1,6 @@
 ~some random ultralight hackup with more pink~
 Supported Version(s): StepMania 5 Beta 3
-Last Update: July 5th 2014
+Last Update: July 6th 2014
 ====================================
 
 Known Issues:
