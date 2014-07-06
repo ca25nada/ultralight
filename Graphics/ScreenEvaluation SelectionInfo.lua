@@ -4,10 +4,10 @@ return LoadFont("Common normal") .. {
 		local Selection, text = nil, "";
 		if GAMESTATE:IsCourseMode() then
 			Selection = GAMESTATE:GetCurrentCourse();
-			text = Selection:GetDisplayFullTitle();
+			text = Selection:GetDisplayMainTitle();
 		else
 			Selection = GAMESTATE:GetCurrentSong();
-			text = Selection:GetDisplayFullTitle() .." / ".. Selection:GetDisplayArtist();
+			text = Selection:GetDisplayMainTitle() .." / ".. Selection:GetDisplayArtist();
 		end;
 		self:settext(text);
 	end;

@@ -5,7 +5,7 @@ local bgHeight = 22; -- was 24
 local labelZoom = 0.75;
 local labelOffsetX = 127; -- was 64
 local labelAlpha = 0.625; -- was 0.8
-local labelSkew = -0.1;
+local labelSkew = 0;
 
 local t = Def.ActorFrame{};
 

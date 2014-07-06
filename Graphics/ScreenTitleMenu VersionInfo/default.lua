@@ -9,11 +9,10 @@ return Def.ActorFrame{
 			local fillColor;
 			local alpha = 0.5;
 			self:blend(Blend.Add);
-
 			-- check version
-			if SSC then
+			if ProductID() == "sm-ssc" then
 				-- sm-ssc
-				fillColor = HSVA(32,1,1,alpha);
+				fillColor = HSVA(48,1,1,alpha);
 			else
 				-- StepMania 5
 				fillColor = HSVA(0,1,1,alpha);

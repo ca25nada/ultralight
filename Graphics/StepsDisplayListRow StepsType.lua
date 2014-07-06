@@ -1,5 +1,5 @@
 local sString;
-
+--[[
 local stGraphics = {
 	-- dance (ok)
 	StepsType_Dance_Single = "_dance-single",
@@ -51,16 +51,41 @@ local t = Def.ActorFrame{
 			if param.StepsType then
 				self:Load( THEME:GetPathG("","_stepstype/"..stGraphics[param.StepsType]) );
 				-- broken as shit now
-				--[[
 				if param.Steps:IsAutogen() then
 					self:rainbow();
 				else
 					self:stopeffect();
 				end;
-				--]]
 			end;
 		end;
 	};
+}; --]]
+local t = Def.ActorFrame{
+--[[ 	LoadActor("TestStep") .. {
+		InitCommand=cmd(zoomto,20,20);
+	}; --]]
+	LoadFont("Common normal")..{
+		InitCommand=cmd(shadowlength,1;horizalign,left;zoom,1.00;skewx,-0.05);
+		SetMessageCommand=function(self,param)
+			sString = THEME:GetString("StepsListDisplayRow StepsType",ToEnumShortString(param.StepsType));
+			if param.Steps and param.Steps:IsAutogen() then
+				self:rainbow();
+			else
+				self:stopeffect();
+				self:diffuse(Color("White"));
+			end;
+			self:settext( sString );
+		end;
+	};
+	-- argh this isn't working as nicely as I would've hoped...
+	--[[
+	Def.Sprite{
+		SetMessageCommand=function(self,param)
+			self:Load( THEME:GetPathG("","_StepsType/"..ToEnumShortString(param.StepsType)) );
+			self:diffusealpha(0.5);
+		end;
+	};
+	--]]
 };
 
 return t;

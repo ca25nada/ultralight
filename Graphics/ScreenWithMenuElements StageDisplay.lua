@@ -2,11 +2,11 @@ local ScreenName = Var "LoadingScreen";
 
 local stages = Def.ActorFrame {
 	LoadFont("Common normal") .. {
-		InitCommand=cmd(shadowlength,1;zoom,0.5;NoStroke;visible,true);
+		InitCommand=cmd(visible,false);--cmd(shadowlength,1;zoom,0.5;NoStroke;visible,true);
 		BeginCommand=cmd(playcommand,"Set";);
 		CurrentSongChangedMessageCommand=cmd(finishtweening;playcommand,"Set";);
 
-		SetCommand=function(self, params)
+		--[[SetCommand=function(self, params)
 			local curStage = GAMESTATE:GetCurrentStage()
 			if GAMESTATE:IsCourseMode() then
 				-- stuff
@@ -20,13 +20,14 @@ local stages = Def.ActorFrame {
 				if curStageIndex == 6 then
 					self:settext("I am not a number,\nI am a free man.")
 				else
-					self:settextf("#%i",curStageIndex)
+					self:settextf("Stage "..curStageIndex)
 				end
 			else
 				self:settext( StageToLocalizedString(curStage) );
 				self:diffuse( StageToColor(s) );
 			end
 		end;
+		--]]
 	};
 };
 

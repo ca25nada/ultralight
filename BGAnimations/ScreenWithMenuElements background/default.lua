@@ -1,6 +1,7 @@
 local t = Def.ActorFrame{
 	Def.Quad{
-		InitCommand=cmd(FullScreen;diffuse,HSV(192,1,0.05);diffusebottomedge,HSV(192,0.75,0.125));
+		InitCommand=cmd(FullScreen;diffuse,HSV(0,0,0););
+		--InitCommand=cmd(FullScreen;diffuse,HSV(0,0.2,0);diffuserightedge,HSV(0,0.2,0));
 	};
 };
 

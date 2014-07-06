@@ -17,7 +17,8 @@ return Def.ActorFrame{
 
 local bpmLabel = LoadFont("Common normal")..{
 	Text="BPM";
-	InitCommand=cmd(shadowlength,1;y,-16;zoom,0.5;strokecolor,color("#00000000"));
+	--InitCommand=cmd(shadowlength,1;y,-16;zoom,0.5;strokecolor,color("#00000000"));
+	InitCommand=cmd(shadowlength,1;zoom,0.45;x,-SCREEN_CENTER_X+5;y,-418;halign,0;strokecolor,color("#00000000"));
 };
 
 -- check if players are playing steps with different timingdata.
@@ -28,7 +29,22 @@ local function UpdateSingleBPM(self)
 	local pn = GAMESTATE:GetMasterPlayerNumber()
 	local pState = GAMESTATE:GetPlayerState(pn);
 	local songPosition = pState:GetSongPosition()
-	local bpm = songPosition:GetCurBPS() * 60
+
+	-- for SM5Beta3 or earlier
+	-- Does not take haste mods into account
+	local mods = GAMESTATE:GetSongOptionsString()
+	local rate = 1
+	if string.find(mods,"xMusic") == nil then
+		rate = 1
+	else
+		rate = tonumber((string.match(mods,"%d+%.%d+xMusic")):sub(1,-7))
+	end;
+
+	local bpm = songPosition:GetCurBPS() * 60 * rate
+
+	-- Replace above with this for current builds.
+	--local bpm = SCREENMAN:GetTopScreen():GetTrueBPS() * 60
+
 	bpmDisplay:settext( string.format("%03.2f",bpm) )
 end
 
@@ -37,7 +53,7 @@ local displaySingle = Def.ActorFrame{
 	-- manual bpm displays
 	LoadFont("BPMDisplay", "bpm")..{
 		Name="BPMDisplay";
-		InitCommand=cmd(zoom,0.675;shadowlength,1;strokecolor,color("#00000000"));
+		InitCommand=cmd(zoom,0.45;x,-SCREEN_CENTER_X+30+5;y,-418;halign,0;shadowlength,1;strokecolor,color("#00000000"));
 	};
 
 	--[[
@@ -104,7 +120,18 @@ else
 			local bpmDisplay = (pn == PLAYER_1) and dispP1 or dispP2
 			local pState = GAMESTATE:GetPlayerState(pn);
 			local songPosition = pState:GetSongPosition()
-			local bpm = songPosition:GetCurBPS() * 60
+
+
+			-- for SM5B3 or earlier
+			local mods = GAMESTATE:GetSongOptionsString()
+			local rate = 1
+			if string.find(mods,"xMusic") == nil then
+				rate = 1
+			else
+				rate = tonumber(string.sub(mods,string.find(mods,"xMusic")-3,-7))
+			end;
+
+			local bpm = songPosition:GetCurBPS() * 60 * rate
 			bpmDisplay:settext( string.format("%03.2f",bpm) )
 		end
 	end

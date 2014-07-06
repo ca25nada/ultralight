@@ -15,6 +15,7 @@ local t = Def.ActorFrame{
 	};
 };
 
+t[#t+1] = StandardDecorationFromFile("SongTitle","SongTitle");
 t[#t+1] = StandardDecorationFromFile("ArtistAndGenre","ArtistAndGenre");
 t[#t+1] = StandardDecorationFromFile("BPMDisplay","BPMDisplay");
 t[#t+1] = StandardDecorationFromFileOptional("SortDisplay","SortDisplay");
@@ -61,6 +62,7 @@ if not GAMESTATE:IsCourseMode() then
 						if param.Player ~= "PlayerNumber_P1" then return end;
 						self:visible( true );
 					end;
+					OffCommand=cmd(bouncebegin,0.35;zoomy,0)
 				};
 				Def.ActorFrame {
 					InitCommand=cmd(x,-130;);
@@ -140,4 +142,6 @@ for pn in ivalues(PlayerNumber) do
 	t[#t+1] = StandardDecorationFromTable( "Grade" .. ToEnumShortString(pn), Grade );
 end
 
+t[#t+1] = StandardDecorationFromFileOptional("BannerFrame","BannerFrame");
+t[#t+1] = LoadActor("test");
 return t;

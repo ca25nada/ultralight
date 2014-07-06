@@ -1,7 +1,9 @@
 local t = LoadFallbackB();
 --[[--------------------------------------------------------------------------]]
 t[#t+1] = StandardDecorationFromFileOptional("StageDisplay","StageDisplay");
-
+t[#t+1] = StandardDecorationFromFileOptional("LifeDifficulty","LifeDifficulty");
+t[#t+1] = StandardDecorationFromFileOptional("TimingDifficulty","TimingDifficulty");
+t[#t+1] = StandardDecorationFromFileOptional("GameType","GameType");
 local function GraphDisplay( pn )
 	local t = Def.ActorFrame {
 		Def.GraphDisplay {
@@ -127,7 +129,7 @@ for i=1,#judgeLines do
 					self:halign(1)
 					local playerStageStats = STATSMAN:GetCurStageStats():GetPlayerStageStats(pn)
 					local count = playerStageStats:GetPercentageOfTaps(tns);
-					local p = tonumber(string.format("%.00f",count*100));
+					local p = tonumber(string.format("%.1f",count*100));
 					self:settext( p.."%" );
 				end;
 				OffCommand=THEME:GetMetric(Var "LoadingScreen",metric.."OffCommand");

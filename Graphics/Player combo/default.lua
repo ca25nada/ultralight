@@ -5,7 +5,7 @@ local ShowComboAt = THEME:GetMetric("Combo", "ShowComboAt");
 local Pulse = THEME:GetMetric("Combo", "PulseCommand");
 local PulseLabel = THEME:GetMetric("Combo", "PulseLabelCommand");
 
-local NumberMinZoom = 0.8;
+local NumberMinZoom = 1;
 local NumberMaxZoom = 1;
 local NumberMaxZoomAt = 100;
 
@@ -28,11 +28,13 @@ local t = Def.ActorFrame {
 		c.Number:visible(false);
 		c.Label:visible(false);
 	end;
+	--[[
 	ToastyAchievedMessageCommand=function(self,params)
 		if params.PlayerNumber == player then
 			(cmd(thump,2;effectclock,'beat'))(self);
 		end;
 	end;
+	--]]
 	ComboCommand=function(self, param)
 		local iCombo = param.Misses or param.Combo;
 		if not iCombo or iCombo < ShowComboAt then
@@ -46,7 +48,7 @@ local t = Def.ActorFrame {
 			labeltext = "Combo";
 -- 			c.Number:playcommand("Reset");
 		else
-			labeltext = "Combo";
+			labeltext = "Misses";
 -- 			c.Number:playcommand("Miss");
 		end
 		c.Label:settext( labeltext );
