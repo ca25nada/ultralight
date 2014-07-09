@@ -144,5 +144,4 @@ end
 
 t[#t+1] = StandardDecorationFromFileOptional("BannerFrame","BannerFrame");
 t[#t+1] = LoadActor("test");
-t[#t+1] = LoadActor("scorestat");
 return t;
