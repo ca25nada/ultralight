@@ -1,3 +1,4 @@
+
 local t = Def.ActorFrame{
 	Font("mentone","24px") .. {
 		Name="SongTitle"; -- was Artist

@@ -1,4 +1,17 @@
+
+local scorestatheld = false
 local t = Def.ActorFrame{
+	Def.Actor{
+		Name="scorestat";
+		CodeMessageCommand=function(self,params)
+			if params.Name == "ScoreStat" then
+				scorestatheld = true
+			end;
+			if params.Name == "ScoreStatOff" then
+				scorestatheld = false
+			end;
+		end;
+	};
 	Font("mentone","24px") .. {
 		Name="Above"; -- was Artist
 		InitCommand=cmd(y,-8;zoom,0.8;horizalign,left;vertalign,bottom;NoStroke;shadowlength,1;maxwidth,SCREEN_CENTER_X*0.75);
@@ -19,6 +32,15 @@ local t = Def.ActorFrame{
 		CurrentCourseChangedMessageCommand=cmd(playcommand,"Set");
 		CurrentTrailP1ChangedMessageCommand=cmd(playcommand,"Set");
 		CurrentTrailP2ChangedMessageCommand=cmd(playcommand,"Set");
+		CodeMessageCommand=function(self,params)
+			self:finishtweening()
+			if scorestatheld then
+				self:playcommand("Off")
+			else
+				self:bouncebegin(0.35)
+				self:y(-8)
+			end;
+		end;
 		OffCommand=cmd(bouncebegin,0.35;addy,-SCREEN_CENTER_Y*1.25);
 	};
 	Font("mentone","24px") .. {
@@ -40,6 +62,15 @@ local t = Def.ActorFrame{
 		end;
 		CurrentSongChangedMessageCommand=cmd(playcommand,"Set");
 		CurrentCourseChangedMessageCommand=cmd(playcommand,"Set");
+		CodeMessageCommand=function(self,params)
+			self:finishtweening()
+			if scorestatheld then
+				self:playcommand("Off")
+			else
+				self:bouncebegin(0.35)
+				self:y(8)
+			end;
+		end;
 		OffCommand=cmd(bouncebegin,0.35;addy,SCREEN_CENTER_Y*1.25);
 	};
 };

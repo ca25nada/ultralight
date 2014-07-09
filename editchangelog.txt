@@ -1,184 +1,194 @@
+2014/07/09
+New:
+- [ScreenSelectMusic] ScoreStatus in screengameplay. Hold down the "Select" key during the song select screen for details regarding the top score of the song.
+- [ScreenSelectMusic] Removed few redundant things due to above.
+
+Changes:
+- [General] Changed ScoreWeight of HitMine for percent score from 0 to -2. (Some of the scores with mines didn't seem to match unless I did this.)
+
+==========================================================================
+
 2014/07/06
 Fixes:
-- Fixed where the player name does not display on the pacemaker when %Score or MIGS score is used.
+- [ScreenGameplay] Fixed where the player name does not display on the pacemaker when %Score or MIGS score is used.
 
 ==========================================================================
 2014/07/04
 Fixes:
-- Fixed issue where the current grade would update 1 note later.
+- [ScreenGameplay] Fixed issue where the current grade would update 1 note later.
 
 ==========================================================================
 2014/07/03
 Changes:
-- Judgement displays ITG style early/late bar. (thanks staiain..!)
-- Removed version label in changelog because.... I wasn't even using it anyway.
+- [ScreenGameplay] Judgement displays ITG style early/late bar. (thanks staiain..!)
+- [Other] Removed version label in changelog because.... I wasn't even using it anyway.
 
 ==========================================================================
 2014/07/02
 Changes:
-- Pacemaker and Usernames on the scoregraph are now aligned to left.
-- Moved song progress bar to the bottom
-- Moved everything in judgecount.lua and lifejudgedisplay.lua to screengameplaydecorations
+- [ScreenGameplay] Pacemaker and Usernames on the scoregraph are now aligned to left.
+- [ScreenGameplay] Moved song progress bar to the bottom
+- [Other] Moved everything in judgecount.lua and lifejudgedisplay.lua to screengameplaydecorations
 
 ==========================================================================
 2014/06/31
 Changes:
-- Grade display for JudgeCount now takes failing grades into account. (aka: displays "F" when you're failing)
-- Graph Messages preferences are now togglable. (The messages that show up on the graph when you pass a certain rank)
+- [ScreenGameplay] Grade display for JudgeCount now takes failing grades into account. (aka: displays "F" when you're failing)
+- [ScreenGameplay/ScreenPlayerOptions] Graph Messages preferences are now togglable. (The messages that show up on the graph when you pass a certain rank)
 
 ==========================================================================
 2014/06/30
 Changes:
-- Moar Comments/Organized slightly.
-- Added display for rate modifiers used for the top score on ScreenSelectMusic
-- BPM display in ScreenGameplay now takes rate mods into account.
-- Changed some descriptions for some modifiers.
+- [Other] Moar Comments/Organized slightly.
+- [ScreenSelectMusic] Added display for rate modifiers used for the top score.
+- [ScreenGameplay] BPM display now takes rate mods into account.
+- [ScreenPlayerOptions] Changed some descriptions for some modifiers.
 
 ==========================================================================
 2014/06/14
 Fixes:
-- Fixed issue where max DP score didn't take rolls into account. Resulting in scores that seems to have higher DP than the highest possible value.
+- [ScreenSelectMusic/ScreenGameplay] Fixed issue where max DP score didn't take rolls into account. Resulting in scores that seems to have higher DP than the highest possible value.
 
 ===========================================================================
 2014/03/25
 Fixes:
-- Fixed issue where current player score on the graph for percent score and migs score did not display properly.
-- Fixed song progress bar being covered by the life gauge when on 4:3 aspect ratio on ScreenGameplay
-- Added Timing/Life difficulty display on ScreenGameplay.
+- [ScreenGameplay] Fixed issue where current player score on the graph for percent score and migs score did not display properly.
+- [ScreenGameplay] Fixed song progress bar being covered by the life gauge when on 4:3 aspect ratio.
+- [ScreenGameplay] Added Timing/Life difficulty display.
 
 ===========================================================================
 2014/03/23
 Changes:
-- Width of scoregraph can be now changed more easily. Values under 100 might cause some elements to overlap.
-- Background image in ScreenSelectMusic now fades in.
-- Background image no longer stretches to fit the screen, Instead, it is now aligned left and will scale to fit height.
+- [ScreenGameplay] Width of scoregraph can be now changed more easily. Values under 100 might cause some elements to overlap.
+- [ScreenSelectMusic] Background image now fades in.
+- [ScreenSelectMusic] Background image no longer stretches to fit the screen, Instead, it is now aligned left and will scale to fit height.
 
 Fixes:
-- Made a lot of things "unbroken" in widescreen
-- Fixed issue where current grade will still be displayed when JudgeCount mod is set to "Off"
+- [General] Made a lot of things "unbroken" in widescreen
+- [ScreenGameplay] Fixed issue where current grade will still be displayed when JudgeCount mod is set to "Off"
 
 ===========================================================================
 2014/03/20
 Changes:
-- Scoregraph and Judgecount will no longer display when modes with 8+ lanes are played.
-- %Life Display text blinking effect at full life is now more subtle.
-- The Life: text and the percentage value for %Life Display are now separate texts and only the percentage value will have effects.
+- [ScreenGameplay] Scoregraph and Judgecount will no longer display when modes with 8+ lanes are played.
+- [ScreenGameplay] %Life Display text blinking effect at full life is now more subtle.
+- [ScreenGameplay] The Life: text and the percentage value for %Life Display are now separate texts and only the percentage value will have effects.
 
 Fixes:
-- Judgecount will now change locations based on keycount and Center1Player preferences.
-- Fixed position of Ghost Score and Current Accuracy when Center1Player is off
+- [ScreenGameplay] Judgecount will now change locations based on keycount and Center1Player preferences.
+- [ScreenGameplay] Fixed position of Ghost Score and Current Accuracy when Center1Player is off
 
 ===========================================================================
 2014/03/19
 Changes:
-- Moved song progress bar
-- Style/Difficulty display on gameplay screen changed slightly.
-- Changed one of condition variables for "rank pass" mesages to be in a table. 
+- [ScreenGameplay] Moved song progress bar
+- [ScreenGameplay] Style/Difficulty display on gameplay screen changed slightly.
+- [ScreenGameplay] Changed one of condition variables for "rank pass" mesages to be in a table. 
 ===========================================================================
 2014/03/07
 New:
-- Added "DJ Level <insert Rank> Pass" message display on the scoregraph which will show whenever a player passes said grade.
-- Added current grade display which is shown below the judgecounter.
-- Preparation for ~nekochoof~ modo
+- [ScreenGameplay] Added "DJ Level <insert Rank> Pass" message display on the scoregraph which will show whenever a player passes said grade.
+- [ScreenGameplay] Added current grade display which is shown below the judgecounter.
+- [ScreenGameplay] Preparation for ~nekochoof~ modo
 
 Changes:
-- Scores on the graph no longer move with the top of the graph and will stay at the bottom. (deciding whether i should just remove this since it's redundant anyway)
-- Ghost Score and Current Accuracy will now only display when combo is 2 or higher
+- [ScreenGameplay] Scores on the graph no longer move with the top of the graph and will stay at the bottom. (deciding whether i should just remove this since it's redundant anyway)
+- [ScreenGameplay] Ghost Score and Current Accuracy will now only display when combo is 2 or higher
 
 Fixes:
-- Fixed position of Ghost Score and Current Accuracy when player is using reverse mod.
-- Current Accuracy will be fixed to 0.00% when the maximum possible score is 0% (which caused it to divide by zero whenever a song started off with mines)
+- [ScreenGameplay] Fixed position of Ghost Score and Current Accuracy when player is using reverse mod.
+- [ScreenGameplay] Current Accuracy will be fixed to 0.00% when the maximum possible score is 0% (which caused it to divide by zero whenever a song started off with mines)
 
 ===========================================================================
 2014/02/27
 New:
-- Added simfile directory text
-- Added clear-type text (from failed,clear to FMC) based on stage awards.
-- Added total playcount /song playcount text
+- [ScreenSelectMusic] Added simfile directory text
+- [ScreenSelectMusic] Added clear-type text (from failed,clear to FMC) based on stage awards.
+- [ScreenSelectMusic] Added total playcount /song playcount text
 
 ===========================================================================
 2014/02/25
 New:
-- added option to turn the scoregraph and judge count off
-- users can set graph type and target score at playeroptions
-- setting target percentage identical to the letter grade requirements while the graph is set to DP will result in the target display being set to that specific letter grade instead of the percentage.
+- [ScreenGameplay/ScreenPlayerOptions] added option to turn the scoregraph and judge count off
+- [ScreenGameplay/ScreenPlayerOptions] users can set graph type and target score at playeroptions
+- [ScreenGameplay] setting target percentage identical to the letter grade requirements while the graph is set to DP will result in the target display being set to that specific letter grade instead of the percentage.
 
 Changes:
-- %life display's low life (below 30%) flashing period is now proportional to the %life the player has left as opposed to flashing to the beat. 
+- [ScreenGameplay] %life display's low life (below 30%) flashing period is now proportional to the %life the player has left as opposed to flashing to the beat. 
 (flashing is faster when player is on low life)
 
 Fixes:
-- score weights for DP and PS are manually set for now as they were broken in SM5b3.
-- judgecount and scoregraph will no longer increment after the player has failed.
+- [ScreenGameplay] score weights for DP and PS are manually set for now as they were broken in SM5b3.
+- [ScreenGameplay] judgecount and scoregraph will no longer increment after the player has failed.
 
 ===========================================================================
 2014/02/02
 New:
-- added support for other scoring types (DP/percent score/migs)
+- [ScreenGameplay] added support for other scoring types (DP/percent score/migs)
 
 ===========================================================================
 2013/12/07
 New:
-- Added average score
-- Added Ghost Score or w/e it was called in iidx/lr2 that shows difference in your current score and the target score.
+- [ScreenGameplay] Added average score
+- [ScreenGameplay] Added Ghost Score or w/e it was called in iidx/lr2 that shows difference in your current score and the target score.
 
 Changes:
-- Removed combo effects that came on whenever a toasty was triggered
+- [ScreenGameplay] Removed combo effects that came on whenever a toasty was triggered
 
 ============================================================================
 2013/12/06
 New:
-- Added Score/Target Graph - Has some issues but works fine most of the time.
+- [ScreenGameplay] Added Score/Target Graph - Has some issues but works fine most of the time.
 
 ============================================================================
 2013/11/13
 Changes:
-- The indivdual judges in judgecounter now flashes when the player hits a note corresponding to that judge.
+- [ScreenGameplay] The indivdual judges in judgecounter now flashes when the player hits a note corresponding to that judge.
 
 ============================================================================
 2013/11/12
 New:
-- Added JudgeCounter (doesn't change locations based on center1player preferences yet, so just change framex value in the .lua file as needed)
+- [ScreenGameplay] Added JudgeCounter (doesn't change locations based on center1player preferences yet, so just change framex value in the .lua file as needed)
 located at BGAnimations\ScreenGameplay overlay\judgecount.lua
 
 ============================================================================
 2013/07/27
 Ignoring 2p for now. /o/
 New:
-- %life display now has effects depending on amount of life a player has
-- moved lifebar and added LifeMeterBar over image
+- [ScreenGameplay] %life display now has effects depending on amount of life a player has
+- [ScreenGameplay] moved lifebar and added LifeMeterBar over image
 
 Changes:
-- difficulty and difficulty meter now displays as a single concatnated string "gamestype stepstype meter" with a bg image that changes color depending on difficulty chosen
-- moved song title/artist display to bottom left. (probably broken for courses but who cares)
+- [ScreenGameplay] difficulty and difficulty meter now displays as a single concatnated string "gamestype stepstype meter" with a bg image that changes color depending on difficulty chosen
+- [ScreenGameplay] moved song title/artist display to bottom left. (probably broken for courses but who cares)
 
 ============================================================================
 2013/07/06
 New:
-- Added %Life Display on ScreeenGameplay (again, credits to Jousway~)
+- [ScreenGameplay] Added %Life Display on ScreeenGameplay (again, credits to Jousway~)
 
 ============================================================================
 v??? (2013/07/05)
 New:
-- Added ScreenSelectScreen Background Display (Jousway)
+- [ScreenSelectMusic] Added ScreenSelectScreen Background Display (Jousway)
 https://github.com/Jousway/Stepmania-Zpawn/blob/master/SM5/Themes/default_JousEdit_ScreenSelectMusic/BGAnimations/ScreenSelectMusic%20background.lua
-- Added "JousEdit_SpeedMod_System" (Jousway)
+- [ScreenPlayerOptions] Added "JousEdit_SpeedMod_System" (Jousway)
 https://github.com/Jousway/Stepmania-Zpawn/tree/master/SM5/Themes/default_JousEdit_SpeedMod_System
 
 ============================================================================
 2013/07/04
 New:
-- "Stole" screenfilter mod from the default theme
-- "Stole" speedkills, map effectup and effectdown keys to use.
-- Added CustomGradeColor Function to 02 Colors.lua
-- Added Lamps to MusicWheelGrades that flash with different colors based on grade
-- Added Judge/Life Difficulty Labels on ScreenEvaluation
-- Added GameType-StepsType Label on ScreenEvaluation
+- [ScreenGameplay/ScreenPlayerOptions] "Stole" screenfilter mod from the default theme
+- [ScreenGameplay/ScreenPlayerOptions]"Stole" speedkills, map effectup and effectdown keys to use.
+- [Other] Added CustomGradeColor Function to 02 Colors.lua
+- [ScreenSelectMusic] Added Lamps to MusicWheelGrades that flash with different colors based on grade
+- [ScreenEvaluation] Added Judge/Life Difficulty Labels on ScreenEvaluation
+- [ScreenEvaluation] Added GameType-StepsType Label on ScreenEvaluation
 
 Changes:
-- (Almost) Everything is Pink/White now
-- StepsType Now Displayed as Text on ScreenSelectMusic
-- Different grades display different color on MusicWheelGrades
-- Remove text Shadows from SectionExpanded and SectionCollapsed (folders)
-- Moved SectionCount to right side of screen
-- Changed Miss Animation to match W5 Animation.
+- [General] (Almost) Everything is Pink/White now
+- [ScreenSelectMusic] StepsType Now Displayed as Text on ScreenSelectMusic
+- [ScreenSelectMusic] Different grades display different color on MusicWheelGrades
+- [ScreenSelectMusic] Remove text Shadows from SectionExpanded and SectionCollapsed (folders)
+- [ScreenSelectMusic] Moved SectionCount to right side of screen
+- [ScreenGameplay] Changed Miss Animation to match W5 Animation.

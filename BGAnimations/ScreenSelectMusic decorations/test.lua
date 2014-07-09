@@ -1,6 +1,5 @@
  
--- todo - again, clean up the huge "aaaa" actor or w/e it was.
-
+-- this is a giant mess atm.
 
 
  -- iForgot where I stole it from
@@ -25,7 +24,7 @@ function diffstring(scorediff)
 	end;
 end;
 
---Return letter grades based on tier, assumes the standard 8 tier grade used in SM.
+--Return letter grades based on tier, assumes the 8 tier grade used in SM.
 function gradestring(tier)
 	if tier == "Grade_Tier01" then
 		return 'AAAA'
@@ -44,12 +43,29 @@ function gradestring(tier)
 	elseif tier == 'Grade_Failed' then
 		return 'F'
 	else
-		return ''
+		return tier
 	end;
 end;
 
-function getgrades(dppercent,gradetier)
-	if dppercent > gradetier["Grade_Tier03"] then --AA
+-- Takes both DP and %Score and player number as input, returns grade.
+-- GetGradeFromPercent() doesn't seem to be able to distinguish AAAA and AAA
+function getgrade(DPScore,MaxDP,PScore,MaxPDP,pn)
+	if SCREENMAN:GetTopScreen():GetLifeMeter(pn):IsFailing() then
+		return 'Grade_Failed'
+	elseif MaxDP == 0 and MaxPDP == 0 then
+		return GetGradeFromPercent(0)
+	elseif PScore == MaxPDP then
+		return 'Grade_Tier01'
+	elseif DPScore == MaxDP then
+		return 'Grade_Tier02'
+	else
+		return GetGradeFromPercent(DPScore/MaxDP)
+	end;
+end;
+
+-- Returns the string for the next grade given the current DP score percentage and a table containing the grade cutoffs.
+function getnextgrade(dppercent,gradetier)
+	if dppercent > gradetier["Grade_Tier03"] then --AA/AAA/AAAA
 		return "Grade_Tier02"
 	elseif dppercent > gradetier["Grade_Tier04"] then --A
 		return "Grade_Tier03"
@@ -76,6 +92,31 @@ local scoreweight =  {
 	TapNoteScore_CheckpointHit	= 0,--PREFSMAN:GetPreference("GradeWeightCheckpointHit"),		--  0
 	TapNoteScore_CheckpointMiss = 0,--PREFSMAN:GetPreference("GradeWeightCheckpointMiss"),		--  0
 };
+
+local pweight =  { -- Score Weights for percentage scores (EX oni)
+	TapNoteScore_W1			= 3,--PREFSMAN:GetPreference("PercentScoreWeightW1"),
+	TapNoteScore_W2			= 2,--PREFSMAN:GetPreference("PercentScoreWeightW2"),
+	TapNoteScore_W3			= 1,--PREFSMAN:GetPreference("PercentScoreWeightW3"),
+	TapNoteScore_W4			= 0,--PREFSMAN:GetPreference("PercentScoreWeightW4"),
+	TapNoteScore_W5			= 0,--PREFSMAN:GetPreference("PercentScoreWeightW5"),
+	TapNoteScore_Miss			= 0,--PREFSMAN:GetPreference("PercentScoreWeightMiss"),
+	HoldNoteScore_Held			= 3,--PREFSMAN:GetPreference("PercentScoreWeightHeld"),
+	TapNoteScore_HitMine			= -2,--(-2 or 0?)PREFSMAN:GetPreference("PercentScoreWeightHitMine"),
+	HoldNoteScore_LetGo			= 0,--PREFSMAN:GetPreference("PercentScoreWeightLetGo"),
+	-- HoldNoteScore_Missed = 0 --Placeholder for now
+	TapNoteScore_AvoidMine		= 0,
+	TapNoteScore_CheckpointHit		= 0,--PREFSMAN:GetPreference("PercentScoreWeightCheckpointHit"),
+	TapNoteScore_CheckpointMiss 	= 0,--PREFSMAN:GetPreference("PercentScoreWeightCheckpointMiss"),
+};
+
+local difftype = {
+	Difficulty_Beginner 		= 'Novice',
+	Difficulty_Easy 			= 'Easy',
+	Difficulty_Medium			= 'Medium',
+	Difficulty_Hard				= 'Hard',
+	Difficulty_Challenge		= 'Expert',
+	Difficulty_Edit				= 'Edit'
+}
 
 local gradetier = {
 	Grade_Tier01 = THEME:GetMetric("PlayerStageStats", "GradePercentTier01"), -- AAAA
@@ -123,8 +164,6 @@ local typetable = { -- ClearType texts
 	[15]="Ragequit"
 };
 
-
---
 local typecolors = {
 	[1]		= color("#66ccff"),
 	[2]		= color("#dddddd"),
@@ -142,7 +181,8 @@ local typecolors = {
 	[14]	= color("#ffffff"),
 	[15]	= color("#e61e25")
 };
--- Clear Types based on stage awards
+
+-- Clear Types based on stage awards and grades.
 function title(sa,grade,playcount,misscount)
 	if grade == 'nil' then -- If grade does not exist
 		if playcount == 0 then
@@ -176,6 +216,7 @@ function title(sa,grade,playcount,misscount)
 	return typetable[12],typecolors[12] -- noplay
 end;
 
+
 local profileP1 = GetPlayerOrMachineProfile(PLAYER_1)
 local playcount = 0
 local misscount = 0
@@ -194,12 +235,54 @@ local grade = ''
 local nexttier = ''
 local cardpos0 = SCREEN_CENTER_X*0.475-((SCREEN_CENTER_X*0.625)/2)+2
 local cardpos1 = SCREEN_CENTER_X*0.5-7
+local scorestatX = 20
+local scorestatY = 20
+local scorestatWidth = SCREEN_WIDTH/8*3.5-10
+local scorestatHeight = SCREEN_HEIGHT-200
+local judgeX = 5
+local judgeY = 115
 local hstable
 local mods = ''
 local ratemods = '1.0x Rate'
+local scorestatheld = false
+local songtitle = ''
+local subtitle = ''
+local artist = ''
+local stepstype = ''
+local difficulty = ''
+local meter = 0
 
+local judgestats = { -- Table containing the # of judgements made so far
+	TapNoteScore_W1 = 0,
+	TapNoteScore_W2 = 0,
+	TapNoteScore_W3 = 0,
+	TapNoteScore_W4 = 0,
+	TapNoteScore_W5 = 0,
+	TapNoteScore_Miss = 0,
+	TapNoteScore_HitMine = 0,
+	TapNoteScore_AvoidMine		= 0,
+	TapNoteScore_CheckpointHit		= 0,
+	TapNoteScore_CheckpointMiss 	= 0
+};
+local holdstats = {
+	HoldNoteScore_Held = 0,
+	HoldNoteScore_LetGo = 0
+	-- HoldNoteScore_Missed = 0 --Placeholder for now
+};
 
 local t = Def.ActorFrame {
+	Def.Actor{
+		Name="scorestat";
+		CodeMessageCommand=function(self,params)
+			if params.Name == "ScoreStat" then
+				scorestatheld = true
+			end;
+			if params.Name == "ScoreStatOff" then
+				scorestatheld = false
+			end;
+		end;
+	};
+
 	Def.Actor{
 		Name='aaaa';
 		SetCommand=function(self)
@@ -209,9 +292,17 @@ local t = Def.ActorFrame {
 			maxnotes =  steps:GetRadarValues(PLAYER_1):GetValue("RadarCategory_TapsAndHolds");
 			maxholds = GAMESTATE:GetCurrentSteps(PLAYER_1):GetRadarValues(PLAYER_1):GetValue("RadarCategory_Holds") + GAMESTATE:GetCurrentSteps(PLAYER_1):GetRadarValues(PLAYER_1):GetValue("RadarCategory_Rolls");
 			maxdp = maxnotes*scoreweight["TapNoteScore_W1"]+maxholds*scoreweight["HoldNoteScore_Held"]
+			maxps = maxnotes*pweight["TapNoteScore_W1"]+maxholds*pweight["HoldNoteScore_Held"]
 			if song ~= nil then -- when song is selected on musicwheel
+				--assuming steps also have to exist if the song exists in the music wheel.
+				songtitle = song:GetDisplayMainTitle()
+				subtitle = song:GetDisplaySubTitle()
+				artist = song:GetDisplayArtist()
 				playcount = profileP1:GetSongNumTimesPlayed(GAMESTATE:GetCurrentSong()) -- grabs playcount for song
 				hstable = profileP1:GetHighScoreList(song,steps):GetHighScores() -- grabs table of high scores (assumed to be sorted by score)
+				stepstype = string.gsub(ToEnumShortString(steps:GetStepsType()),"%_"," ")
+				meter = steps:GetMeter()
+				difficulty = difftype[steps:GetDifficulty()]
 				topscore = hstable[1] -- returns first score
 				--tablelength = #hstable
 
@@ -219,8 +310,15 @@ local t = Def.ActorFrame {
 
 					-- Date and Score
 					date = topscore:GetDate()
+					for k,v in pairs(judgestats) do
+						judgestats[k] = topscore:GetTapNoteScore(k)
+					end;
+					for k,v in pairs(holdstats) do
+						holdstats[k] = topscore:GetHoldNoteScore(k)
+					end;
 					playerdp = topscore:GetTapNoteScore('TapNoteScore_W1')*scoreweight['TapNoteScore_W1']+topscore:GetTapNoteScore('TapNoteScore_W2')*scoreweight['TapNoteScore_W2']+topscore:GetTapNoteScore('TapNoteScore_W3')*scoreweight['TapNoteScore_W3']+topscore:GetTapNoteScore('TapNoteScore_W4')*scoreweight['TapNoteScore_W4']+topscore:GetTapNoteScore('TapNoteScore_W5')*scoreweight['TapNoteScore_W5']+topscore:GetTapNoteScore('TapNoteScore_Miss')*scoreweight['TapNoteScore_Miss']+topscore:GetTapNoteScore('TapNoteScore_HitMine')*scoreweight['TapNoteScore_HitMine']+topscore:GetHoldNoteScore('HoldNoteScore_LetGo')*scoreweight['HoldNoteScore_LetGo']+topscore:GetHoldNoteScore('HoldNoteScore_Held')*scoreweight['HoldNoteScore_Held']
-					nexttier = getgrades(playerdp/maxdp,gradetier)
+					percentscore = topscore:GetTapNoteScore('TapNoteScore_W1')*pweight['TapNoteScore_W1']+topscore:GetTapNoteScore('TapNoteScore_W2')*pweight['TapNoteScore_W2']+topscore:GetTapNoteScore('TapNoteScore_W3')*pweight['TapNoteScore_W3']+topscore:GetTapNoteScore('TapNoteScore_W4')*pweight['TapNoteScore_W4']+topscore:GetTapNoteScore('TapNoteScore_W5')*pweight['TapNoteScore_W5']+topscore:GetTapNoteScore('TapNoteScore_Miss')*pweight['TapNoteScore_Miss']+topscore:GetTapNoteScore('TapNoteScore_HitMine')*pweight['TapNoteScore_HitMine']+topscore:GetHoldNoteScore('HoldNoteScore_LetGo')*pweight['HoldNoteScore_LetGo']+topscore:GetHoldNoteScore('HoldNoteScore_Held')*pweight['HoldNoteScore_Held']
+					nexttier = getnextgrade(playerdp/maxdp,gradetier)
 					nextdp = math.ceil(maxdp*gradetier[nexttier])
 					misscount = topscore:GetTapNoteScore('TapNoteScore_Miss')+topscore:GetTapNoteScore('TapNoteScore_W5')+topscore:GetTapNoteScore('TapNoteScore_W4')
 					
@@ -256,10 +354,18 @@ local t = Def.ActorFrame {
 					playerdp = 0
 					nexttier = "Grade_Tier07"
 					nextdp = 0
+					percentscore = 0
 					cttext,ctcolor = title('nil','nil',playcount,'-')
 					date = ''
-					mods = ''
+					mods = 'No Modifiers'
 					ratemods = ''
+					for k,v in pairs(judgestats) do
+						judgestats[k] = 0
+					end;
+					for k,v in pairs(holdstats) do
+						holdstats[k] = 0
+					end;
+					grade = 'n/a'
 				end;
 			else -- when something that isn't a song is selected on musicwheel
 				cttext = '-'
@@ -269,9 +375,23 @@ local t = Def.ActorFrame {
 				playerdp = 0
 				nexttier = "Grade_Tier07"
 				nextdp = 0
+				percentscore = 0
 				date = ''
-				mods = ''
+				mods = 'No Modifiers'
 				ratemods = ''
+				songtitle = ''
+				subtitle = ''
+				artist = ''
+				grade = 'n/a'
+				stepstype = ' '
+				meter = ' '
+				difficulty = ' '
+				for k,v in pairs(judgestats) do
+						judgestats[k] = 0
+				end;
+				for k,v in pairs(holdstats) do
+						holdstats[k] = 0
+				end;
 			end;
 		end;
 		CurrentSongChangedMessageCommand=cmd(queuecommand,"Set");
@@ -292,12 +412,14 @@ local t = Def.ActorFrame {
 	};--]]
 	LoadFont("Common Normal") .. { -- highscore rate mods
         Name="test";
-		InitCommand=cmd(x,cardpos0;y,400;zoom,0.4;horizalign,left);
+		InitCommand=cmd(x,cardpos0;y,410;zoom,0.4;horizalign,left);
 		BeginCommand=cmd(playcommand,"Set");
 		SetCommand=function(self)
 			self:settext(ratemods)
 		end;
+		OnCommand=cmd(bouncebegin,0.35;zoomy,0.4);
 		OffCommand=cmd(bouncebegin,0.35;zoomy,0);
+
 		CurrentSongChangedMessageCommand=cmd(queuecommand,"Set");
 		CurrentStepsP1ChangedMessageCommand=cmd(queuecommand,"Set");
 	};
@@ -330,7 +452,16 @@ local t = Def.ActorFrame {
 		BeginCommand=function(self)
 			self:settext(totalplays..' Total Plays')
 		end;
-		OffCommand=cmd(bouncebegin,0.35;zoomy,0);
+		CodeMessageCommand=function(self,params)
+			self:finishtweening()
+			if scorestatheld then
+				self:playcommand("Off")
+			else
+				self:bouncebegin(0.375)
+				self:y(20)
+			end;
+		end;
+		OffCommand=cmd(bouncebegin,0.375;addy,-192);
 	};
 	LoadFont("Common Normal") .. { -- Song Playcount
         Name="SongPlaycount";
@@ -355,19 +486,16 @@ local t = Def.ActorFrame {
 				self:settext("")
 			end;
 		end;
-		OffCommand=cmd(bouncebegin,0.375;addy,-192);
-	};
-
-	LoadFont("Common Normal") .. { -- Scoredate
-        Name="ScoreDateP1";
-		InitCommand=cmd(x,cardpos0;y,410;zoom,0.4;horizalign,left;shadowlength,1;shadowcolor,color("0,0,0,0.4"));
-		BeginCommand=cmd(playcommand,"Set");
-		SetCommand=function(self)
-			self:settext("Achieved on: "..date)
+		CodeMessageCommand=function(self,params)
+			self:finishtweening()
+			if scorestatheld then
+				self:playcommand("Off")
+			else
+				self:bouncebegin(0.375)
+				self:y(121)
+			end;
 		end;
-		OffCommand=cmd(bouncebegin,0.35;zoomy,0);
-		CurrentSongChangedMessageCommand=cmd(queuecommand,"Set");
-		CurrentStepsP1ChangedMessageCommand=cmd(queuecommand,"Set");
+		OffCommand=cmd(bouncebegin,0.375;addy,-192);
 	};
 
 	LoadFont("Common Normal") .. { -- ClearType
@@ -427,17 +555,477 @@ local t = Def.ActorFrame {
 		CurrentSongChangedMessageCommand=cmd(queuecommand,"Set");
 		CurrentStepsP1ChangedMessageCommand=cmd(queuecommand,"Set");
 	};
+
+	--ScoreStat
+	--Comment this
+
+	Def.ActorFrame {
+		Name="ScoreStatP1";
+		InitCommand=cmd(xy,scorestatX-SCREEN_WIDTH/2,scorestatY);
+		CodeMessageCommand=function(self,params)
+			self:finishtweening()
+			if scorestatheld then
+				self:bouncebegin(0.375)
+				self:addx(SCREEN_WIDTH/2)
+			else
+				self:bouncebegin(0.375)
+				self:xy(scorestatX-SCREEN_WIDTH/2,scorestatY)
+			end;
+		end;
+		OffCommand=cmd(bouncebegin,0.375;addx,-SCREEN_WIDTH/2);
+		Def.Quad{
+			InitCommand=cmd(zoomto,scorestatWidth,scorestatHeight;horizalign,left;vertalign,top;diffuse,color("#333333");diffusealpha,0.7);
+		};
+		LoadFont("Common Normal") .. {
+			InitCommand=cmd(x,5;zoom,0.5;maxwidth,scorestatWidth/0.5-20;horizalign,left;vertalign,top);
+			BeginCommand=cmd(queuecommand,"Set");
+			SetCommand=function(self)
+				self:settext(songtitle.." - "..artist)
+			end;
+			OffCommand=cmd(bouncebegin,0.35;zoomy,0);
+			CurrentSongChangedMessageCommand=cmd(queuecommand,"Set");
+			CurrentStepsP1ChangedMessageCommand=cmd(queuecommand,"Set");
+		};
+		LoadFont("Common Normal") .. {
+			InitCommand=cmd(xy,5,15;zoom,0.4;maxwidth,scorestatWidth/0.4;horizalign,left;vertalign,top);
+			BeginCommand=cmd(queuecommand,"Set");
+			SetCommand=function(self)
+				self:settext(stepstype.." "..difficulty.." "..meter.."\nPlaycount: "..playcount.."\nAchieved on: "..date)
+			end;
+			OffCommand=cmd(bouncebegin,0.35;zoomy,0);
+			CurrentSongChangedMessageCommand=cmd(queuecommand,"Set");
+		};
+		LoadFont("Common Normal") .. {
+			InitCommand=cmd(xy,6,50;diffuse,color("#cc6666");zoom,0.9;maxwidth,45/0.9;horizalign,left;vertalign,top);
+			BeginCommand=cmd(queuecommand,"Set");
+			SetCommand=function(self)
+				self:diffuse(CustomGradeColor(grade))
+				self:settext(gradestring(grade))
+			end;
+			OffCommand=cmd(bouncebegin,0.35;zoomy,0);
+			CurrentSongChangedMessageCommand=cmd(queuecommand,"Set");
+			CurrentStepsP1ChangedMessageCommand=cmd(queuecommand,"Set");
+		};
+		LoadFont("Common Normal") .. {
+			InitCommand=cmd(xy,53,57;zoom,0.4;horizalign,left;vertalign,top);
+			BeginCommand=cmd(queuecommand,"Set");
+			SetCommand=function(self)
+				if maxnotes ~= 0  then
+					self:settextf("Score: %.2f%%",(math.floor(percentscore/maxps*10000))/100); 
+				else
+					self:settext("Score: 0.00%")
+				end;
+			end;
+			OffCommand=cmd(bouncebegin,0.35;zoomy,0);
+			CurrentSongChangedMessageCommand=cmd(queuecommand,"Set");
+			CurrentStepsP1ChangedMessageCommand=cmd(queuecommand,"Set");
+		};
+		LoadFont("Common Normal") .. {
+			InitCommand=cmd(xy,53,65;zoom,0.4;horizalign,left;vertalign,top);
+			BeginCommand=cmd(queuecommand,"Set");
+			SetCommand=function(self)
+				self:settext("DP :"..playerdp.."/"..maxdp..' '..gradestring(nexttier)..' '..diffstring(playerdp-nextdp))
+			end;
+			OffCommand=cmd(bouncebegin,0.35;zoomy,0);
+			CurrentSongChangedMessageCommand=cmd(queuecommand,"Set");
+			CurrentStepsP1ChangedMessageCommand=cmd(queuecommand,"Set");
+		};
+		LoadFont("Common Normal") .. {
+			InitCommand=cmd(xy,5,75;zoom,0.5;horizalign,left;vertalign,top);
+			BeginCommand=cmd(queuecommand,"Set");
+			SetCommand=function(self)
+				self:stopeffect()
+				self:settext(cttext)
+				if ctcolor == 'rainbow' then
+					self:rainbow(true)
+					self:effectperiod(1)
+					self:diffuse(ctcolor)
+				elseif cttext == "Marvelous Full Combo"then
+					self:diffuseshift()
+					self:effectcolor1(CustomGradeColor("Grade_Tier01"))
+					self:effectcolor2(color(ctcolor))
+					self:effectperiod(0.1)
+				else
+					self:diffuse(ctcolor)
+				end;
+			end;
+			OffCommand=cmd(bouncebegin,0.35;zoomy,0);
+			CurrentSongChangedMessageCommand=cmd(queuecommand,"Set");
+			CurrentStepsP1ChangedMessageCommand=cmd(queuecommand,"Set");
+		};
+		LoadFont("Common Normal") .. {
+			InitCommand=cmd(xy,5,90;zoom,0.4;maxwidth,scorestatWidth/0.4-20;horizalign,left;vertalign,top);
+			BeginCommand=cmd(queuecommand,"Set");
+			SetCommand=function(self)
+				self:settext("Mods : \n"..mods)
+			end;
+			OffCommand=cmd(bouncebegin,0.35;zoomy,0);
+			CurrentSongChangedMessageCommand=cmd(queuecommand,"Set");
+			CurrentStepsP1ChangedMessageCommand=cmd(queuecommand,"Set");
+		};
+		LoadFont("Common Normal") .. {
+			InitCommand=cmd(xy,judgeX,judgeY;zoom,0.5;horizalign,left;vertalign,top);
+			BeginCommand=function(self)
+				self:settext("Marvelous ")
+				self:diffuseshift()
+				self:effectcolor1(TapNoteScoreToColor("TapNoteScore_W1"))
+				self:effectcolor2(color("#66ccff"))
+				self:effectperiod(0.1)
+			end;
+			OffCommand=cmd(bouncebegin,0.35;zoomy,0);
+			CurrentSongChangedMessageCommand=cmd(queuecommand,"Set");
+			CurrentStepsP1ChangedMessageCommand=cmd(queuecommand,"Set");
+		};
+		LoadFont("Common Normal") .. {
+			InitCommand=cmd(xy,judgeX+100,judgeY;zoom,0.5;horizalign,right;vertalign,top);
+			BeginCommand=cmd(queuecommand,"Set");
+			SetCommand=function(self)
+				local temp = judgestats["TapNoteScore_W1"]
+				if temp ~= nil then
+					self:settext(temp)
+				else
+					self:settext(0)
+				end;
+			end;
+			OffCommand=cmd(bouncebegin,0.35;zoomy,0);
+			CurrentSongChangedMessageCommand=cmd(queuecommand,"Set");
+			CurrentStepsP1ChangedMessageCommand=cmd(queuecommand,"Set");
+		};
+		LoadFont("Common Normal") .. {
+			InitCommand=cmd(xy,judgeX+102,judgeY+4;zoom,0.35;horizalign,left;vertalign,top);
+			BeginCommand=cmd(queuecommand,"Set");
+			SetCommand=function(self)
+				local temp = judgestats["TapNoteScore_W1"]
+				if temp ~= nil and maxnotes ~= 0  then
+					self:settextf("(%.2f%%)",(math.floor(judgestats["TapNoteScore_W1"]/maxnotes*10000))/100); 
+				else
+					self:settext("(0.0%)")
+				end;
+			end;
+			OffCommand=cmd(bouncebegin,0.35;zoomy,0);
+			CurrentSongChangedMessageCommand=cmd(queuecommand,"Set");
+			CurrentStepsP1ChangedMessageCommand=cmd(queuecommand,"Set");
+		};
+		LoadFont("Common Normal") .. {
+			InitCommand=cmd(xy,judgeX,judgeY+15;diffuse,TapNoteScoreToColor("TapNoteScore_W2");zoom,0.5;horizalign,left;vertalign,top);
+			BeginCommand=function(self)
+				self:settext("Perfect ")
+			end;
+			OffCommand=cmd(bouncebegin,0.35;zoomy,0);
+			CurrentSongChangedMessageCommand=cmd(queuecommand,"Set");
+			CurrentStepsP1ChangedMessageCommand=cmd(queuecommand,"Set");
+		};
+		LoadFont("Common Normal") .. {
+			InitCommand=cmd(xy,judgeX+100,judgeY+15;zoom,0.5;horizalign,right;vertalign,top);
+			BeginCommand=cmd(queuecommand,"Set");
+			SetCommand=function(self)
+				local temp = judgestats["TapNoteScore_W2"]
+				if temp ~= nil then
+					self:settext(temp)
+				else
+					self:settext(0)
+				end;
+			end;
+			OffCommand=cmd(bouncebegin,0.35;zoomy,0);
+			CurrentSongChangedMessageCommand=cmd(queuecommand,"Set");
+			CurrentStepsP1ChangedMessageCommand=cmd(queuecommand,"Set");
+		};
+		LoadFont("Common Normal") .. {
+			InitCommand=cmd(xy,judgeX+102,judgeY+15+4;zoom,0.35;horizalign,left;vertalign,top);
+			BeginCommand=cmd(queuecommand,"Set");
+			SetCommand=function(self)
+				local temp = judgestats["TapNoteScore_W2"]
+				if temp ~= nil and maxnotes ~= 0  then
+					self:settextf("(%.2f%%)",(math.floor(judgestats["TapNoteScore_W2"]/maxnotes*10000))/100); 
+				else
+					self:settext("(0.0%)")
+				end;
+			end;
+			OffCommand=cmd(bouncebegin,0.35;zoomy,0);
+			CurrentSongChangedMessageCommand=cmd(queuecommand,"Set");
+			CurrentStepsP1ChangedMessageCommand=cmd(queuecommand,"Set");
+		};
+		LoadFont("Common Normal") .. {
+			InitCommand=cmd(xy,judgeX,judgeY+30;diffuse,TapNoteScoreToColor("TapNoteScore_W3");zoom,0.5;horizalign,left;vertalign,top);
+			BeginCommand=function(self)
+				self:settext("Great ")
+			end;
+			OffCommand=cmd(bouncebegin,0.35;zoomy,0);
+			CurrentSongChangedMessageCommand=cmd(queuecommand,"Set");
+			CurrentStepsP1ChangedMessageCommand=cmd(queuecommand,"Set");
+		};
+		LoadFont("Common Normal") .. {
+			InitCommand=cmd(xy,judgeX+100,judgeY+30;zoom,0.5;horizalign,right;vertalign,top);
+			BeginCommand=cmd(queuecommand,"Set");
+			SetCommand=function(self)
+				local temp = judgestats["TapNoteScore_W3"]
+				if temp ~= nil then
+					self:settext(temp)
+				else
+					self:settext(0)
+				end;
+			end;
+			OffCommand=cmd(bouncebegin,0.35;zoomy,0);
+			CurrentSongChangedMessageCommand=cmd(queuecommand,"Set");
+			CurrentStepsP1ChangedMessageCommand=cmd(queuecommand,"Set");
+		};
+		LoadFont("Common Normal") .. {
+			InitCommand=cmd(xy,judgeX+102,judgeY+30+4;zoom,0.35;horizalign,left;vertalign,top);
+			BeginCommand=cmd(queuecommand,"Set");
+			SetCommand=function(self)
+				local temp = judgestats["TapNoteScore_W3"]
+				if temp ~= nil and maxnotes ~= 0  then
+					self:settextf("(%.2f%%)",(math.floor(judgestats["TapNoteScore_W3"]/maxnotes*10000))/100); 
+				else
+					self:settext("(0.0%)")
+				end;
+			end;
+			OffCommand=cmd(bouncebegin,0.35;zoomy,0);
+			CurrentSongChangedMessageCommand=cmd(queuecommand,"Set");
+			CurrentStepsP1ChangedMessageCommand=cmd(queuecommand,"Set");
+		};
+		LoadFont("Common Normal") .. {
+			InitCommand=cmd(xy,judgeX,judgeY+45;diffuse,TapNoteScoreToColor("TapNoteScore_W4");zoom,0.5;horizalign,left;vertalign,top);
+			BeginCommand=function(self)
+				self:settext("Good ")
+			end;
+			OffCommand=cmd(bouncebegin,0.35;zoomy,0);
+			CurrentSongChangedMessageCommand=cmd(queuecommand,"Set");
+			CurrentStepsP1ChangedMessageCommand=cmd(queuecommand,"Set");
+		};
+		LoadFont("Common Normal") .. {
+			InitCommand=cmd(xy,judgeX+100,judgeY+45;zoom,0.5;horizalign,right;vertalign,top);
+			BeginCommand=cmd(queuecommand,"Set");
+			SetCommand=function(self)
+				local temp = judgestats["TapNoteScore_W4"]
+				if temp ~= nil then
+					self:settext(temp)
+				else
+					self:settext(0)
+				end;
+			end;
+			OffCommand=cmd(bouncebegin,0.35;zoomy,0);
+			CurrentSongChangedMessageCommand=cmd(queuecommand,"Set");
+			CurrentStepsP1ChangedMessageCommand=cmd(queuecommand,"Set");
+		};
+		LoadFont("Common Normal") .. {
+			InitCommand=cmd(xy,judgeX+102,judgeY+45+4;zoom,0.35;horizalign,left;vertalign,top);
+			BeginCommand=cmd(queuecommand,"Set");
+			SetCommand=function(self)
+				local temp = judgestats["TapNoteScore_W4"]
+				if temp ~= nil and maxnotes ~= 0  then
+					self:settextf("(%.2f%%)",(math.floor(judgestats["TapNoteScore_W4"]/maxnotes*10000))/100); 
+				else
+					self:settext("(0.0%)")
+				end;
+			end;
+			OffCommand=cmd(bouncebegin,0.35;zoomy,0);
+			CurrentSongChangedMessageCommand=cmd(queuecommand,"Set");
+			CurrentStepsP1ChangedMessageCommand=cmd(queuecommand,"Set");
+		};
+		LoadFont("Common Normal") .. {
+			InitCommand=cmd(xy,judgeX,judgeY+60;diffuse,TapNoteScoreToColor("TapNoteScore_W5");zoom,0.5;horizalign,left;vertalign,top);
+			BeginCommand=function(self)
+				self:settext("Bad ")
+			end;
+			OffCommand=cmd(bouncebegin,0.35;zoomy,0);
+			CurrentSongChangedMessageCommand=cmd(queuecommand,"Set");
+			CurrentStepsP1ChangedMessageCommand=cmd(queuecommand,"Set");
+		};
+		LoadFont("Common Normal") .. {
+			InitCommand=cmd(xy,judgeX+100,judgeY+60;zoom,0.5;horizalign,right;vertalign,top);
+			BeginCommand=cmd(queuecommand,"Set");
+			SetCommand=function(self)
+				local temp = judgestats["TapNoteScore_W5"]
+				if temp ~= nil then
+					self:settext(temp)
+				else
+					self:settext(0)
+				end;
+			end;
+			OffCommand=cmd(bouncebegin,0.35;zoomy,0);
+			CurrentSongChangedMessageCommand=cmd(queuecommand,"Set");
+			CurrentStepsP1ChangedMessageCommand=cmd(queuecommand,"Set");
+		};
+		LoadFont("Common Normal") .. {
+			InitCommand=cmd(xy,judgeX+102,judgeY+60+4;zoom,0.35;horizalign,left;vertalign,top);
+			BeginCommand=cmd(queuecommand,"Set");
+			SetCommand=function(self)
+				local temp = judgestats["TapNoteScore_W5"]
+				if temp ~= nil and maxnotes ~= 0  then
+					self:settextf("(%.2f%%)",(math.floor(judgestats["TapNoteScore_W5"]/maxnotes*10000))/100); 
+				else
+					self:settext("(0.0%)")
+				end;
+			end;
+			OffCommand=cmd(bouncebegin,0.35;zoomy,0);
+			CurrentSongChangedMessageCommand=cmd(queuecommand,"Set");
+			CurrentStepsP1ChangedMessageCommand=cmd(queuecommand,"Set");
+		};
+		LoadFont("Common Normal") .. {
+			InitCommand=cmd(xy,judgeX,judgeY+75;diffuse,TapNoteScoreToColor("TapNoteScore_Miss");zoom,0.5;horizalign,left;vertalign,top);
+			BeginCommand=function(self)
+				self:settext("Miss ")
+			end;
+			OffCommand=cmd(bouncebegin,0.35;zoomy,0);
+			CurrentSongChangedMessageCommand=cmd(queuecommand,"Set");
+			CurrentStepsP1ChangedMessageCommand=cmd(queuecommand,"Set");
+		};
+		LoadFont("Common Normal") .. {
+			InitCommand=cmd(xy,judgeX+100,judgeY+75;zoom,0.5;horizalign,right;vertalign,top);
+			BeginCommand=cmd(queuecommand,"Set");
+			SetCommand=function(self)
+				local temp = judgestats["TapNoteScore_Miss"]
+				if temp ~= nil then
+					self:settext(temp)
+				else
+					self:settext(0)
+				end;
+			end;
+			OffCommand=cmd(bouncebegin,0.35;zoomy,0);
+			CurrentSongChangedMessageCommand=cmd(queuecommand,"Set");
+			CurrentStepsP1ChangedMessageCommand=cmd(queuecommand,"Set");
+		};
+		LoadFont("Common Normal") .. {
+			InitCommand=cmd(xy,judgeX+102,judgeY+75+4;zoom,0.35;horizalign,left;vertalign,top);
+			BeginCommand=cmd(queuecommand,"Set");
+			SetCommand=function(self)
+				local temp = judgestats["TapNoteScore_Miss"]
+				if temp ~= nil and maxnotes ~= 0  then
+					self:settextf("(%.2f%%)",(math.floor(judgestats["TapNoteScore_Miss"]/maxnotes*10000))/100); 
+				else
+					self:settext("(0.0%)")
+				end;
+			end;
+			OffCommand=cmd(bouncebegin,0.35;zoomy,0);
+			CurrentSongChangedMessageCommand=cmd(queuecommand,"Set");
+			CurrentStepsP1ChangedMessageCommand=cmd(queuecommand,"Set");
+		};
+		LoadFont("Common Normal") .. {
+			InitCommand=cmd(xy,judgeX,judgeY+90;diffuse,TapNoteScoreToColor("TapNoteScore_W2");zoom,0.5;horizalign,left;vertalign,top);
+			BeginCommand=function(self)
+				self:settext("OK ")
+			end;
+			OffCommand=cmd(bouncebegin,0.35;zoomy,0);
+			CurrentSongChangedMessageCommand=cmd(queuecommand,"Set");
+			CurrentStepsP1ChangedMessageCommand=cmd(queuecommand,"Set");
+		};
+		LoadFont("Common Normal") .. {
+			InitCommand=cmd(xy,judgeX+100,judgeY+90;zoom,0.5;horizalign,right;vertalign,top);
+			BeginCommand=cmd(queuecommand,"Set");
+			SetCommand=function(self)
+				local temp = holdstats["HoldNoteScore_Held"]
+				if temp ~= nil then
+					self:settext(temp)
+				else
+					self:settext(0)
+				end;
+			end;
+			OffCommand=cmd(bouncebegin,0.35;zoomy,0);
+			CurrentSongChangedMessageCommand=cmd(queuecommand,"Set");
+			CurrentStepsP1ChangedMessageCommand=cmd(queuecommand,"Set");
+		};
+		LoadFont("Common Normal") .. {
+			InitCommand=cmd(xy,judgeX+102,judgeY+90+4;zoom,0.35;horizalign,left;vertalign,top);
+			BeginCommand=cmd(queuecommand,"Set");
+			SetCommand=function(self)
+				local temp = holdstats["HoldNoteScore_Held"]
+				if temp ~= nil and maxholds ~= 0  then
+					self:settextf("(%.2f%%)",(math.floor(holdstats["HoldNoteScore_Held"]/maxholds*10000))/100); 
+				else
+					self:settext("(0.0%)")
+				end;
+			end;
+			OffCommand=cmd(bouncebegin,0.35;zoomy,0);
+			CurrentSongChangedMessageCommand=cmd(queuecommand,"Set");
+			CurrentStepsP1ChangedMessageCommand=cmd(queuecommand,"Set");
+		};
+		LoadFont("Common Normal") .. {
+			InitCommand=cmd(xy,judgeX,judgeY+105;diffuse,TapNoteScoreToColor("TapNoteScore_Miss");zoom,0.5;horizalign,left;vertalign,top);
+			BeginCommand=function(self)
+				self:settext("NG ")
+			end;
+			OffCommand=cmd(bouncebegin,0.35;zoomy,0);
+			CurrentSongChangedMessageCommand=cmd(queuecommand,"Set");
+			CurrentStepsP1ChangedMessageCommand=cmd(queuecommand,"Set");
+		};
+		LoadFont("Common Normal") .. {
+			InitCommand=cmd(xy,judgeX+100,judgeY+105;zoom,0.5;horizalign,right;vertalign,top);
+			BeginCommand=cmd(queuecommand,"Set");
+			SetCommand=function(self)
+				local temp = holdstats["HoldNoteScore_LetGo"]
+				if temp ~= nil then
+					self:settext(temp)
+				else
+					self:settext(0)
+				end;
+			end;
+			OffCommand=cmd(bouncebegin,0.35;zoomy,0);
+			CurrentSongChangedMessageCommand=cmd(queuecommand,"Set");
+			CurrentStepsP1ChangedMessageCommand=cmd(queuecommand,"Set");
+		};
+		LoadFont("Common Normal") .. {
+			InitCommand=cmd(xy,judgeX+102,judgeY+105+4;zoom,0.35;horizalign,left;vertalign,top);
+			BeginCommand=cmd(queuecommand,"Set");
+			SetCommand=function(self)
+				local temp = holdstats["HoldNoteScore_LetGo"]
+				if temp ~= nil and maxholds ~= 0 then
+					self:settextf("(%.2f%%)",(math.floor(holdstats["HoldNoteScore_LetGo"]/maxholds*10000))/100); 
+				else
+					self:settext("(0.0%)")
+				end;
+			end;
+			OffCommand=cmd(bouncebegin,0.35;zoomy,0);
+			CurrentSongChangedMessageCommand=cmd(queuecommand,"Set");
+			CurrentStepsP1ChangedMessageCommand=cmd(queuecommand,"Set");
+		};
+
+
+	};
+
 };
+
+-- Switch to something like this for judgecounts since the current one is a giant copy-paste-fest.
+-- Also Make them display in order
 --[[
-local testtable = profileP1:GetHighScoreList(GAMESTATE:GetCurrentSong(),GAMESTATE:GetCurrentSteps(PLAYER_1)):GetHighScores()
-for i, v in ipairs(testtable) do
+local i = 0
+for k, v in pairs(judgestats) do
+	i = 0
 	t[#t+1] = LoadFont("Common Normal") .. {
-		InitCommand=cmd(x,305;y,50+i*10;zoom,0.5;horizalign,left);
-		BeginCommand=cmd(queuecommand,"Set");
+		InitCommand=cmd(xy,judgeX+100,judgeY;zoom,0.5;horizalign,right);
+		BeginCommand=function(self)
+			i=1+i
+			self:y(judgeY+i*15*0.5)
+			self:queuecommand("Set")
+		end;
 		SetCommand=function(self)
-			local tabledp = v:GetTapNoteScore('TapNoteScore_W1')*scoreweight['TapNoteScore_W1']+v:GetTapNoteScore('TapNoteScore_W2')*scoreweight['TapNoteScore_W2']+v:GetTapNoteScore('TapNoteScore_W3')*scoreweight['TapNoteScore_W3']+v:GetTapNoteScore('TapNoteScore_W4')*scoreweight['TapNoteScore_W4']+v:GetTapNoteScore('TapNoteScore_W5')*scoreweight['TapNoteScore_W5']+v:GetTapNoteScore('TapNoteScore_Miss')*scoreweight['TapNoteScore_Miss']+v:GetTapNoteScore('TapNoteScore_HitMine')*scoreweight['TapNoteScore_HitMine']+v:GetHoldNoteScore('HoldNoteScore_LetGo')*scoreweight['HoldNoteScore_LetGo']+v:GetHoldNoteScore('HoldNoteScore_Held')*scoreweight['HoldNoteScore_Held']
-			self:settext(i)
-			self:settext(tabledp)
+			self:settext(judgestats[k])
+		end;
+		CurrentSongChangedMessageCommand=cmd(queuecommand,"Set");
+		CurrentStepsP1ChangedMessageCommand=cmd(queuecommand,"Set");
+	};
+	t[#t+1] = LoadFont("Common Normal") .. {
+		InitCommand=cmd(xy,judgeX+105,judgeY;zoom,0.5;horizalign,left);
+		BeginCommand=function(self)
+			i=1+i
+			self:y(judgeY-15/2+i*15*0.5)
+			self:queuecommand("Set")
+		end;
+		SetCommand=function(self)
+			self:settextf("%.1f%%",(math.floor(judgestats[k]/maxnotes*10000))/100); 
+		end;
+		CurrentSongChangedMessageCommand=cmd(queuecommand,"Set");
+		CurrentStepsP1ChangedMessageCommand=cmd(queuecommand,"Set");
+	};
+	t[#t+1] = LoadFont("Common Normal") .. {
+		InitCommand=cmd(xy,judgeX,judgeY;zoom,0.5;horizalign,right);
+		BeginCommand=function(self)
+			i=1+i
+			self:y(judgeY-15+i*15*0.5)
+			self:queuecommand("Set")
+		end;
+		SetCommand=function(self)
+			self:settext(k)
 		end;
 		CurrentSongChangedMessageCommand=cmd(queuecommand,"Set");
 		CurrentStepsP1ChangedMessageCommand=cmd(queuecommand,"Set");

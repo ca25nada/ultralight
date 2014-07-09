@@ -79,7 +79,7 @@ function PlayerColor(pn)
 end;
 
 function CustomGradeColor (grade)
-	return themeColors.Grade[grade] or color("ffffcc");
+	return themeColors.Grade[grade] or color("#ffffff");
 end;
 
 function CustomDifficultyToColor(diff)
@@ -95,4 +95,4 @@ local tnsColors = {
 	TapNoteScore_W5 = HSV(320,0.9,1),
 	TapNoteScore_Miss = HSV(0,0.8,0.8),
 };
-function TapNoteScoreToColor(tns) return tnsColors[tns]; end;
+function TapNoteScoreToColor(tns) return tnsColors[tns] or color("#ffffff"); end;

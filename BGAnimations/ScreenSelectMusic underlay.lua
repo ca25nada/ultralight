@@ -38,7 +38,7 @@ local t = Def.ActorFrame{
 			self:x(0);
 			self:y(SCREEN_CENTER_Y);
 			self:finishtweening();
-			self:sleep(0.25);
+			self:sleep(0.5);
 
 			self:queuecommand("ModifySongBackground");
 			self:diffusealpha(0)

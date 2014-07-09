@@ -1,6 +1,7 @@
 -- this is only used for post-selection so far
 local t = Def.ActorFrame{};
 
+
 t[#t+1] = Def.Banner{
 	InitCommand=cmd(x,SCREEN_CENTER_X;y,SCREEN_TOP-128;visible,false);
 	SetCommand=function(self)
