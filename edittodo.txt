@@ -1,0 +1,10 @@
+
+
+[ScreenSelectMusic]
+- Allow users to scroll through other scores for ScoreStats.
+- Layout change(?)
+
+[ScreenEvaluation]
+- Show difference from best score/target to the score just achiveved.
+- Show list of top X scores on the right. (imagine the rival/shop score list in beatmania iidx tricoro/spada result screen, but for your own scores.)
+

@@ -251,6 +251,7 @@ local artist = ''
 local stepstype = ''
 local difficulty = ''
 local meter = 0
+local numscore = 1
 
 local judgestats = { -- Table containing the # of judgements made so far
 	TapNoteScore_W1 = 0,
@@ -309,6 +310,7 @@ local t = Def.ActorFrame {
 				if topscore ~= nil then -- when a score exists
 
 					-- Date and Score
+					numscore = #hstable
 					date = topscore:GetDate()
 					for k,v in pairs(judgestats) do
 						judgestats[k] = topscore:GetTapNoteScore(k)
@@ -351,6 +353,7 @@ local t = Def.ActorFrame {
 					end;
 				else -- when song has been played but someone quits midway
 					misscount = '-'
+					numscore = 1
 					playerdp = 0
 					nexttier = "Grade_Tier07"
 					nextdp = 0
@@ -372,6 +375,7 @@ local t = Def.ActorFrame {
 				ctcolor = typecolors[13]
 				playcount = '-'
 				misscount = '-'
+				numscore = 1
 				playerdp = 0
 				nexttier = "Grade_Tier07"
 				nextdp = 0
@@ -594,6 +598,7 @@ local t = Def.ActorFrame {
 			end;
 			OffCommand=cmd(bouncebegin,0.35;zoomy,0);
 			CurrentSongChangedMessageCommand=cmd(queuecommand,"Set");
+			CurrentStepsP1ChangedMessageCommand=cmd(queuecommand,"Set");
 		};
 		LoadFont("Common Normal") .. {
 			InitCommand=cmd(xy,6,50;diffuse,color("#cc6666");zoom,0.9;maxwidth,45/0.9;horizalign,left;vertalign,top);
@@ -699,7 +704,7 @@ local t = Def.ActorFrame {
 				if temp ~= nil and maxnotes ~= 0  then
 					self:settextf("(%.2f%%)",(math.floor(judgestats["TapNoteScore_W1"]/maxnotes*10000))/100); 
 				else
-					self:settext("(0.0%)")
+					self:settext("(0.00%)")
 				end;
 			end;
 			OffCommand=cmd(bouncebegin,0.35;zoomy,0);
@@ -738,7 +743,7 @@ local t = Def.ActorFrame {
 				if temp ~= nil and maxnotes ~= 0  then
 					self:settextf("(%.2f%%)",(math.floor(judgestats["TapNoteScore_W2"]/maxnotes*10000))/100); 
 				else
-					self:settext("(0.0%)")
+					self:settext("(0.00%)")
 				end;
 			end;
 			OffCommand=cmd(bouncebegin,0.35;zoomy,0);
@@ -777,7 +782,7 @@ local t = Def.ActorFrame {
 				if temp ~= nil and maxnotes ~= 0  then
 					self:settextf("(%.2f%%)",(math.floor(judgestats["TapNoteScore_W3"]/maxnotes*10000))/100); 
 				else
-					self:settext("(0.0%)")
+					self:settext("(0.00%)")
 				end;
 			end;
 			OffCommand=cmd(bouncebegin,0.35;zoomy,0);
@@ -816,7 +821,7 @@ local t = Def.ActorFrame {
 				if temp ~= nil and maxnotes ~= 0  then
 					self:settextf("(%.2f%%)",(math.floor(judgestats["TapNoteScore_W4"]/maxnotes*10000))/100); 
 				else
-					self:settext("(0.0%)")
+					self:settext("(0.00%)")
 				end;
 			end;
 			OffCommand=cmd(bouncebegin,0.35;zoomy,0);
@@ -855,7 +860,7 @@ local t = Def.ActorFrame {
 				if temp ~= nil and maxnotes ~= 0  then
 					self:settextf("(%.2f%%)",(math.floor(judgestats["TapNoteScore_W5"]/maxnotes*10000))/100); 
 				else
-					self:settext("(0.0%)")
+					self:settext("(0.00%)")
 				end;
 			end;
 			OffCommand=cmd(bouncebegin,0.35;zoomy,0);
@@ -894,7 +899,7 @@ local t = Def.ActorFrame {
 				if temp ~= nil and maxnotes ~= 0  then
 					self:settextf("(%.2f%%)",(math.floor(judgestats["TapNoteScore_Miss"]/maxnotes*10000))/100); 
 				else
-					self:settext("(0.0%)")
+					self:settext("(0.00%)")
 				end;
 			end;
 			OffCommand=cmd(bouncebegin,0.35;zoomy,0);
@@ -933,7 +938,7 @@ local t = Def.ActorFrame {
 				if temp ~= nil and maxholds ~= 0  then
 					self:settextf("(%.2f%%)",(math.floor(holdstats["HoldNoteScore_Held"]/maxholds*10000))/100); 
 				else
-					self:settext("(0.0%)")
+					self:settext("(0.00%)")
 				end;
 			end;
 			OffCommand=cmd(bouncebegin,0.35;zoomy,0);
@@ -972,8 +977,18 @@ local t = Def.ActorFrame {
 				if temp ~= nil and maxholds ~= 0 then
 					self:settextf("(%.2f%%)",(math.floor(holdstats["HoldNoteScore_LetGo"]/maxholds*10000))/100); 
 				else
-					self:settext("(0.0%)")
+					self:settext("(0.00%)")
 				end;
+			end;
+			OffCommand=cmd(bouncebegin,0.35;zoomy,0);
+			CurrentSongChangedMessageCommand=cmd(queuecommand,"Set");
+			CurrentStepsP1ChangedMessageCommand=cmd(queuecommand,"Set");
+		};
+		LoadFont("Common Normal") .. {
+			InitCommand=cmd(xy,scorestatWidth-5,scorestatHeight-5;zoom,0.35;diffusealpha,0.5;horizalign,right;vertalign,bottom);
+			BeginCommand=cmd(queuecommand,"Set");
+			SetCommand=function(self)
+				self:settext("Showing 1 of "..numscore)
 			end;
 			OffCommand=cmd(bouncebegin,0.35;zoomy,0);
 			CurrentSongChangedMessageCommand=cmd(queuecommand,"Set");

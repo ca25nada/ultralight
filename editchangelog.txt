@@ -1,3 +1,18 @@
+2014/07/19
+Fixes:
+- [ScreenSelectMusic] Fixed one of the texts not updating when changing difficulty.
+
+==========================================================================
+
+2014/07/10
+Changes:
+- [General] Some menu sound effect changes.
+
+Fixes:
+- [ScreenSelectMusic] Fixed some percentages displaying only 1 decimal places on ScoreStatus.
+
+==========================================================================
+
 2014/07/09
 New:
 - [ScreenSelectMusic] ScoreStatus in screengameplay. Hold down the "Select" key during the song select screen for details regarding the top score of the song.
