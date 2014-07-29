@@ -221,7 +221,6 @@ local profileP1 = GetPlayerOrMachineProfile(PLAYER_1)
 local playcount = 0
 local misscount = 0
 local totalplays = profileP1:GetNumTotalSongsPlayed()
-local tablelength = 0
 local cttext =''
 local ctcolor =''
 local topscore = nil
@@ -252,6 +251,8 @@ local stepstype = ''
 local difficulty = ''
 local meter = 0
 local numscore = 1
+local tablelength = 1
+local scoreindex = 0
 
 local judgestats = { -- Table containing the # of judgements made so far
 	TapNoteScore_W1 = 0,
@@ -272,14 +273,19 @@ local holdstats = {
 };
 
 local t = Def.ActorFrame {
-	Def.Actor{
+	Def.Actor{ -- ScoreStats
 		Name="scorestat";
 		CodeMessageCommand=function(self,params)
 			if params.Name == "ScoreStat" then
 				scorestatheld = true
-			end;
-			if params.Name == "ScoreStatOff" then
+				scoreindex = 0
+			elseif params.Name == "ScoreStatNext" and scorestatheld then
+				scoreindex = scoreindex+1
+			elseif params.Name == "ScoreStatPrev" and scorestatheld then
+				scoreindex = scoreindex-1
+			elseif params.Name == "ScoreStatOff" then
 				scorestatheld = false
+				scoreindex = 0
 			end;
 		end;
 	};
@@ -304,8 +310,9 @@ local t = Def.ActorFrame {
 				stepstype = string.gsub(ToEnumShortString(steps:GetStepsType()),"%_"," ")
 				meter = steps:GetMeter()
 				difficulty = difftype[steps:GetDifficulty()]
-				topscore = hstable[1] -- returns first score
-				--tablelength = #hstable
+				tablelength = math.max(#hstable,1)
+				scoreindex = scoreindex%tablelength
+				topscore = hstable[(scoreindex)+1] -- returns first score
 
 				if topscore ~= nil then -- when a score exists
 
@@ -390,6 +397,8 @@ local t = Def.ActorFrame {
 				stepstype = ' '
 				meter = ' '
 				difficulty = ' '
+				tablelength = 1
+				scoreindex = 0
 				for k,v in pairs(judgestats) do
 						judgestats[k] = 0
 				end;
@@ -400,6 +409,7 @@ local t = Def.ActorFrame {
 		end;
 		CurrentSongChangedMessageCommand=cmd(queuecommand,"Set");
 		CurrentStepsP1ChangedMessageCommand=cmd(queuecommand,"Set");
+		CodeMessageCommand=cmd(queuecommand,"Set");
 	};
 	--[[
 	LoadFont("Common Normal") .. { -- debug
@@ -570,7 +580,7 @@ local t = Def.ActorFrame {
 			self:finishtweening()
 			if scorestatheld then
 				self:bouncebegin(0.375)
-				self:addx(SCREEN_WIDTH/2)
+				self:x((scorestatX-SCREEN_WIDTH/2)+(SCREEN_WIDTH/2))
 			else
 				self:bouncebegin(0.375)
 				self:xy(scorestatX-SCREEN_WIDTH/2,scorestatY)
@@ -589,6 +599,7 @@ local t = Def.ActorFrame {
 			OffCommand=cmd(bouncebegin,0.35;zoomy,0);
 			CurrentSongChangedMessageCommand=cmd(queuecommand,"Set");
 			CurrentStepsP1ChangedMessageCommand=cmd(queuecommand,"Set");
+			CodeMessageCommand=cmd(queuecommand,"Set");
 		};
 		LoadFont("Common Normal") .. {
 			InitCommand=cmd(xy,5,15;zoom,0.4;maxwidth,scorestatWidth/0.4;horizalign,left;vertalign,top);
@@ -599,6 +610,7 @@ local t = Def.ActorFrame {
 			OffCommand=cmd(bouncebegin,0.35;zoomy,0);
 			CurrentSongChangedMessageCommand=cmd(queuecommand,"Set");
 			CurrentStepsP1ChangedMessageCommand=cmd(queuecommand,"Set");
+			CodeMessageCommand=cmd(queuecommand,"Set");
 		};
 		LoadFont("Common Normal") .. {
 			InitCommand=cmd(xy,6,50;diffuse,color("#cc6666");zoom,0.9;maxwidth,45/0.9;horizalign,left;vertalign,top);
@@ -610,6 +622,7 @@ local t = Def.ActorFrame {
 			OffCommand=cmd(bouncebegin,0.35;zoomy,0);
 			CurrentSongChangedMessageCommand=cmd(queuecommand,"Set");
 			CurrentStepsP1ChangedMessageCommand=cmd(queuecommand,"Set");
+			CodeMessageCommand=cmd(queuecommand,"Set");
 		};
 		LoadFont("Common Normal") .. {
 			InitCommand=cmd(xy,53,57;zoom,0.4;horizalign,left;vertalign,top);
@@ -624,6 +637,7 @@ local t = Def.ActorFrame {
 			OffCommand=cmd(bouncebegin,0.35;zoomy,0);
 			CurrentSongChangedMessageCommand=cmd(queuecommand,"Set");
 			CurrentStepsP1ChangedMessageCommand=cmd(queuecommand,"Set");
+			CodeMessageCommand=cmd(queuecommand,"Set");
 		};
 		LoadFont("Common Normal") .. {
 			InitCommand=cmd(xy,53,65;zoom,0.4;horizalign,left;vertalign,top);
@@ -634,6 +648,7 @@ local t = Def.ActorFrame {
 			OffCommand=cmd(bouncebegin,0.35;zoomy,0);
 			CurrentSongChangedMessageCommand=cmd(queuecommand,"Set");
 			CurrentStepsP1ChangedMessageCommand=cmd(queuecommand,"Set");
+			CodeMessageCommand=cmd(queuecommand,"Set");
 		};
 		LoadFont("Common Normal") .. {
 			InitCommand=cmd(xy,5,75;zoom,0.5;horizalign,left;vertalign,top);
@@ -657,6 +672,7 @@ local t = Def.ActorFrame {
 			OffCommand=cmd(bouncebegin,0.35;zoomy,0);
 			CurrentSongChangedMessageCommand=cmd(queuecommand,"Set");
 			CurrentStepsP1ChangedMessageCommand=cmd(queuecommand,"Set");
+			CodeMessageCommand=cmd(queuecommand,"Set");
 		};
 		LoadFont("Common Normal") .. {
 			InitCommand=cmd(xy,5,90;zoom,0.4;maxwidth,scorestatWidth/0.4-20;horizalign,left;vertalign,top);
@@ -667,6 +683,7 @@ local t = Def.ActorFrame {
 			OffCommand=cmd(bouncebegin,0.35;zoomy,0);
 			CurrentSongChangedMessageCommand=cmd(queuecommand,"Set");
 			CurrentStepsP1ChangedMessageCommand=cmd(queuecommand,"Set");
+			CodeMessageCommand=cmd(queuecommand,"Set");
 		};
 		LoadFont("Common Normal") .. {
 			InitCommand=cmd(xy,judgeX,judgeY;zoom,0.5;horizalign,left;vertalign,top);
@@ -680,6 +697,7 @@ local t = Def.ActorFrame {
 			OffCommand=cmd(bouncebegin,0.35;zoomy,0);
 			CurrentSongChangedMessageCommand=cmd(queuecommand,"Set");
 			CurrentStepsP1ChangedMessageCommand=cmd(queuecommand,"Set");
+			CodeMessageCommand=cmd(queuecommand,"Set");
 		};
 		LoadFont("Common Normal") .. {
 			InitCommand=cmd(xy,judgeX+100,judgeY;zoom,0.5;horizalign,right;vertalign,top);
@@ -695,6 +713,7 @@ local t = Def.ActorFrame {
 			OffCommand=cmd(bouncebegin,0.35;zoomy,0);
 			CurrentSongChangedMessageCommand=cmd(queuecommand,"Set");
 			CurrentStepsP1ChangedMessageCommand=cmd(queuecommand,"Set");
+			CodeMessageCommand=cmd(queuecommand,"Set");
 		};
 		LoadFont("Common Normal") .. {
 			InitCommand=cmd(xy,judgeX+102,judgeY+4;zoom,0.35;horizalign,left;vertalign,top);
@@ -710,6 +729,7 @@ local t = Def.ActorFrame {
 			OffCommand=cmd(bouncebegin,0.35;zoomy,0);
 			CurrentSongChangedMessageCommand=cmd(queuecommand,"Set");
 			CurrentStepsP1ChangedMessageCommand=cmd(queuecommand,"Set");
+			CodeMessageCommand=cmd(queuecommand,"Set");
 		};
 		LoadFont("Common Normal") .. {
 			InitCommand=cmd(xy,judgeX,judgeY+15;diffuse,TapNoteScoreToColor("TapNoteScore_W2");zoom,0.5;horizalign,left;vertalign,top);
@@ -719,6 +739,7 @@ local t = Def.ActorFrame {
 			OffCommand=cmd(bouncebegin,0.35;zoomy,0);
 			CurrentSongChangedMessageCommand=cmd(queuecommand,"Set");
 			CurrentStepsP1ChangedMessageCommand=cmd(queuecommand,"Set");
+			CodeMessageCommand=cmd(queuecommand,"Set");
 		};
 		LoadFont("Common Normal") .. {
 			InitCommand=cmd(xy,judgeX+100,judgeY+15;zoom,0.5;horizalign,right;vertalign,top);
@@ -734,6 +755,7 @@ local t = Def.ActorFrame {
 			OffCommand=cmd(bouncebegin,0.35;zoomy,0);
 			CurrentSongChangedMessageCommand=cmd(queuecommand,"Set");
 			CurrentStepsP1ChangedMessageCommand=cmd(queuecommand,"Set");
+			CodeMessageCommand=cmd(queuecommand,"Set");
 		};
 		LoadFont("Common Normal") .. {
 			InitCommand=cmd(xy,judgeX+102,judgeY+15+4;zoom,0.35;horizalign,left;vertalign,top);
@@ -749,6 +771,7 @@ local t = Def.ActorFrame {
 			OffCommand=cmd(bouncebegin,0.35;zoomy,0);
 			CurrentSongChangedMessageCommand=cmd(queuecommand,"Set");
 			CurrentStepsP1ChangedMessageCommand=cmd(queuecommand,"Set");
+			CodeMessageCommand=cmd(queuecommand,"Set");
 		};
 		LoadFont("Common Normal") .. {
 			InitCommand=cmd(xy,judgeX,judgeY+30;diffuse,TapNoteScoreToColor("TapNoteScore_W3");zoom,0.5;horizalign,left;vertalign,top);
@@ -758,6 +781,7 @@ local t = Def.ActorFrame {
 			OffCommand=cmd(bouncebegin,0.35;zoomy,0);
 			CurrentSongChangedMessageCommand=cmd(queuecommand,"Set");
 			CurrentStepsP1ChangedMessageCommand=cmd(queuecommand,"Set");
+			CodeMessageCommand=cmd(queuecommand,"Set");
 		};
 		LoadFont("Common Normal") .. {
 			InitCommand=cmd(xy,judgeX+100,judgeY+30;zoom,0.5;horizalign,right;vertalign,top);
@@ -773,6 +797,7 @@ local t = Def.ActorFrame {
 			OffCommand=cmd(bouncebegin,0.35;zoomy,0);
 			CurrentSongChangedMessageCommand=cmd(queuecommand,"Set");
 			CurrentStepsP1ChangedMessageCommand=cmd(queuecommand,"Set");
+			CodeMessageCommand=cmd(queuecommand,"Set");
 		};
 		LoadFont("Common Normal") .. {
 			InitCommand=cmd(xy,judgeX+102,judgeY+30+4;zoom,0.35;horizalign,left;vertalign,top);
@@ -788,6 +813,7 @@ local t = Def.ActorFrame {
 			OffCommand=cmd(bouncebegin,0.35;zoomy,0);
 			CurrentSongChangedMessageCommand=cmd(queuecommand,"Set");
 			CurrentStepsP1ChangedMessageCommand=cmd(queuecommand,"Set");
+			CodeMessageCommand=cmd(queuecommand,"Set");
 		};
 		LoadFont("Common Normal") .. {
 			InitCommand=cmd(xy,judgeX,judgeY+45;diffuse,TapNoteScoreToColor("TapNoteScore_W4");zoom,0.5;horizalign,left;vertalign,top);
@@ -797,6 +823,7 @@ local t = Def.ActorFrame {
 			OffCommand=cmd(bouncebegin,0.35;zoomy,0);
 			CurrentSongChangedMessageCommand=cmd(queuecommand,"Set");
 			CurrentStepsP1ChangedMessageCommand=cmd(queuecommand,"Set");
+			CodeMessageCommand=cmd(queuecommand,"Set");
 		};
 		LoadFont("Common Normal") .. {
 			InitCommand=cmd(xy,judgeX+100,judgeY+45;zoom,0.5;horizalign,right;vertalign,top);
@@ -812,6 +839,7 @@ local t = Def.ActorFrame {
 			OffCommand=cmd(bouncebegin,0.35;zoomy,0);
 			CurrentSongChangedMessageCommand=cmd(queuecommand,"Set");
 			CurrentStepsP1ChangedMessageCommand=cmd(queuecommand,"Set");
+			CodeMessageCommand=cmd(queuecommand,"Set");
 		};
 		LoadFont("Common Normal") .. {
 			InitCommand=cmd(xy,judgeX+102,judgeY+45+4;zoom,0.35;horizalign,left;vertalign,top);
@@ -827,6 +855,7 @@ local t = Def.ActorFrame {
 			OffCommand=cmd(bouncebegin,0.35;zoomy,0);
 			CurrentSongChangedMessageCommand=cmd(queuecommand,"Set");
 			CurrentStepsP1ChangedMessageCommand=cmd(queuecommand,"Set");
+			CodeMessageCommand=cmd(queuecommand,"Set");
 		};
 		LoadFont("Common Normal") .. {
 			InitCommand=cmd(xy,judgeX,judgeY+60;diffuse,TapNoteScoreToColor("TapNoteScore_W5");zoom,0.5;horizalign,left;vertalign,top);
@@ -836,6 +865,7 @@ local t = Def.ActorFrame {
 			OffCommand=cmd(bouncebegin,0.35;zoomy,0);
 			CurrentSongChangedMessageCommand=cmd(queuecommand,"Set");
 			CurrentStepsP1ChangedMessageCommand=cmd(queuecommand,"Set");
+			CodeMessageCommand=cmd(queuecommand,"Set");
 		};
 		LoadFont("Common Normal") .. {
 			InitCommand=cmd(xy,judgeX+100,judgeY+60;zoom,0.5;horizalign,right;vertalign,top);
@@ -851,6 +881,7 @@ local t = Def.ActorFrame {
 			OffCommand=cmd(bouncebegin,0.35;zoomy,0);
 			CurrentSongChangedMessageCommand=cmd(queuecommand,"Set");
 			CurrentStepsP1ChangedMessageCommand=cmd(queuecommand,"Set");
+			CodeMessageCommand=cmd(queuecommand,"Set");
 		};
 		LoadFont("Common Normal") .. {
 			InitCommand=cmd(xy,judgeX+102,judgeY+60+4;zoom,0.35;horizalign,left;vertalign,top);
@@ -866,6 +897,7 @@ local t = Def.ActorFrame {
 			OffCommand=cmd(bouncebegin,0.35;zoomy,0);
 			CurrentSongChangedMessageCommand=cmd(queuecommand,"Set");
 			CurrentStepsP1ChangedMessageCommand=cmd(queuecommand,"Set");
+			CodeMessageCommand=cmd(queuecommand,"Set");
 		};
 		LoadFont("Common Normal") .. {
 			InitCommand=cmd(xy,judgeX,judgeY+75;diffuse,TapNoteScoreToColor("TapNoteScore_Miss");zoom,0.5;horizalign,left;vertalign,top);
@@ -875,6 +907,7 @@ local t = Def.ActorFrame {
 			OffCommand=cmd(bouncebegin,0.35;zoomy,0);
 			CurrentSongChangedMessageCommand=cmd(queuecommand,"Set");
 			CurrentStepsP1ChangedMessageCommand=cmd(queuecommand,"Set");
+			CodeMessageCommand=cmd(queuecommand,"Set");
 		};
 		LoadFont("Common Normal") .. {
 			InitCommand=cmd(xy,judgeX+100,judgeY+75;zoom,0.5;horizalign,right;vertalign,top);
@@ -890,6 +923,7 @@ local t = Def.ActorFrame {
 			OffCommand=cmd(bouncebegin,0.35;zoomy,0);
 			CurrentSongChangedMessageCommand=cmd(queuecommand,"Set");
 			CurrentStepsP1ChangedMessageCommand=cmd(queuecommand,"Set");
+			CodeMessageCommand=cmd(queuecommand,"Set");
 		};
 		LoadFont("Common Normal") .. {
 			InitCommand=cmd(xy,judgeX+102,judgeY+75+4;zoom,0.35;horizalign,left;vertalign,top);
@@ -905,6 +939,7 @@ local t = Def.ActorFrame {
 			OffCommand=cmd(bouncebegin,0.35;zoomy,0);
 			CurrentSongChangedMessageCommand=cmd(queuecommand,"Set");
 			CurrentStepsP1ChangedMessageCommand=cmd(queuecommand,"Set");
+			CodeMessageCommand=cmd(queuecommand,"Set");
 		};
 		LoadFont("Common Normal") .. {
 			InitCommand=cmd(xy,judgeX,judgeY+90;diffuse,TapNoteScoreToColor("TapNoteScore_W2");zoom,0.5;horizalign,left;vertalign,top);
@@ -914,6 +949,7 @@ local t = Def.ActorFrame {
 			OffCommand=cmd(bouncebegin,0.35;zoomy,0);
 			CurrentSongChangedMessageCommand=cmd(queuecommand,"Set");
 			CurrentStepsP1ChangedMessageCommand=cmd(queuecommand,"Set");
+			CodeMessageCommand=cmd(queuecommand,"Set");
 		};
 		LoadFont("Common Normal") .. {
 			InitCommand=cmd(xy,judgeX+100,judgeY+90;zoom,0.5;horizalign,right;vertalign,top);
@@ -929,6 +965,7 @@ local t = Def.ActorFrame {
 			OffCommand=cmd(bouncebegin,0.35;zoomy,0);
 			CurrentSongChangedMessageCommand=cmd(queuecommand,"Set");
 			CurrentStepsP1ChangedMessageCommand=cmd(queuecommand,"Set");
+			CodeMessageCommand=cmd(queuecommand,"Set");
 		};
 		LoadFont("Common Normal") .. {
 			InitCommand=cmd(xy,judgeX+102,judgeY+90+4;zoom,0.35;horizalign,left;vertalign,top);
@@ -944,6 +981,7 @@ local t = Def.ActorFrame {
 			OffCommand=cmd(bouncebegin,0.35;zoomy,0);
 			CurrentSongChangedMessageCommand=cmd(queuecommand,"Set");
 			CurrentStepsP1ChangedMessageCommand=cmd(queuecommand,"Set");
+			CodeMessageCommand=cmd(queuecommand,"Set");
 		};
 		LoadFont("Common Normal") .. {
 			InitCommand=cmd(xy,judgeX,judgeY+105;diffuse,TapNoteScoreToColor("TapNoteScore_Miss");zoom,0.5;horizalign,left;vertalign,top);
@@ -953,6 +991,7 @@ local t = Def.ActorFrame {
 			OffCommand=cmd(bouncebegin,0.35;zoomy,0);
 			CurrentSongChangedMessageCommand=cmd(queuecommand,"Set");
 			CurrentStepsP1ChangedMessageCommand=cmd(queuecommand,"Set");
+			CodeMessageCommand=cmd(queuecommand,"Set");
 		};
 		LoadFont("Common Normal") .. {
 			InitCommand=cmd(xy,judgeX+100,judgeY+105;zoom,0.5;horizalign,right;vertalign,top);
@@ -968,6 +1007,7 @@ local t = Def.ActorFrame {
 			OffCommand=cmd(bouncebegin,0.35;zoomy,0);
 			CurrentSongChangedMessageCommand=cmd(queuecommand,"Set");
 			CurrentStepsP1ChangedMessageCommand=cmd(queuecommand,"Set");
+			CodeMessageCommand=cmd(queuecommand,"Set");
 		};
 		LoadFont("Common Normal") .. {
 			InitCommand=cmd(xy,judgeX+102,judgeY+105+4;zoom,0.35;horizalign,left;vertalign,top);
@@ -983,16 +1023,18 @@ local t = Def.ActorFrame {
 			OffCommand=cmd(bouncebegin,0.35;zoomy,0);
 			CurrentSongChangedMessageCommand=cmd(queuecommand,"Set");
 			CurrentStepsP1ChangedMessageCommand=cmd(queuecommand,"Set");
+			CodeMessageCommand=cmd(queuecommand,"Set");
 		};
 		LoadFont("Common Normal") .. {
 			InitCommand=cmd(xy,scorestatWidth-5,scorestatHeight-5;zoom,0.35;diffusealpha,0.5;horizalign,right;vertalign,bottom);
 			BeginCommand=cmd(queuecommand,"Set");
 			SetCommand=function(self)
-				self:settext("Showing 1 of "..numscore)
+				self:settext("Showing "..(scoreindex+1).." of "..numscore)
 			end;
 			OffCommand=cmd(bouncebegin,0.35;zoomy,0);
 			CurrentSongChangedMessageCommand=cmd(queuecommand,"Set");
 			CurrentStepsP1ChangedMessageCommand=cmd(queuecommand,"Set");
+			CodeMessageCommand=cmd(queuecommand,"Set");
 		};
 
 

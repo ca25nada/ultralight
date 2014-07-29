@@ -1,3 +1,14 @@
+2014/07/20
+Changes:
+- [ScreenSelectMusic] Users can now sift through all recorded scores for ScoreStats (sorted by highest to lowest score). Press the EffectUp/EffectDown button while scorestat screen is out to navigate.
+
+One thing to note: The number of scores saved on the profile/machine depends on the numbers set in preferences.ini (iirc default is 3 for profile, 10 for machine scores)
+To change the number of scores stepmania saves, search and change the numbers on these lines:
+MaxHighScoresPerListForMachine=
+MaxHighScoresPerListForPlayer=
+
+==========================================================================
+
 2014/07/19
 Fixes:
 - [ScreenSelectMusic] Fixed one of the texts not updating when changing difficulty.
@@ -28,17 +39,20 @@ Fixes:
 - [ScreenGameplay] Fixed where the player name does not display on the pacemaker when %Score or MIGS score is used.
 
 ==========================================================================
+
 2014/07/04
 Fixes:
 - [ScreenGameplay] Fixed issue where the current grade would update 1 note later.
 
 ==========================================================================
+
 2014/07/03
 Changes:
 - [ScreenGameplay] Judgement displays ITG style early/late bar. (thanks staiain..!)
 - [Other] Removed version label in changelog because.... I wasn't even using it anyway.
 
 ==========================================================================
+
 2014/07/02
 Changes:
 - [ScreenGameplay] Pacemaker and Usernames on the scoregraph are now aligned to left.
@@ -46,12 +60,14 @@ Changes:
 - [Other] Moved everything in judgecount.lua and lifejudgedisplay.lua to screengameplaydecorations
 
 ==========================================================================
+
 2014/06/31
 Changes:
 - [ScreenGameplay] Grade display for JudgeCount now takes failing grades into account. (aka: displays "F" when you're failing)
 - [ScreenGameplay/ScreenPlayerOptions] Graph Messages preferences are now togglable. (The messages that show up on the graph when you pass a certain rank)
 
 ==========================================================================
+
 2014/06/30
 Changes:
 - [Other] Moar Comments/Organized slightly.
@@ -60,11 +76,13 @@ Changes:
 - [ScreenPlayerOptions] Changed some descriptions for some modifiers.
 
 ==========================================================================
+
 2014/06/14
 Fixes:
 - [ScreenSelectMusic/ScreenGameplay] Fixed issue where max DP score didn't take rolls into account. Resulting in scores that seems to have higher DP than the highest possible value.
 
 ===========================================================================
+
 2014/03/25
 Fixes:
 - [ScreenGameplay] Fixed issue where current player score on the graph for percent score and migs score did not display properly.
@@ -72,6 +90,7 @@ Fixes:
 - [ScreenGameplay] Added Timing/Life difficulty display.
 
 ===========================================================================
+
 2014/03/23
 Changes:
 - [ScreenGameplay] Width of scoregraph can be now changed more easily. Values under 100 might cause some elements to overlap.
@@ -83,6 +102,7 @@ Fixes:
 - [ScreenGameplay] Fixed issue where current grade will still be displayed when JudgeCount mod is set to "Off"
 
 ===========================================================================
+
 2014/03/20
 Changes:
 - [ScreenGameplay] Scoregraph and Judgecount will no longer display when modes with 8+ lanes are played.
@@ -94,12 +114,14 @@ Fixes:
 - [ScreenGameplay] Fixed position of Ghost Score and Current Accuracy when Center1Player is off
 
 ===========================================================================
+
 2014/03/19
 Changes:
 - [ScreenGameplay] Moved song progress bar
 - [ScreenGameplay] Style/Difficulty display on gameplay screen changed slightly.
 - [ScreenGameplay] Changed one of condition variables for "rank pass" mesages to be in a table. 
 ===========================================================================
+
 2014/03/07
 New:
 - [ScreenGameplay] Added "DJ Level <insert Rank> Pass" message display on the scoregraph which will show whenever a player passes said grade.
@@ -115,6 +137,7 @@ Fixes:
 - [ScreenGameplay] Current Accuracy will be fixed to 0.00% when the maximum possible score is 0% (which caused it to divide by zero whenever a song started off with mines)
 
 ===========================================================================
+
 2014/02/27
 New:
 - [ScreenSelectMusic] Added simfile directory text
@@ -122,6 +145,7 @@ New:
 - [ScreenSelectMusic] Added total playcount /song playcount text
 
 ===========================================================================
+
 2014/02/25
 New:
 - [ScreenGameplay/ScreenPlayerOptions] added option to turn the scoregraph and judge count off
@@ -137,11 +161,13 @@ Fixes:
 - [ScreenGameplay] judgecount and scoregraph will no longer increment after the player has failed.
 
 ===========================================================================
+
 2014/02/02
 New:
 - [ScreenGameplay] added support for other scoring types (DP/percent score/migs)
 
 ===========================================================================
+
 2013/12/07
 New:
 - [ScreenGameplay] Added average score
@@ -151,22 +177,26 @@ Changes:
 - [ScreenGameplay] Removed combo effects that came on whenever a toasty was triggered
 
 ============================================================================
+
 2013/12/06
 New:
 - [ScreenGameplay] Added Score/Target Graph - Has some issues but works fine most of the time.
 
 ============================================================================
+
 2013/11/13
 Changes:
 - [ScreenGameplay] The indivdual judges in judgecounter now flashes when the player hits a note corresponding to that judge.
 
 ============================================================================
+
 2013/11/12
 New:
 - [ScreenGameplay] Added JudgeCounter (doesn't change locations based on center1player preferences yet, so just change framex value in the .lua file as needed)
 located at BGAnimations\ScreenGameplay overlay\judgecount.lua
 
 ============================================================================
+
 2013/07/27
 Ignoring 2p for now. /o/
 New:
@@ -178,11 +208,13 @@ Changes:
 - [ScreenGameplay] moved song title/artist display to bottom left. (probably broken for courses but who cares)
 
 ============================================================================
+
 2013/07/06
 New:
 - [ScreenGameplay] Added %Life Display on ScreeenGameplay (again, credits to Jousway~)
 
 ============================================================================
+
 v??? (2013/07/05)
 New:
 - [ScreenSelectMusic] Added ScreenSelectScreen Background Display (Jousway)
@@ -191,6 +223,7 @@ https://github.com/Jousway/Stepmania-Zpawn/blob/master/SM5/Themes/default_JousEd
 https://github.com/Jousway/Stepmania-Zpawn/tree/master/SM5/Themes/default_JousEdit_SpeedMod_System
 
 ============================================================================
+
 2013/07/04
 New:
 - [ScreenGameplay/ScreenPlayerOptions] "Stole" screenfilter mod from the default theme
