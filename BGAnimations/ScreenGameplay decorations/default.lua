@@ -63,7 +63,7 @@ t[#t+1] = Def.ActorFrame{
 		Stream=Def.Actor{};
 		Tip=Def.ActorFrame{
 			Def.Quad{
-				InitCommand=cmd(zoomto,6,6;diffuse,HSV(0,0.4,1);rotationz,45;pulse;effectclock,'beatnooffset';effectmagnitude,1,0.75,1);
+				InitCommand=cmd(zoomto,6,6;diffuse,CustomDifficultyToColor(GAMESTATE:GetCurrentSteps(PLAYER_1):GetDifficulty());rotationz,45;pulse;effectclock,'beatnooffset';effectmagnitude,1,0.75,1);
 			};
 			Def.Quad{
 				InitCommand=cmd(zoomto,4,4;diffuse,HSV(0,0,1);rotationz,45;pulse;effectclock,'beatnooffset';effectmagnitude,1,0.75,1);

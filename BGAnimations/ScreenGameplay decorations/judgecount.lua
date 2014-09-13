@@ -22,6 +22,7 @@ Current (known) issues with scoregraph:
 ---------------------------------------
 -- Score Weights and Rank Conditions --
 ---------------------------------------
+
 local gradestring = {
 	Grade_Tier01 = 'AAAA',
 	Grade_Tier02 = 'AAA',
@@ -205,6 +206,12 @@ end;
 -------------------------------------------
 -- Variables for Current Play Statistics --
 -------------------------------------------
+judgetable = {}
+protimingtable = {}
+protimingsum = 0
+
+--local timingtype = 'pro' -- unused. 
+
 local p1name = GAMESTATE:GetPlayerDisplayName(PLAYER_1)
 local maxnotes = GAMESTATE:GetCurrentSteps(PLAYER_1):GetRadarValues(PLAYER_1):GetValue("RadarCategory_TapsAndHolds"); -- Radarvalue, maximum number of notes
 local maxholds = GAMESTATE:GetCurrentSteps(PLAYER_1):GetRadarValues(PLAYER_1):GetValue("RadarCategory_Holds") + GAMESTATE:GetCurrentSteps(PLAYER_1):GetRadarValues(PLAYER_1):GetValue("RadarCategory_Rolls"); -- Radarvalue, maximum number of holds
@@ -628,13 +635,24 @@ local t = Def.ActorFrame {
 				
 			end;
 			JudgmentMessageCommand=function(self,params)
-				
 				if params.HoldNoteScore then
 					totholds = totholds + 1;
+					judgetable[#judgetable+1] = params.HoldNoteScore
 				elseif params.TapNoteScore == 'TapNoteScore_HitMine' or params.TapNoteScore == 'TapNoteScore_AvoidMine' then
 					totmines = totmines + 1;
+					judgetable[#judgetable+1] = params.TapNoteScore
 				else
 					totnotes = totnotes + 1;
+					judgetable[#judgetable+1] = params.TapNoteScore
+					if params.TapNoteScore ~= 'TapNoteScore_Miss' then
+						if not params.Early then
+							protimingtable[#protimingtable+1] = -params.TapNoteOffset
+							protimingsum = protimingsum - params.TapNoteOffset
+						else
+							protimingtable[#protimingtable+1] = -params.TapNoteOffset
+							protimingsum = protimingsum + params.TapNoteOffset
+						end;
+					end;
 				end;
 				--halfassed attempt at fixing hold issue, might cause graph issues with songs with just holds at ending.
 				--to be removed after it's fixed.
@@ -1686,7 +1704,34 @@ local t = Def.ActorFrame {
 				self:queuecommand("Set");
 			end;
 		};
-		
+		--[[
+		LoadFont("Common Normal") .. { -- Protiming
+			Name="Protiming";
+			InitCommand=cmd(x,SCREEN_CENTER_X;y,SCREEN_CENTER_Y-10;zoom,0.45;diffuse,color("#ffffff"));
+			BeginCommand=function(self)
+				self:visible(false)
+				if GAMESTATE:GetPlayerState(PLAYER_1):GetCurrentPlayerOptions():UsingReverse() == true then
+					self:y(SCREEN_CENTER_Y+10)
+				end;
+				if center1P == false then
+					self:x((SCREEN_CENTER_X*0.57)+50)
+				end;
+			end;
+			SetCommand=function(self)
+				self:settext(string.format("%.2f",protimingtable[#protimingtable]*1000).." ms")
+			end;
+			JudgmentMessageCommand=function(self,params)
+				if params.TapNoteScore ~= 'TapNoteScore_Miss' then
+					self:queuecommand("Set");
+					self:visible(true)
+				else
+					self:settext('')
+					self:visible(false)
+				end;
+
+			end;
+		--]]
+		};
 	};
 };
 return t;
