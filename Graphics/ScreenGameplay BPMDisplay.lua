@@ -32,6 +32,7 @@ local function UpdateSingleBPM(self)
 
 	-- for SM5Beta3 or earlier
 	-- Does not take haste mods into account
+	--[[
 	local mods = GAMESTATE:GetSongOptionsString()
 	local rate = 1
 	if string.find(mods,"xMusic") == nil then
@@ -41,9 +42,10 @@ local function UpdateSingleBPM(self)
 	end;
 
 	local bpm = songPosition:GetCurBPS() * 60 * rate
+	--]]
 
-	-- Replace above with this for current builds.
-	--local bpm = SCREENMAN:GetTopScreen():GetTrueBPS() * 60
+	-- for SM5Beta4 or newer
+	local bpm = SCREENMAN:GetTopScreen():GetTrueBPS(PLAYER_1) * 60
 
 	bpmDisplay:settext( string.format("%03.2f",bpm) )
 end

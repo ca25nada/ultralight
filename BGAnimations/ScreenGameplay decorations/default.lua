@@ -95,6 +95,7 @@ t[#t+1] = StandardDecorationFromFile( "BPMDisplay", "BPMDisplay" );
 -- sigh. I personally don't like having to do this to get machine score working,
 -- so imagine how all the people who DON'T know as much as I do about theming
 -- who will run into this.
+--[[
 if not GAMESTATE:IsCourseMode() then
 	t[#t+1] = Def.Actor{
 		Name="JudgmentController";
@@ -104,7 +105,7 @@ if not GAMESTATE:IsCourseMode() then
 		end;
 	};
 end;
-
+--]]
 
 
 -- speedkills
@@ -157,13 +158,15 @@ t[#t+1] = Def.ActorFrame {
 			if GAMESTATE:IsSideJoined(v) then
 				local ps = GAMESTATE:GetPlayerState(v);
 				local po = ps:GetPlayerOptions("ModsLevel_Preferred");
+				local modstring = ps:GetPlayerOptionsString("ModsLevel_Preferred");
 
-				local XMod = po:GetXMod() or 0;
-				local MMod = po:GetMMod() or 0;
+				local XMod = po:XMod() or 0;
+				local MMod = po:MMod() or 0;
+				--local MMod = tonumber(string.match(modstring, "[Mm](%d+)")) or 0;
 
 				-- [ja] �R�[�h��������GetCMod()�͐��������삵�Ȃ��H
 				-- local CMod = po:GetCMod();
-				local modstring = ps:GetPlayerOptionsString("ModsLevel_Preferred");
+				
 				local CModString = string.match(modstring, "[Cc](%d+)") or "0";
 				local CMod = tonumber(CModString);
 
@@ -180,7 +183,7 @@ t[#t+1] = Def.ActorFrame {
 					targetBPM[v] = CMod;
 				end;
 
-				SCREENMAN:SystemMessage(string.format("%s: Speed Mode: %s Target BPM: %.0f", v, speedMode[v], targetBPM[v]));
+				SCREENMAN:SystemMessage(string.format("%s: Speed Mode: %s Target BPM: %.0f ", v, speedMode[v], XMod));
 			end;
 		end;
 
@@ -197,7 +200,9 @@ t[#t+1] = Def.ActorFrame {
 
 		if speedMode[pn] == 'x' then
 			-- X-Mod
-			local speed = po:GetXMod() or 0;
+			local speed = po:XMod() or 0;
+
+			--local speed = 0;
 			speed = math.floor(speed * 4 + 0.5) / 4;
 
 			local speedDelta = 0;

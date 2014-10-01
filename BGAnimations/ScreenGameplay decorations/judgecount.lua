@@ -54,7 +54,7 @@ local scoreweight =  { -- Score Weights for DP score (MAX2)
 	HoldNoteScore_Held			= 6,--PREFSMAN:GetPreference("GradeWeightHeld"),				--  6
 	TapNoteScore_HitMine		= -8,--PREFSMAN:GetPreference("GradeWeightHitMine"),				-- -8
 	HoldNoteScore_LetGo			= 0,--PREFSMAN:GetPreference("GradeWeightLetGo"),				--  0
-	-- HoldNoteScore_Missed = 0 --Placeholder for now
+	HoldNoteScore_Missed = 0,
 	TapNoteScore_AvoidMine		= 0,
 	TapNoteScore_CheckpointHit	= 0,--PREFSMAN:GetPreference("GradeWeightCheckpointHit"),		--  0
 	TapNoteScore_CheckpointMiss = 0,--PREFSMAN:GetPreference("GradeWeightCheckpointMiss"),		--  0
@@ -71,7 +71,7 @@ local pweight =  { -- Score Weights for percentage scores (EX oni)
 	HoldNoteScore_Held			= 3,--PREFSMAN:GetPreference("PercentScoreWeightHeld"),
 	TapNoteScore_HitMine			= -2,--(0 or -2?) PREFSMAN:GetPreference("PercentScoreWeightHitMine"),
 	HoldNoteScore_LetGo			= 0,--PREFSMAN:GetPreference("PercentScoreWeightLetGo"),
-	-- HoldNoteScore_Missed = 0 --Placeholder for now
+	HoldNoteScore_Missed = 0,
 	TapNoteScore_AvoidMine		= 0,
 	TapNoteScore_CheckpointHit		= 0,--PREFSMAN:GetPreference("PercentScoreWeightCheckpointHit"),
 	TapNoteScore_CheckpointMiss 	= 0,--PREFSMAN:GetPreference("PercentScoreWeightCheckpointMiss"),
@@ -87,7 +87,7 @@ local migsweight =  { -- Score Weights for MIGS score
 	HoldNoteScore_Held			= 6,
 	TapNoteScore_HitMine			= -8,
 	HoldNoteScore_LetGo			= 0,
-	-- HoldNoteScore_Missed = 0 --Placeholder for now
+	HoldNoteScore_Missed = 0,
 	TapNoteScore_AvoidMine		= 0,
 	TapNoteScore_CheckpointHit		= 0,
 	TapNoteScore_CheckpointMiss 	= 0,
@@ -103,7 +103,7 @@ local judgestats = { -- Table containing the # of judgements made so far
 	HoldNoteScore_Held = 0,
 	TapNoteScore_HitMine = 0,
 	HoldNoteScore_LetGo = 0,
-	-- HoldNoteScore_Missed = 0 --Placeholder for now
+	HoldNoteScore_Missed = 0,
 	TapNoteScore_AvoidMine		= 0,
 	TapNoteScore_CheckpointHit		= 0,
 	TapNoteScore_CheckpointMiss 	= 0,
@@ -602,7 +602,9 @@ local t = Def.ActorFrame {
 				SetCommand=function(self)
 					if P1Fail == false then
 						local count = PHJudge(PLAYER_1,'HoldNoteScore_LetGo')
+						local misscount = PHJudge(PLAYER_1,'HoldNoteScore_LetGo')
 						judgestats["HoldNoteScore_LetGo"] = count
+						judgestats["HoldNoteScore_Missed"] = misscount
 						self:settext(count)
 					end;
 				end;
@@ -656,11 +658,14 @@ local t = Def.ActorFrame {
 				end;
 				--halfassed attempt at fixing hold issue, might cause graph issues with songs with just holds at ending.
 				--to be removed after it's fixed.
+				--edit: fixed as of sm5b4
+				--[[
 				if totnotes == maxnotes then
 					if totholds ~= maxholds then
 						totholds = maxholds
 					end;
 				end;
+				--]]
 				self:queuecommand("Set");
 			end;
 		};
@@ -1730,8 +1735,8 @@ local t = Def.ActorFrame {
 				end;
 
 			end;
-		--]]
 		};
+		--]]
 	};
 };
 return t;

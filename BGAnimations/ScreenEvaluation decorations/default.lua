@@ -102,7 +102,7 @@ for pn in ivalues(GAMESTATE:GetHumanPlayers()) do
 	};
 end
 --]]
-
+local test = getenv("ProTimingArray")
 -- percentages
 local judgeLines = {
 	'JudgmentLine_W1',
@@ -130,7 +130,11 @@ for i=1,#judgeLines do
 					local playerStageStats = STATSMAN:GetCurStageStats():GetPlayerStageStats(pn)
 					local count = playerStageStats:GetPercentageOfTaps(tns);
 					local p = tonumber(string.format("%.1f",count*100));
-					self:settext( p.."%" );
+					if p ~= nil then
+						self:settext( p.."%" );
+					else
+						self:settext("%");
+					end;
 				end;
 				OffCommand=THEME:GetMetric(Var "LoadingScreen",metric.."OffCommand");
 			};

@@ -1,3 +1,14 @@
+2014/09/30
+update for sm5b4
+
+Changes:
+- [ScreenGameplay] Maximum possible score now takes into missed holds into account.
+- [ScreenGameplay] BPM now takes current rate mods (and haste) into account.
+
+Fixes:
+- other minor issues that caused error messages to show.
+
+==========================================================================
 2014/07/20
 Changes:
 - [ScreenSelectMusic] Users can now sift through all recorded scores for ScoreStats (sorted by highest to lowest score). Press the EffectUp/EffectDown button while scorestat screen is out to navigate.

@@ -222,7 +222,7 @@ local playcount = 0
 local misscount = 0
 local totalplays = profileP1:GetNumTotalSongsPlayed()
 local cttext =''
-local ctcolor =''
+local ctcolor = color("#ffffff")
 local topscore = nil
 local playerdp = 0
 local maxdp = 0
@@ -536,26 +536,6 @@ local t = Def.ActorFrame {
 		CurrentSongChangedMessageCommand=cmd(queuecommand,"Set");
 		CurrentStepsP1ChangedMessageCommand=cmd(queuecommand,"Set");
 		};
-	LoadFont("Common Normal") .. { -- ClearType2
-        Name="ClearTypeP1_AAAA";
-		InitCommand=cmd(x,cardpos0;y,427;zoom,0.39;horizalign,left);
-		BeginCommand=cmd(playcommand,"Set");
-		SetCommand=function(self)
-			self:visible(false)
-			self:stopeffect()
-			self:settext(cttext)
-			if cttext == "Marvelous Full Combo" then
-				self:diffuseshift()
-				self:visible(true)
-				self:effectcolor1(color("1,1,1,0.2"))
-				self:effectcolor2(ctcolor)
-				self:effectperiod(0.4)
-			end;
-		end;
-		OffCommand=cmd(bouncebegin,0.35;zoomy,0);
-		CurrentSongChangedMessageCommand=cmd(queuecommand,"Set");
-		CurrentStepsP1ChangedMessageCommand=cmd(queuecommand,"Set");
-	};
 	LoadFont("Common Normal") .. { -- MissCount
         Name="MissCountP1";
 		InitCommand=cmd(x,cardpos1;y,455;zoom,0.39;horizalign,left);
@@ -663,7 +643,7 @@ local t = Def.ActorFrame {
 				elseif cttext == "Marvelous Full Combo"then
 					self:diffuseshift()
 					self:effectcolor1(CustomGradeColor("Grade_Tier01"))
-					self:effectcolor2(color(ctcolor))
+					self:effectcolor2(ctcolor)
 					self:effectperiod(0.1)
 				else
 					self:diffuse(ctcolor)
@@ -1042,7 +1022,7 @@ local t = Def.ActorFrame {
 
 };
 
--- Switch to something like this for judgecounts since the current one is a giant copy-paste-fest.
+-- something for judgecount so it's not a giant copypastefest
 -- Also Make them display in order
 --[[
 local i = 0

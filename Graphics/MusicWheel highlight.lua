@@ -6,7 +6,7 @@ return Def.ActorFrame{
 	};
 
 	Def.Quad{
-		InitCommand=cmd(halign,0;draworder,-250;x,0-(SCREEN_WIDTH-240)+SCREEN_CENTER_X*0.225;y,15;zoomto,(SCREEN_WIDTH-330)-(SCREEN_CENTER_X*0.225),2;diffuse,color("1,1,1,1");blend,Blend.Add;halign,left;vertalign,bottom);
+		InitCommand=cmd(horizalign,0;draworder,-250;x,0-(SCREEN_WIDTH-240)+SCREEN_CENTER_X*0.225;y,15;zoomto,(SCREEN_WIDTH-330)-(SCREEN_CENTER_X*0.225),2;diffuse,color("1,1,1,1");blend,Blend.Add;vertalign,bottom);
 		OffCommand=cmd(visible,false);
 		CodeMessageCommand=function(self,params)
 			self:finishtweening();
