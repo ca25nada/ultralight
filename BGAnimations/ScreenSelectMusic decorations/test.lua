@@ -128,95 +128,6 @@ local gradetier = {
 	Grade_Tier07 = THEME:GetMetric("PlayerStageStats", "GradePercentTier07"), -- D
 };
 
-local stypetable = { -- Shorthand Versions of ClearType
-	[1]="Marv F-Combo",
-	[2]="Whiteflag",
-	[3]="SDP",
-	[4]="Perf F-Combo",
-	[5]="Blackflag",
-	[6]="SDG",
-	[7]="F-Combo",
-	[8]="Missflag",
-	[9]="SDCB",
-	[10]="Clear",
-	[11]="Failed",
-	[12]="No Play",
-	[13]="-",
-	[14]="Rainbowflag",
-	[15]="Ragequit"
-};
-
-local typetable = { -- ClearType texts
-	[1]="Marvelous Full Combo",
-	[2]="Whiteflag",
-	[3]="Single Digit Perfects",
-	[4]="Perfect Full Combo",
-	[5]="Blackflag",
-	[6]="Single Digit Greats",
-	[7]="Full Combo",
-	[8]="Missflag",
-	[9]="Single Digit CBs",
-	[10]="Clear",
-	[11]="Failed",
-	[12]="No Play",
-	[13]="-",
-	[14]="Rainbowflag",
-	[15]="Ragequit"
-};
-
-local typecolors = {
-	[1]		= color("#66ccff"),
-	[2]		= color("#dddddd"),
-	[3] 	= color("#cc8800"),
-	[4] 	= color("#eeaa00"),
-	[5]		= color("#333333"),
-	[6]		= color("#448844"),
-	[7]		= color("#66cc66"),
-	[8]		= color("#8c6239"),
-	[9]		= color("#666666"),
-	[10]	= color("#33aaff"),
-	[11]	= color("#e61e25"),
-	[12]	= color("#666666"),
-	[13]	= color("#666666"),
-	[14]	= color("#ffffff"),
-	[15]	= color("#e61e25")
-};
-
--- Clear Types based on stage awards and grades.
-function title(sa,grade,playcount,misscount)
-	if grade == 'nil' then -- If grade does not exist
-		if playcount == 0 then
-			return typetable[12],typecolors[12] -- no play
-		end;
-	else
-		if grade == 'Grade_Failed' then -- failed
-				return typetable[11],typecolors[11]
-		elseif sa == 'StageAward_SingleDigitW2'then -- SDP
-			return typetable[3],typecolors[3]
-		elseif sa == 'StageAward_SingleDigitW3' then -- SDG
-			return typetable[6],typecolors[6]
-		elseif sa == 'StageAward_OneW2' then -- whiteflag
-			return typetable[2],typecolors[2]
-		elseif sa == 'StageAward_OneW3' then -- blackflag
-			return typetable[5],typecolors[5]
-		elseif sa == 'StageAward_FullComboW1' or grade == 'Grade_Tier01' then -- MFC
-			return typetable[1],typecolors[1]
-		elseif sa == 'StageAward_FullComboW2' or grade == 'Grade_Tier02'then -- PFC
-			return typetable[4],typecolors[4]
-		elseif sa == 'StageAward_FullComboW3' then -- FC
-			return typetable[7],typecolors[7]
-		else
-			if misscount == 1 then 
-				return typetable[8],typecolors[8] -- missflag
-			else
-				return typetable[10],typecolors[10] -- Clear
-			end;
-		end;
-	end;
-	return typetable[12],typecolors[12] -- noplay
-end;
-
-
 local profileP1 = GetPlayerOrMachineProfile(PLAYER_1)
 local playcount = 0
 local misscount = 0
@@ -353,7 +264,9 @@ local t = Def.ActorFrame {
 					if grade == nil then
 						grade = 'nil'
 					end;
-					cttext,ctcolor = title(sa,grade,playcount,misscount)
+					--cttext,ctcolor = title(sa,grade,playcount,misscount)
+					cttext = getClearTypeP1(topscore)
+					ctcolor = getClearColorP1(topscore)
 					if rainbow == true then
 						cttext = typetable[14]
 						ctcolor = "rainbow"
@@ -365,7 +278,9 @@ local t = Def.ActorFrame {
 					nexttier = "Grade_Tier07"
 					nextdp = 0
 					percentscore = 0
-					cttext,ctcolor = title('nil','nil',playcount,'-')
+					--cttext,ctcolor = title('nil','nil',playcount,'-')
+					cttext = getClearTypeP1(topscore)
+					ctcolor = getClearColorP1(topscore)
 					date = ''
 					mods = 'No Modifiers'
 					ratemods = ''
@@ -379,7 +294,7 @@ local t = Def.ActorFrame {
 				end;
 			else -- when something that isn't a song is selected on musicwheel
 				cttext = '-'
-				ctcolor = typecolors[13]
+				ctcolor = getClearTypeColor(13)
 				playcount = '-'
 				misscount = '-'
 				numscore = 1
@@ -424,6 +339,8 @@ local t = Def.ActorFrame {
 		CurrentSongChangedMessageCommand=cmd(playcommand,"Set");
 		CurrentStepsP1ChangedMessageCommand=cmd(playcommand,"Set");
 	};--]]
+
+	--[[
 	LoadFont("Common Normal") .. { -- highscore rate mods
         Name="test";
 		InitCommand=cmd(x,cardpos0;y,410;zoom,0.4;horizalign,left);
@@ -437,6 +354,8 @@ local t = Def.ActorFrame {
 		CurrentSongChangedMessageCommand=cmd(queuecommand,"Set");
 		CurrentStepsP1ChangedMessageCommand=cmd(queuecommand,"Set");
 	};
+	--]]
+
 	LoadFont("Common Normal") .. { -- nextgrade/difference
         Name="P1DP";
 		InitCommand=cmd(x,cardpos1;y,435;zoom,0.4;horizalign,left);
@@ -1015,6 +934,21 @@ local t = Def.ActorFrame {
 			CurrentSongChangedMessageCommand=cmd(queuecommand,"Set");
 			CurrentStepsP1ChangedMessageCommand=cmd(queuecommand,"Set");
 			CodeMessageCommand=cmd(queuecommand,"Set");
+		};
+
+		--randomquotes
+		--see Scripts/Quotes.Lua to add/remove ,etc.
+		LoadFont("Common Normal") .. {
+			InitCommand=cmd(xy,5,scorestatHeight-5;zoom,0.35;diffusealpha,0.5;horizalign,left;vertalign,bottom;maxwidth,(scorestatWidth-100)/0.35);
+			BeginCommand=function(self)
+				self:settext(getRandomQuotes())
+			end;
+			OffCommand=cmd(bouncebegin,0.35;zoomy,0);
+			CodeMessageCommand=function(self,params)
+			if params.Name == "ScoreStat" then
+				self:settext(getRandomQuotes());
+			end;
+		end;
 		};
 
 

@@ -1,3 +1,10 @@
+2014/12/09
+
+Changes:
+- [General] Moved all cleartype related code into a separate global file. (might break rainbowflags which i'm sure almost no one gets)
+- [ScreenSelectMusic] added random quotes depr.
+
+==========================================================================
 2014/09/30
 update for sm5b4
 

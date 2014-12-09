@@ -1,6 +1,6 @@
 ~some random ultralight hackup with more pink~
-Supported Version(s): StepMania 5 Beta 3
-Last Update: Sept 30th 2014
+Supported Version(s): StepMania 5 Beta 4
+Last Update: Dec 9th 2014
 ====================================
 
 Known Issues:
@@ -20,7 +20,7 @@ How to use ScoreStatus
 Map and press and hold down <Select> key at ScreenSelectMusic.
 
 Speedmods do not load from speedmods.txt:
-The speedmods are no longer loaded from that file as it is replaced by jousway's speedmod system.
+The speedmods are no longer loaded from that file as it is replaced by jousway's speedmod system. (annnd soon to be reverted back to default because they added something similar for b4)
 
 
 
