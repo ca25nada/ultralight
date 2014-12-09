@@ -950,7 +950,7 @@ local t = Def.ActorFrame {
 			BeginCommand=cmd(queuecommand,"Set");
 			SetCommand=function(self)
 				self:finishtweening();
-				self:smooth(0.15);
+				self:smooth(0.2);
 				self:zoomto(5,scorestatHeight/numscore);
 				self:y(scorestatHeight/numscore*scoreindex);
 				if numscore==1 then
