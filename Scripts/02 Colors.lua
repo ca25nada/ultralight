@@ -83,7 +83,7 @@ function CustomGradeColor (grade)
 end;
 
 function CustomDifficultyToColor(diff)
-	return themeColors.Difficulty[diff] or color("1,0,0,1");
+	return themeColors.Difficulty[diff] or color("#ffffff");
 end;
 
 -- judgment colors

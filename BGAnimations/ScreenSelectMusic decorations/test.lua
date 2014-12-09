@@ -4,6 +4,7 @@
 
  -- iForgot where I stole it from
  -- splits a string into a table
+
 function split(div,str)
     if (div=='') then return false end
     local pos,arr = 0,{}
@@ -203,6 +204,9 @@ local t = Def.ActorFrame {
 
 	Def.Actor{
 		Name='aaaa';
+		BeginCommand=function(self)
+			addExtraQuotes();
+		end;
 		SetCommand=function(self)
 			local rainbow = false
 			local song = GAMESTATE:GetCurrentSong() -- grabs current song
@@ -925,7 +929,7 @@ local t = Def.ActorFrame {
 			CodeMessageCommand=cmd(queuecommand,"Set");
 		};
 		LoadFont("Common Normal") .. {
-			InitCommand=cmd(xy,scorestatWidth-5,scorestatHeight-5;zoom,0.35;diffusealpha,0.5;horizalign,right;vertalign,bottom);
+			InitCommand=cmd(xy,scorestatWidth-10,scorestatHeight-5;zoom,0.35;diffusealpha,0.5;horizalign,right;vertalign,bottom);
 			BeginCommand=cmd(queuecommand,"Set");
 			SetCommand=function(self)
 				self:settext("Showing "..(scoreindex+1).." of "..numscore)
@@ -936,10 +940,36 @@ local t = Def.ActorFrame {
 			CodeMessageCommand=cmd(queuecommand,"Set");
 		};
 
+		--scrollbar
+		Def.Quad{
+			InitCommand=cmd(x,scorestatWidth;zoomto,5,scorestatHeight;horizalign,right;vertalign,top;diffuse,color("#ffffff");diffusealpha,1);
+
+		};
+		Def.Quad{
+			InitCommand=cmd(x,scorestatWidth;zoomto,5,(scorestatHeight/numscore);horizalign,right;vertalign,top;diffuse,color("#ff9999");diffusealpha,1);
+			BeginCommand=cmd(queuecommand,"Set");
+			SetCommand=function(self)
+				self:finishtweening();
+				self:smooth(0.15);
+				self:zoomto(5,scorestatHeight/numscore);
+				self:y(scorestatHeight/numscore*scoreindex);
+				if numscore==1 then
+					self:diffusealpha(0);
+				else
+					self:diffusealpha(1);
+				end;
+			end;
+			OffCommand=cmd(bouncebegin,0.35;zoomy,0);
+			CurrentSongChangedMessageCommand=cmd(queuecommand,"Set");
+			CurrentStepsP1ChangedMessageCommand=cmd(queuecommand,"Set");
+			CodeMessageCommand=cmd(queuecommand,"Set");
+		};
+
+
 		--randomquotes
 		--see Scripts/Quotes.Lua to add/remove ,etc.
 		LoadFont("Common Normal") .. {
-			InitCommand=cmd(xy,5,scorestatHeight-5;zoom,0.35;diffusealpha,0.5;horizalign,left;vertalign,bottom;maxwidth,(scorestatWidth-100)/0.35);
+			InitCommand=cmd(xy,5,scorestatHeight-5;zoom,0.30;diffusealpha,0.5;horizalign,left;vertalign,bottom;maxwidth,(scorestatWidth-80)/0.30);
 			BeginCommand=function(self)
 				self:settext(getRandomQuotes())
 			end;

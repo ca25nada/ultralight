@@ -1,3 +1,12 @@
+local function contains(table, value)
+  for _, v in pairs(table) do
+    if v == value then
+      return true;
+    end;
+  end;
+  return false;
+end;
+
 local Phrases = {
         "That guy is saltier than the dead sea.",
         "not even kaiden yet",
@@ -81,7 +90,7 @@ local Phrases = {
         "I had a SV change trauma this SV change requires my no response in flying ball towards me",
         "Re:apparantly wearing a fedora improves sightreading???",
         "\"How does your osu have all notes go to one place?\"",
-        "Fuga Fuuuga Fuuuuuckga Fuuuuuuuuckga Darkstar PAZO light TRASH ACE WOOD HELL",
+        "Fuga Fuuuga Fuuuuuckga Fuuuuuuuuckga Darkstar PAZO light TRASH ACE WOOD HELL", -- Fuga Hall of Shame
         "JESUS WON'T COME TO SAVE YOU IN RHYTHM GAME HELL SON",
         "slapping colorful hamburgers is one of my many hobbies",
         "our park isn't very sunny in fact its raining",
@@ -92,36 +101,77 @@ local Phrases = {
         "To Abcdullah: your cheating is obvious, doing 100.00% on lv.26-28 maps from the first attempt is cheating, admit it.",
         "konmai",
         "haha facerolling",
-
 		"gonz:pork",
-		"BMS = Button Mashing Simulator",
-		"\"leonid fucking hard\" - LUXURY",
-		"\"in Norway every girl is blonde, blue eyed and 300BPMs\" - Roar176",
+		"BMS = Button Mashing Simulator", 
+		"\"leonid fucking hard\" - LUXURY", 
+		"\"in Norway every girl is blonde, blue eyed and 300BPMs\" - Roar176", -
 		"vROFL",
 		"Sandbaggerrrrrrr",
 		"\"I'm gonna suee your ass to pakistan\" - Gundam-Dude",
-		"what is the romaji of 皿 : scratches",
+		"what is the romaji of 皿 : scratches", -- AKA: sarachan >~<
 		"solo rulz",
 		"(o:",
-		"TSUMOOOOOO",
-		"\"maniera fuck\" - ideu",
-		"Solord State Squad",
+		"TSUMOOOOOO", -- Chiitoitsu dora2 4000/2000 and y'all owe me a simfile
+		"\"maniera fuck\" - ideu", 
+		"Solord State Squad", 
 		"StepMania changed my life!",
-		"Lincle Prim is best Prim",
-		"Bubububub~",
-		"Lovery Radio",
-		"えいニャ！　えいニャ！",
+		"Lincle Prim is best Prim", 
+		"Bubububub~", 
+		"Lovery Radio", 
+		"えいニャ！　えいニャ！", 
 		"Dat MA",
-		"IT HAS MEI IN IT",
+		"IT HAS MEI IN IT", 
 		"J1L1",
 		"(KOOKY)",
 		"(^^)/★★",
 		"less apm for more swage",
 		"\"people age at a rate of about 1 year per year\" - Choofers",
 		"Overjoy in 6 months",
-		"FDFD in 6 months"
+		"FDFD in 6 months",
+		"FUCGELO", -- ↓YOU FUC 
+		"earbleed",
+		"にっこにっこにー☆", -- raburaibu
+		"%E3%83%96%E3%83%B3%E3%82%BF%E3%83%B3 ～Falling in \"B\" mix～",
+		"\"~koreastep~\"",
+		"solocock.png", -- "Mine is Bigger"
+		"Gigadelicious",
+		"hot sexy touhou",
+		"Today's Popn",
+		"B..bbut... you're supposed to play this on a dance mat", -- Every youtube comment ever on stepmania vids
+		"WinDEU hates you",
+		"nerd",
+		"~kawaii chordsmash~", -- https://www.youtube.com/watch?v=52laML7s9y0
+		">~<",
+		";w;",
+		"uwaaaa",
+		"tatataatatatatattatatattatatataii hihhihihihihhihhihihihihiihihhihihihihhihhi",
+		"Is dis a game? If it is can I ask for da link and I need to play dis so badly and I wanna know if dere is any vocaloid songs on it",
+		"Korea team for 4k: Captain:abcd right hand, player 2: abcd left hand",
+		"hory shiet"
 }
 
+local temp;
+function addExtraQuotes() -- for adding dynamic Phrases, call this function somewhere before calling getRandomQuotes()
+	local p1name = GAMESTATE:GetPlayerDisplayName(PLAYER_1);
+	if p1name ~= nil then
+
+		temp = p1name.."'s waifu is: Gundam-Dude. You listen to Tsukasa CDs together."
+		if contains(Phrases,temp) == false then
+			table.insert(Phrases,temp);
+		end;
+
+		temp = "Xx{"..p1name.."}xX"
+		if contains(Phrases,temp) == false then
+			table.insert(Phrases,temp);
+		end;
+
+		temp = p1name.." got disregarded faster than 300BPM"
+		if contains(Phrases,temp) == false then
+			table.insert(Phrases,temp);
+		end;
+	end;
+end;
+
 function getRandomQuotes()
-	return Phrases[math.random(1,#Phrases)];
+	return Phrases[math.random(#Phrases)];
 end;
