@@ -1,4 +1,3 @@
- 
 -- this is a giant mess atm.
 
 
@@ -128,11 +127,19 @@ local gradetier = {
 	Grade_Tier06 = THEME:GetMetric("PlayerStageStats", "GradePercentTier06"), -- C
 	Grade_Tier07 = THEME:GetMetric("PlayerStageStats", "GradePercentTier07"), -- D
 };
-
-local profileP1 = GetPlayerOrMachineProfile(PLAYER_1)
+local totalplays = 0
+local profileP1
+local profileP2
+if GAMESTATE:IsPlayerEnabled(PLAYER_1) then
+	profileP1 = GetPlayerOrMachineProfile(PLAYER_1)
+	totalplays = profileP1:GetNumTotalSongsPlayed() --separate this for each players later
+end;
+if GAMESTATE:IsPlayerEnabled(PLAYER_2) then
+	profileP2 = GetPlayerOrMachineProfile(PLAYER_2)
+	totalplays = profileP2:GetNumTotalSongsPlayed()
+end;
 local playcount = 0
 local misscount = 0
-local totalplays = profileP1:GetNumTotalSongsPlayed()
 local cttext =''
 local ctcolor = color("#ffffff")
 local topscore = nil
@@ -210,9 +217,16 @@ local t = Def.ActorFrame {
 		SetCommand=function(self)
 			local rainbow = false
 			local song = GAMESTATE:GetCurrentSong() -- grabs current song
-			local steps = GAMESTATE:GetCurrentSteps(PLAYER_1) -- grabs current difficulty
-			maxnotes =  steps:GetRadarValues(PLAYER_1):GetValue("RadarCategory_TapsAndHolds");
-			maxholds = GAMESTATE:GetCurrentSteps(PLAYER_1):GetRadarValues(PLAYER_1):GetValue("RadarCategory_Holds") + GAMESTATE:GetCurrentSteps(PLAYER_1):GetRadarValues(PLAYER_1):GetValue("RadarCategory_Rolls");
+			local steps
+			if GAMESTATE:IsPlayerEnabled(PLAYER_1) then
+				steps = GAMESTATE:GetCurrentSteps(PLAYER_1) -- grabs current difficulty
+				maxnotes =  steps:GetRadarValues(PLAYER_1):GetValue("RadarCategory_TapsAndHolds");
+				maxholds = GAMESTATE:GetCurrentSteps(PLAYER_1):GetRadarValues(PLAYER_1):GetValue("RadarCategory_Holds") + GAMESTATE:GetCurrentSteps(PLAYER_1):GetRadarValues(PLAYER_1):GetValue("RadarCategory_Rolls");
+			else
+				steps = GAMESTATE:GetCurrentSteps(PLAYER_2) -- grabs current difficulty
+				maxnotes =  steps:GetRadarValues(PLAYER_2):GetValue("RadarCategory_TapsAndHolds");
+				maxholds = GAMESTATE:GetCurrentSteps(PLAYER_2):GetRadarValues(PLAYER_1):GetValue("RadarCategory_Holds") + GAMESTATE:GetCurrentSteps(PLAYER_1):GetRadarValues(PLAYER_1):GetValue("RadarCategory_Rolls");
+			end;
 			maxdp = maxnotes*scoreweight["TapNoteScore_W1"]+maxholds*scoreweight["HoldNoteScore_Held"]
 			maxps = maxnotes*pweight["TapNoteScore_W1"]+maxholds*pweight["HoldNoteScore_Held"]
 			if song ~= nil then -- when song is selected on musicwheel
@@ -220,8 +234,13 @@ local t = Def.ActorFrame {
 				songtitle = song:GetDisplayMainTitle()
 				subtitle = song:GetDisplaySubTitle()
 				artist = song:GetDisplayArtist()
-				playcount = profileP1:GetSongNumTimesPlayed(GAMESTATE:GetCurrentSong()) -- grabs playcount for song
-				hstable = profileP1:GetHighScoreList(song,steps):GetHighScores() -- grabs table of high scores (assumed to be sorted by score)
+				if GAMESTATE:IsPlayerEnabled(PLAYER_1) then
+					playcount = profileP1:GetSongNumTimesPlayed(GAMESTATE:GetCurrentSong()) -- grabs playcount for song
+					hstable = profileP1:GetHighScoreList(song,steps):GetHighScores() -- grabs table of high scores (assumed to be sorted by score)
+				else
+					playcount = profileP2:GetSongNumTimesPlayed(GAMESTATE:GetCurrentSong()) -- grabs playcount for song
+					hstable = profileP2:GetHighScoreList(song,steps):GetHighScores() -- grabs table of high scores (assumed to be sorted by score)
+				end;
 				stepstype = string.gsub(ToEnumShortString(steps:GetStepsType()),"%_"," ")
 				meter = steps:GetMeter()
 				difficulty = difftype[steps:GetDifficulty()]
@@ -269,8 +288,13 @@ local t = Def.ActorFrame {
 						grade = 'nil'
 					end;
 					--cttext,ctcolor = title(sa,grade,playcount,misscount)
-					cttext = getClearTypeP1(topscore)
-					ctcolor = getClearColorP1(topscore)
+					if GAMESTATE:IsPlayerEnabled(PLAYER_1) then
+						cttext = getClearTypeP1(topscore)
+						ctcolor = getClearColorP1(topscore)
+					else
+						cttext = getClearTypeP2(topscore)
+						ctcolor = getClearColorP2(topscore)
+					end;
 					if rainbow == true then
 						cttext = typetable[14]
 						ctcolor = "rainbow"
@@ -283,8 +307,13 @@ local t = Def.ActorFrame {
 					nextdp = 0
 					percentscore = 0
 					--cttext,ctcolor = title('nil','nil',playcount,'-')
-					cttext = getClearTypeP1(topscore)
-					ctcolor = getClearColorP1(topscore)
+					if GAMESTATE:IsPlayerEnabled(PLAYER_1) then
+						cttext = getClearTypeP1(topscore)
+						ctcolor = getClearColorP1(topscore)
+					else
+						cttext = getClearTypeP2(topscore)
+						ctcolor = getClearColorP2(topscore)
+					end;
 					date = ''
 					mods = 'No Modifiers'
 					ratemods = ''
@@ -969,7 +998,7 @@ local t = Def.ActorFrame {
 		--randomquotes
 		--see Scripts/Quotes.Lua to add/remove ,etc.
 		LoadFont("Common Normal") .. {
-			InitCommand=cmd(xy,5,scorestatHeight-5;zoom,0.30;diffusealpha,0.5;horizalign,left;vertalign,bottom;maxwidth,(scorestatWidth-80)/0.30);
+			InitCommand=cmd(xy,5,scorestatHeight-5;zoom,0.35;diffusealpha,0.5;horizalign,left;vertalign,bottom;maxwidth,(scorestatWidth-80)/0.30);
 			BeginCommand=function(self)
 				self:settext(getRandomQuotes())
 			end;

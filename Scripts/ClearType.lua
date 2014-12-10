@@ -1,5 +1,8 @@
+-------------------------------------------------------------------
+--Methods for generating IIDX-ish ClearType texts given the score--
+-------------------------------------------------------------------
 
-local stypetable = { -- Shorthand Versions of ClearType
+local stypetable = { -- Shorthand Versions of ClearType. Not Really used anywhere yet but who knows
 	[1]="Marv F-Combo",
 	[2]="Whiteflag",
 	[3]="SDP",
@@ -53,8 +56,9 @@ local typecolors = {-- colors corresponding to cleartype
 	[15]	= color("#e61e25")
 };
 
-
 -- ClearTypes based on stage awards and grades.
+-- Stageaward based cleartypes do not work if player "clears" midway through the song (by holding enter during gameplay etc.) 
+-- and will just result in "Clear" 
 local function clearTypes(stageaward,grade,playcount,misscount,returntype)
 	stageaward = stageaward or 0;
 	grade = grade or 0;
@@ -124,19 +128,6 @@ local function clearTypes(stageaward,grade,playcount,misscount,returntype)
 		return clearcolor;
 	end;
 end;
-
-function getClearTypeText(index)
-	return typetable[index];
-end;
-
-function getShortClearTypeText(index)
-	return stypetable[index];
-end;
-
-function getClearTypeColor(index)
-	return typecolors[index];
-end;
-
 
 function getClearTypeP1(score)
 	if score == nil then
@@ -283,4 +274,17 @@ function getClearColorP2(score)
 
 	return clearTypes(stageaward,grade,playcount,misscount,1) or typecolors[12];
 end;
+
+function getClearTypeText(index)
+	return typetable[index];
+end;
+
+function getShortClearTypeText(index)
+	return stypetable[index];
+end;
+
+function getClearTypeColor(index)
+	return typecolors[index];
+end;
+
 --]]

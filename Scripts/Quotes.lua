@@ -102,18 +102,19 @@ local Phrases = {
         "konmai",
         "haha facerolling",
 		"gonz:pork",
-		"BMS = Button Mashing Simulator", 
-		"\"leonid fucking hard\" - LUXURY", 
-		"\"in Norway every girl is blonde, blue eyed and 300BPMs\" - Roar176", -
+		"BMS = Button Mashing Simulator", -- Some yt comment... might have been doorknob
+		"leonid fucking hard", -- LUXURY"
+		"in Norway every girl is blonde, blue eyed and 300BPMs", -- Roar176
 		"vROFL",
 		"Sandbaggerrrrrrr",
-		"\"I'm gonna suee your ass to pakistan\" - Gundam-Dude",
+		"\"I'm gonna suee your ass to pakistan\"", -- Gundam-Dude
 		"what is the romaji of 皿 : scratches", -- AKA: sarachan >~<
 		"solo rulz",
 		"(o:",
 		"TSUMOOOOOO", -- Chiitoitsu dora2 4000/2000 and y'all owe me a simfile
-		"\"maniera fuck\" - ideu", 
+		"maniera fuck", -- ideu
 		"Solord State Squad", 
+		"fripSide noodle factory", -- EVERY 17VA MAP
 		"StepMania changed my life!",
 		"Lincle Prim is best Prim", 
 		"Bubububub~", 
@@ -123,16 +124,17 @@ local Phrases = {
 		"IT HAS MEI IN IT", 
 		"J1L1",
 		"(KOOKY)",
+		"bruh...",
 		"(^^)/★★",
 		"less apm for more swage",
-		"\"people age at a rate of about 1 year per year\" - Choofers",
+		"people age at a rate of about 1 year per year", -- Choofers
 		"Overjoy in 6 months",
 		"FDFD in 6 months",
 		"FUCGELO", -- ↓YOU FUC 
 		"earbleed",
 		"にっこにっこにー☆", -- raburaibu
 		"%E3%83%96%E3%83%B3%E3%82%BF%E3%83%B3 ～Falling in \"B\" mix～",
-		"\"~koreastep~\"",
+		"~koreastep~",
 		"solocock.png", -- "Mine is Bigger"
 		"Gigadelicious",
 		"hot sexy touhou",
@@ -147,7 +149,9 @@ local Phrases = {
 		"tatataatatatatattatatattatatataii hihhihihihihhihhihihihihiihihhihihihihhihhi",
 		"Is dis a game? If it is can I ask for da link and I need to play dis so badly and I wanna know if dere is any vocaloid songs on it",
 		"Korea team for 4k: Captain:abcd right hand, player 2: abcd left hand",
-		"hory shiet"
+		"hory shiet", -- Zak
+		"(=^._.^)/☆",
+		"if i train a cat to play bms for 15 years it will pass overjoy" -- Leonid
 }
 
 local temp;
