@@ -998,7 +998,7 @@ local t = Def.ActorFrame {
 		--randomquotes
 		--see Scripts/Quotes.Lua to add/remove ,etc.
 		LoadFont("Common Normal") .. {
-			InitCommand=cmd(xy,5,scorestatHeight-5;zoom,0.35;diffusealpha,0.5;horizalign,left;vertalign,bottom;maxwidth,(scorestatWidth-80)/0.30);
+			InitCommand=cmd(xy,5,scorestatHeight-5;zoom,0.35;diffusealpha,0.5;horizalign,left;vertalign,bottom;maxwidth,(scorestatWidth-80)/0.35);
 			BeginCommand=function(self)
 				self:settext(getRandomQuotes())
 			end;
