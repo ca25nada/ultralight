@@ -63,9 +63,14 @@ t[#t+1] = Def.ActorFrame{
 		InitCommand=cmd(xy,-gradeFrameWidth/2+3,gradeFrameHeight-15;zoom,0.4;horizalign,left;vertalign,top);
 		BeginCommand=cmd(queuecommand,"Set");
 		SetCommand=function(self)
+			local profileP1 = GetPlayerOrMachineProfile(PLAYER_1);
 			local scoreP1 = STATSMAN:GetCurStageStats():GetPlayerStageStats(PLAYER_1):GetHighScore();
 			local cttext = getClearTypeP1(scoreP1) or "Could not get ClearType"
 			local ctcolor = getClearColorP1(scoreP1) or color('#ffffff')
+			local playcount = profileP1:GetSongNumTimesPlayed(STATSMAN:GetCurStageStats():GetPlayedSongs()[1])
+			if playcount <= 1 then
+				cttext = "Sightread "..cttext
+			end;
 			self:stopeffect()
 			self:settext(cttext)
 			if ctcolor == 'rainbow' then

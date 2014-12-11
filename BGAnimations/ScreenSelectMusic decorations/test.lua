@@ -3,7 +3,6 @@
 
  -- iForgot where I stole it from
  -- splits a string into a table
-
 function split(div,str)
     if (div=='') then return false end
     local pos,arr = 0,{}
@@ -279,14 +278,15 @@ local t = Def.ActorFrame {
 					if 1 == topscore:GetTapNoteScore('TapNoteScore_Miss') and 1 == topscore:GetTapNoteScore('TapNoteScore_W5') and 1 == topscore:GetTapNoteScore('TapNoteScore_W4') and 1 == topscore:GetTapNoteScore('TapNoteScore_W3') then
 						rainbow = true
 					end;
-					local sa = topscore:GetStageAward()
+					--local sa = topscore:GetStageAward()
 					grade = topscore:GetGrade()
-					if sa == nil then -- when no stageaward exists. aka: regular clears
-						sa = 'nil'
-					end;
-					if grade == nil then
-						grade = 'nil'
-					end;
+
+					--if sa == nil then -- when no stageaward exists. aka: regular clears
+					--	sa = 'nil'
+					--end;
+					--if grade == nil then
+					--	grade = 'nil'
+					--end;
 					--cttext,ctcolor = title(sa,grade,playcount,misscount)
 					if GAMESTATE:IsPlayerEnabled(PLAYER_1) then
 						cttext = getClearTypeP1(topscore)
