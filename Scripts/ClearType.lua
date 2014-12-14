@@ -17,7 +17,7 @@ local stypetable = { -- Shorthand Versions of ClearType. Not Really used anywher
 	[12]="No Play",
 	[13]="-",
 	[14]="Rainbowflag",
-	[15]="Ragequit"
+	[15]="Ragequit" -- can't implement unless there's a way to track playcounts by difficulty
 };
 
 local typetable = { -- ClearType texts
@@ -58,7 +58,7 @@ local typecolors = {-- colors corresponding to cleartype
 
 -- ClearTypes based on stage awards and grades.
 -- Stageaward based cleartypes do not work if anything causes the stageaward to not show up (disqualification, score saving is off, etc.)
--- and will just result in "Clear" 
+-- and will just result in "Clear". I migggggggggght just drop the SA usage and use raw values instead.
 -- returntype = 0 -> ClearType, =1 -> ClearTypeColor, =2 -> ShortClearType
 local function clearTypes(stageaward,grade,playcount,misscount,returntype)
 	stageaward = stageaward or 0; -- initialize everything incase some are nil
@@ -68,7 +68,7 @@ local function clearTypes(stageaward,grade,playcount,misscount,returntype)
 
 	clearlevel = 12; -- no play
 
-	if grade == -1 then
+	if grade == 0 then
 		if playcount == 0 then
 			clearlevel = 12;
 		end;

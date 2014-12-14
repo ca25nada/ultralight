@@ -151,7 +151,17 @@ local Phrases = {
 		"Korea team for 4k: Captain:abcd right hand, player 2: abcd left hand",
 		"hory shiet", -- Zak
 		"(=^._.^)/☆",
-		"if i train a cat to play bms for 15 years it will pass overjoy" -- Leonid
+		"if i train a cat to play bms for 15 years it will pass overjoy", -- Leonid
+        "You're in denial, your SVs suck and your map needs work", -- moar ossu drama
+        "StepMania Detected",
+        "listen to the music carefully. my jacks always have it own means ",
+        "i dont think my sv is bad . i dont know how you use sv changes but my sv changes are actually comfortable.",
+        "you will kill players",
+        "standard is the only mod worth playing, the other mods require basically less than half the skill",
+        "mania is the easiest I think.  I can clear a lot of ranked maps compare to standard.", -- entozer
+        "you can't ask consistency in players because the next day they could be drunk while playing. or ate a lot of carbo and meat."
+
+
 }
 
 local temp;

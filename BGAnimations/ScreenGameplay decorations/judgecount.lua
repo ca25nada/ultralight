@@ -116,15 +116,13 @@ local judgestats = { -- Table containing the # of judgements made so far
 local center1P = PREFSMAN:GetPreference("Center1Player"); -- For relocating graph/judgecount frame
 local cols = GAMESTATE:GetCurrentStyle():ColumnsPerPlayer(); -- For relocating graph/judgecount frame
 
---Position of JudgeCount, the values here assumes center1P being enabled.
+--Position of JudgeCount, the values here assumes center1P being enabled. (Change values as needed)
 local framex = 20
 local framey = SCREEN_HEIGHT*0.62
 
--- Change X Position depending on centered 1p
-if center1P == false and cols == 4 then
-	framex = framex + 320
-elseif center1P == false and cols == 6 then
-	framex = framex + 384
+-- Change X Position depending on # of lanes if not center1P
+if center1P == false then
+	framex = (SCREEN_CENTER_X/2)+(64*(cols/2))+50
 end;
 
 local judgetype = tonumber(GetUserPref("JudgeTypeP1"));
