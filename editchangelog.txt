@@ -1,8 +1,16 @@
+2014/12/16
+
+Changes:
+- [ScreenEvaluation] Add ScoreBoard to ScreenEvaluation
+- [ScreenEvaluation] Add remaining life% to lifegraph and survived seconds if it's a fail
+
+=========================================================================
 2014/12/09
 
 Changes:
 - [General] Moved all cleartype related code into a separate global file. (might break rainbowflags which i'm sure almost no one gets)
 - [ScreenSelectMusic] added random quotes depr.
+- [ScreenEvaluation] add ClearType 
 
 ==========================================================================
 2014/09/30

@@ -59,6 +59,7 @@ t[#t+1] = Def.ActorFrame{
 		InitCommand=cmd(y,40;zoomto,gradeFrameWidth+(gradeFrameBorderSize),2;vertalign,top;fadeleft,0.25;faderight,0.25;diffusealpha,0.625;blend,Blend.Add;skewx,-0.05);
 	};
 
+	--cleartype
 	LoadFont("Common Normal") .. {
 		InitCommand=cmd(xy,-gradeFrameWidth/2+3,gradeFrameHeight-15;zoom,0.4;horizalign,left;vertalign,top);
 		BeginCommand=cmd(queuecommand,"Set");
@@ -84,6 +85,24 @@ t[#t+1] = Def.ActorFrame{
 				self:effectperiod(0.1)
 			else
 				self:diffuse(ctcolor)
+			end;
+		end;
+		OffCommand=cmd(bouncebegin,0.35;zoomy,0);
+		CurrentSongChangedMessageCommand=cmd(queuecommand,"Set");
+		CurrentStepsP1ChangedMessageCommand=cmd(queuecommand,"Set");
+		CodeMessageCommand=cmd(queuecommand,"Set");
+	};
+
+	--remaining life
+	LoadFont("Common Normal") .. {
+		InitCommand=cmd(xy,gradeFrameWidth-78,gradeFrameHeight-65;zoom,0.4;horizalign,right);
+		BeginCommand=cmd(queuecommand,"Set");
+		SetCommand=function(self)
+			local StageStatsP1 = STATSMAN:GetCurStageStats():GetPlayerStageStats(PLAYER_1)
+			self:settextf("%.0f%%",StageStatsP1:GetCurrentLife()*100)
+			if StageStatsP1:GetCurrentLife() == 0 then
+				self:settextf("%.0f%%\n%.2fs",StageStatsP1:GetCurrentLife()*100,StageStatsP1:GetAliveSeconds())
+				self:y(gradeFrameHeight-70)
 			end;
 		end;
 		OffCommand=cmd(bouncebegin,0.35;zoomy,0);
@@ -213,5 +232,6 @@ t[#t+1] = Def.ActorFrame{
 };
 
 t[#t+1] = LoadActor("judgeBGs");
+t[#t+1] = LoadActor("scoreboard");
 
 return t;

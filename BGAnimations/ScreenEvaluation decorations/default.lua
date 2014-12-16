@@ -12,6 +12,7 @@ local function GraphDisplay( pn )
 			BeginCommand=function(self)
 				local ss = SCREENMAN:GetTopScreen():GetStageStats();
 				self:Set( ss, ss:GetPlayerStageStats(pn) );
+				self:diffusealpha(0.7);
 			end
 		};
 	};

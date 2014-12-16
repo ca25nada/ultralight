@@ -16,7 +16,7 @@ local stypetable = { -- Shorthand Versions of ClearType. Not Really used anywher
 	[11]="Failed",
 	[12]="No Play",
 	[13]="-",
-	[14]="Rainbowflag",
+	[14]="Rainbowflag", -- might remove
 	[15]="Ragequit" -- can't implement unless there's a way to track playcounts by difficulty
 };
 
@@ -34,8 +34,8 @@ local typetable = { -- ClearType texts
 	[11]="Failed",
 	[12]="No Play",
 	[13]="-",
-	[14]="Rainbowflag",
-	[15]="Ragequit"
+	[14]="Rainbowflag", -- might remove
+	[15]="Ragequit" -- can't implement unless there's a way to track playcounts by difficulty
 };
 
 local typecolors = {-- colors corresponding to cleartype

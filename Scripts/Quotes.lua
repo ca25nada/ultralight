@@ -159,9 +159,8 @@ local Phrases = {
         "you will kill players",
         "standard is the only mod worth playing, the other mods require basically less than half the skill",
         "mania is the easiest I think.  I can clear a lot of ranked maps compare to standard.", -- entozer
-        "you can't ask consistency in players because the next day they could be drunk while playing. or ate a lot of carbo and meat."
-
-
+        "you can't ask consistency in players because the next day they could be drunk while playing. or ate a lot of carbo and meat.",
+        "Don't do nazi mods,then it will no drama happen." -- Spy
 }
 
 local temp;
