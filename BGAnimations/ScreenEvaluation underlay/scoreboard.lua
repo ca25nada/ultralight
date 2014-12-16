@@ -38,10 +38,16 @@ local function scoreitem(index,scoreindex,drawindex)
 	local equals = (index == scoreindex)
 	local t = Def.ActorFrame {
 		Def.Quad{
-			Name="P1TopSep";
-			InitCommand=cmd(xy,framex-40,framey+(drawindex*spacing)-4;zoomto,350,30;halign,0;valign,0;diffuse,color("#333333");diffusealpha,0.3;diffuserightedge,color("#33333300"));
+			InitCommand=cmd(xy,framex-40,framey+(drawindex*spacing)-4;zoomto,350,30;halign,0;valign,0;diffuse,color("#333333");diffusealpha,0.5;diffuserightedge,color("#33333300"));
 			BeginCommand=function(self)
 				self:visible(IsPlayerValid(PLAYER_1));
+			end;
+		};
+
+		Def.Quad{
+			InitCommand=cmd(xy,framex-40,framey+(drawindex*spacing)-4;zoomto,350,30;halign,0;valign,0;diffuse,color("#66ccff");diffusealpha,0.2;diffuserightedge,color("#33333300"));
+			BeginCommand=function(self)
+				self:visible(IsPlayerValid(PLAYER_1) and equals);
 			end;
 		};
 
