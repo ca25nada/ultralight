@@ -140,6 +140,14 @@ while drawindex<#hstable and startind<=finishind do
 	drawindex  = drawindex+1
 end;
 
+t[#t+1] = LoadFont("Common normal")..{
+	InitCommand=cmd(xy,framex-38,framey-15;zoom,0.35;halign,0);
+	BeginCommand=function(self)
+		self:settext("Rank "..scoreindex.." / "..(#hstable))
+	end;
+};
+
+
 --[[
 t[#t+1] = LoadFont("Common normal")..{
 	InitCommand=cmd(xy,framex,framey+10+(spacing);zoom,1;halign,0);
