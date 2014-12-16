@@ -77,10 +77,13 @@ local function scoreitem(index,scoreindex,drawindex)
 
 				if #hstable >= 1  and index>= 1 then
 					local difference = (hstable[index]:GetPercentDP() - hstable[scoreindex]:GetPercentDP()) * 100
+					--local difference = (hstable[index]:GetScore() - hstable[scoreindex]:GetScore())
 					if difference >= 0 then
 						difference = string.format("(+%.2f%%)",difference)
+						--difference = string.format("(+%d)",difference)
 					else
 						difference = string.format("(%.2f%%)",difference)
+						--difference = string.format("(%d)",difference)
 					end
 					self:settextf("%s %.2f%% %s",(gradestring(hstable[index]:GetGrade())),hstable[index]:GetPercentDP()*100,difference); 
 				end;
