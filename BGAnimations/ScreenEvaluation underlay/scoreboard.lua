@@ -114,7 +114,7 @@ local function scoreitem(index,scoreindex,drawindex)
 end
 
 if lines > #hstable then
-	lines = hstable
+	lines = #hstable
 end;
 
 local drawindex = 0
