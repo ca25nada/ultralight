@@ -186,8 +186,6 @@ local Phrases = {
         "16th notes Stream file, fun factor based; \"Too generic, 2/10\"",
         "Color theory, Pirtech relevance, Technicality based; \"Masterpiece, I cried playing, 10/10\"", -- hipster stepmania
         "Oooooh yeah, Feel the notes...."
-
-
 }
 
 local temp;
