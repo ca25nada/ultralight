@@ -1,3 +1,5 @@
+
+
 function gradestring(tier) --to be moved
 	if tier == "Grade_Tier01" then
 		return 'AAAA'
@@ -35,6 +37,12 @@ local spacing = 35
 local t = Def.ActorFrame{};
 
 local function scoreitem(index,scoreindex,drawindex)
+
+	--First box always displays the 1st place score
+	if drawindex == 0 then
+		index = 1
+	end;
+
 	local equals = (index == scoreindex)
 	local t = Def.ActorFrame {
 		Def.Quad{
