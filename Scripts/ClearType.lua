@@ -59,7 +59,10 @@ local typecolors = {-- colors corresponding to cleartype
 -- ClearTypes based on stage awards and grades.
 -- Stageaward based cleartypes do not work if anything causes the stageaward to not show up (disqualification, score saving is off, etc.)
 -- and will just result in "Clear". I migggggggggght just drop the SA usage and use raw values instead.
--- returntype = 0 -> ClearType, =1 -> ClearTypeColor, =2 -> ShortClearType
+-- returntype 	=0 -> ClearType, 
+--				=1 -> ShortClearType, 
+-- 				=2 -> ClearTypeColor, 
+-- 				=else -> ClearTypeLevel
 local function clearTypes(stageaward,grade,playcount,misscount,returntype)
 	stageaward = stageaward or 0; -- initialize everything incase some are nil
 	grade = grade or 0;
@@ -99,12 +102,16 @@ local function clearTypes(stageaward,grade,playcount,misscount,returntype)
 	end;
 	if returntype == 0 then
 		return typetable[clearlevel];
-	elseif returntype == 2 then
+	elseif returntype == 1 then
 		return stypetable[clearlevel];
-	else
+	elseif returntype == 2 then
 		return typecolors[clearlevel];
+	else
+		return clearlevel
 	end;
 end;
+
+
 
 -- Returns the ClearType for Player1
 function getClearTypeP1(score)
@@ -158,7 +165,7 @@ function getShortClearTypeP1(score)
 		end;
 	end;
 
-	return clearTypes(stageaward,grade,playcount,misscount,2) or stypetable[12];
+	return clearTypes(stageaward,grade,playcount,misscount,1) or stypetable[12];
 end;
 
 -- Returns the color corresponding to the ClearType for Player1
@@ -185,7 +192,7 @@ function getClearColorP1(score)
 		end;
 	end;
 
-	return clearTypes(stageaward,grade,playcount,misscount,1) or typecolors[12];
+	return clearTypes(stageaward,grade,playcount,misscount,2) or typecolors[12];
 end;
 
 
@@ -232,7 +239,7 @@ function getShortClearTypeP2(score)
 		end;
 	end;
 
-	return clearTypes(stageaward,grade,playcount,misscount,2) or typetable[12];
+	return clearTypes(stageaward,grade,playcount,misscount,1) or typetable[12];
 end;
 
 function getClearColorP2(score)
@@ -254,7 +261,7 @@ function getClearColorP2(score)
 		end;
 	end;
 
-	return clearTypes(stageaward,grade,playcount,misscount,1) or typecolors[12];
+	return clearTypes(stageaward,grade,playcount,misscount,2) or typecolors[12];
 end;
 
 

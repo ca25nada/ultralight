@@ -1,3 +1,8 @@
+--Random quotes,phrases and memes from various rhythm gaming communities /o/
+-- (mainly ossu, stepman and bms)
+
+local show = true -- set to false to stop displaying quotes/phrases
+
 local function contains(table, value)
   for _, v in pairs(table) do
     if v == value then
@@ -125,11 +130,11 @@ local Phrases = {
 		"J1L1",
 		"(KOOKY)",
 		"bruh...",
-		"(^^)/★★",
+		"(^^)/★★", -- ABCD
 		"less apm for more swage",
-		"people age at a rate of about 1 year per year", -- Choofers
-		"Overjoy in 6 months",
-		"FDFD in 6 months",
+		"\"people age at a rate of about 1 year per year\"", -- Choofers
+		"Overjoy in 6 months", -- Yume
+		"FDFD in 6 months", -- what Yume could've done if he didn't rq bms for popn
 		"FUCGELO", -- ↓YOU FUC 
 		"earbleed",
 		"にっこにっこにー☆", -- raburaibu
@@ -137,7 +142,7 @@ local Phrases = {
 		"~koreastep~",
 		"solocock.png", -- "Mine is Bigger"
 		"Gigadelicious",
-		"hot sexy touhou",
+		"hot sexy touhou", -- AKA: HST
 		"Today's Popn",
 		"B..bbut... you're supposed to play this on a dance mat", -- Every youtube comment ever on stepmania vids
 		"WinDEU hates you",
@@ -147,20 +152,42 @@ local Phrases = {
 		";w;",
 		"uwaaaa",
 		"tatataatatatatattatatattatatataii hihhihihihihhihhihihihihiihihhihihihihhihhi",
-		"Is dis a game? If it is can I ask for da link and I need to play dis so badly and I wanna know if dere is any vocaloid songs on it",
-		"Korea team for 4k: Captain:abcd right hand, player 2: abcd left hand",
+		"\"Is dis a game? If it is can I ask for da link and I need to play dis so badly and I wanna know if dere is any vocaloid songs on it\"",
+		"Korea team for 4k: Captain:abcd right hand, player 2: abcd left hand", -- longgone
 		"hory shiet", -- Zak
-		"(=^._.^)/☆",
+		"(=^._.^)/☆", --0
 		"if i train a cat to play bms for 15 years it will pass overjoy", -- Leonid
-        "You're in denial, your SVs suck and your map needs work", -- moar ossu drama
-        "StepMania Detected",
-        "listen to the music carefully. my jacks always have it own means ",
-        "i dont think my sv is bad . i dont know how you use sv changes but my sv changes are actually comfortable.",
-        "you will kill players",
-        "standard is the only mod worth playing, the other mods require basically less than half the skill",
-        "mania is the easiest I think.  I can clear a lot of ranked maps compare to standard.", -- entozer
-        "you can't ask consistency in players because the next day they could be drunk while playing. or ate a lot of carbo and meat.",
-        "Don't do nazi mods,then it will no drama happen." -- Spy
+        "\"You're in denial, your SVs suck and your map needs work\"", -- moar ossu drama
+        "StepMania Detected", -- choof
+        "\"listen to the music carefully. my jacks always have it own means\"", -- victorica_db
+        "\"i dont think my sv is bad . i dont know how you use sv changes but my sv changes are actually comfortable.\"", -- victorica_db
+        "\"you will kill players\"",
+        "\"standard is the only mod worth playing, the other mods require basically less than half the skill\"",
+        "\"mania is the easiest I think.  I can clear a lot of ranked maps compare to standard.\"", -- entozer
+        "\"you can't ask consistency in players because the next day they could be drunk while playing. or ate a lot of carbo and meat.\"",
+        "\"Don't do nazi mods,then it will no drama happen.\"", -- Spy
+        "\"jackhammers are nothing on an IIDX controller.\"", -- kidlat020
+        "\"but then good players will have more advantage in the rankings\"",
+        "EXTRA CRISPY ORIGINAL RECIPE RASIS BREAST", -- foal irc bot
+        "\"what's a fuckin town without ducks, j-tro?\"",
+        "mfw",
+        "gross",
+        "\"I bet you were gettin the red face and fast heartbeat...then fucked up and the feeling kinda wore off\"",
+        "\"I beat off to this background dancer in DDR Supernova once too\"",
+        "\"Shut the fuck up Trance Core\"",
+        "==Planet KARMA==",
+        "STOP FUCKING ARGUING OVER STEPMANIA",
+        "IT'S STEPMANIA, FUCKING DDR ON KEYBOARD", -- Xoon Drama Pack
+        "WookE Seal of Approval",
+        "black people keep finding new and original ways of being black",
+        "invisible 16th streams", -- QED
+        "Subjectivemanias",
+        "THE FACE OF A QUAD", -- https://www.youtube.com/watch?v=PTQmhbnsid8
+        "16th notes Stream file, fun factor based; \"Too generic, 2/10\"",
+        "Color theory, Pirtech relevance, Technicality based; \"Masterpiece, I cried playing, 10/10\"", -- hipster stepmania
+        "Oooooh yeah, Feel the notes...."
+
+
 }
 
 local temp;
@@ -186,5 +213,9 @@ function addExtraQuotes() -- for adding dynamic Phrases, call this function some
 end;
 
 function getRandomQuotes()
-	return Phrases[math.random(#Phrases)];
+    if show then
+    	return Phrases[math.random(#Phrases)];
+    else
+        return " ";
+    end;
 end;

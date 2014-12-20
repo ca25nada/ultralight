@@ -76,7 +76,10 @@ local function scoreitem(index,scoreindex,drawindex)
 			BeginCommand=function(self)
 
 				if #hstable >= 1  and index>= 1 then
-					local difference = (hstable[index]:GetPercentDP() - hstable[scoreindex]:GetPercentDP()) * 100
+					local difference = hstable[index]:GetPercentDP()*100
+					if scoreindex > 0 then -- for non-disqualified scores (aka: scoreindex > 0)
+						local difference = ((hstable[index]:GetPercentDP() - hstable[scoreindex]:GetPercentDP()) * 100)
+					end;
 					--local difference = (hstable[index]:GetScore() - hstable[scoreindex]:GetScore())
 					if difference >= 0 then
 						difference = string.format("(+%.2f%%)",difference)
