@@ -12,6 +12,8 @@ t[#t+1] = LoadActor("diffbar")..{
 t[#t+1] = LoadActor("concstepstype")..{
 };
 
+t[#t+1] = LoadActor("warning")..{
+};
 
 --t[#t+1] = StandardDecorationFromFile( "StageFrame", "StageFrame" );
 
