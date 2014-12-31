@@ -185,7 +185,8 @@ local Phrases = {
         "THE FACE OF A QUAD", -- https://www.youtube.com/watch?v=PTQmhbnsid8
         "16th notes Stream file, fun factor based; \"Too generic, 2/10\"",
         "Color theory, Pirtech relevance, Technicality based; \"Masterpiece, I cried playing, 10/10\"", -- hipster stepmania
-        "Oooooh yeah, Feel the notes...."
+        "Oooooh yeah, Feel the notes....",
+        "can someone send me helvetica so i can make gfx"--for solo rulz 3 http://www.flashflashrevolution.com/vbz/showpost.php?p=4253999&postcount=13
 }
 
 local temp;
