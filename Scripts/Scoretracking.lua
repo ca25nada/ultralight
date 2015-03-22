@@ -1,4 +1,4 @@
---bunch of wrapped functions related to score/grading
+--Assortment of wrapped functions related to score/grading
 
 
 local gradeString = {
@@ -130,6 +130,7 @@ function isFailing(pn)
 	return STATSMAN:GetCurStageStats():GetPlayerStageStats(pn):GetFailed()
 end
 
+-- call this before doing anything
 function resetJudge()
 	for k,_ in pairs(judgeStatsP1) do
 		judgeStatsP1[k] = 0
@@ -310,6 +311,23 @@ function getCurScore(pn,scoreType)
 end
 
 function getGrade(pn)
+	local curDPScore =getCurScore(pn,0)
+	local curPSScore = getCurScore(pn,1)
+	local curMaxDPScore = getCurMaxScore(pn,0)
+	local curMaxPSScore = getCurMaxScore(pn,1)
+
+	if SCREENMAN:GetTopScreen():GetLifeMeter(pn):IsFailing() then
+		return 'Grade_Failed'
+	elseif curDPScore <= 0 and curPSScore <= 0 then
+		return GetGradeFromPercent(0)
+	elseif curPSScore == curMaxPSScore then
+		return 'Grade_Tier01'
+	elseif curDPScore == curMaxDPScore then
+		return 'Grade_Tier02'
+	else
+		return GetGradeFromPercent(curDPScore/curMaxDPScore)
+	end;
+
 	return 
 end
 

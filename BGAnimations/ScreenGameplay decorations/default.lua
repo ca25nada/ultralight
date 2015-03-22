@@ -3,6 +3,9 @@ local t = LoadFallbackB();
 t[#t+1] = LoadActor("judgecount")..{
 }
 
+t[#t+1] = LoadActor("newjudgecount")..{
+}
+
 t[#t+1] = LoadActor("lifejudgedisplay")..{
 }
 
