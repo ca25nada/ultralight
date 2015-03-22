@@ -18,7 +18,7 @@ Current (known) issues with scoregraph:
 
 	Errything is hardcoded for 1P atm so playing as 2P will "probably" crash the game at some point.
 --]]
-
+resetJudge()
 ---------------------------------------
 -- Score Weights and Rank Conditions --
 ---------------------------------------
@@ -284,7 +284,7 @@ local t = Def.ActorFrame {
 				Name="PlayerFail";
 				JudgmentMessageCommand=function(self)
 					P1Fail = STATSMAN:GetCurStageStats():GetPlayerStageStats(PLAYER_1):GetFailed();
-					P2Fail = STATSMAN:GetCurStageStats():GetPlayerStageStats(PLAYER_1):GetFailed();
+					P2Fail = STATSMAN:GetCurStageStats():GetPlayerStageStats(PLAYER_2):GetFailed();
 				end;
 		};	
 		Def.Quad{ --JudgeHighlight
@@ -434,7 +434,7 @@ local t = Def.ActorFrame {
                 Name="P1W2";
                 InitCommand=cmd(x,0+framex;y,10+framey;zoom,0.4;horizalign,left);
 				BeginCommand=function(self)
-					self:settext("PR")
+					self:settext(scoreTrackTest() or "PA")
 					self:diffuse(HSV(48,0.8,0.95))
 				end;
         };
@@ -493,11 +493,13 @@ local t = Def.ActorFrame {
 					self:settext(0)
 				end;
 				SetCommand=function(self)
+					self:settext(getJudge(PLAYER_1,'TapNoteScore_W1'))
+					--[[
 					if P1Fail == false then
 						local count = PJudge(PLAYER_1,'TapNoteScore_W1')
 						judgestats["TapNoteScore_W1"] = count
-						self:settext(count)
 					end;
+					--]]
 				end;
 				JudgmentMessageCommand=cmd(queuecommand,"Set");
 		};
@@ -508,11 +510,14 @@ local t = Def.ActorFrame {
 					self:settext(0)
 				end;
 				SetCommand=function(self)
+					self:settext(getJudge(PLAYER_1,'TapNoteScore_W2'))
+					--[[
 					if P1Fail == false then
 						local count = PJudge(PLAYER_1,'TapNoteScore_W2')
 						judgestats["TapNoteScore_W2"] = count
-						self:settext(count)
+						self:settext(getJudge(PLAYER_1,'TapNoteScore_W2'))
 					end;
+					--]]
 				end;
 				JudgmentMessageCommand=cmd(queuecommand,"Set");
 		};
@@ -523,11 +528,14 @@ local t = Def.ActorFrame {
 					self:settext(0)
 				end;
 				SetCommand=function(self)
+					self:settext(getJudge(PLAYER_1,'TapNoteScore_W3'))
+					--[[
 					if P1Fail == false then
 						local count = PJudge(PLAYER_1,'TapNoteScore_W3')
 						judgestats["TapNoteScore_W3"] = count
 						self:settext(count)
 					end;
+					--]]
 				end;
 				JudgmentMessageCommand=cmd(queuecommand,"Set");
 		};
@@ -538,11 +546,14 @@ local t = Def.ActorFrame {
 					self:settext(0)
 				end;
 				SetCommand=function(self)
+					self:settext(getJudge(PLAYER_1,'TapNoteScore_W4'))
+					--[[
 					if P1Fail == false then
 						local count = PJudge(PLAYER_1,'TapNoteScore_W4')
 						judgestats["TapNoteScore_W4"] = count
 						self:settext(count)
 					end;
+					--]]
 				end;
 				JudgmentMessageCommand=cmd(queuecommand,"Set");
 		};
@@ -553,11 +564,14 @@ local t = Def.ActorFrame {
 					self:settext(0)
 				end;
 				SetCommand=function(self)
+					self:settext(getJudge(PLAYER_1,'TapNoteScore_W5'))
+					--[[
 					if P1Fail == false then
 						local count = PJudge(PLAYER_1,'TapNoteScore_W5')
 						judgestats["TapNoteScore_W5"] = count
 						self:settext(count)
 					end;
+					--]]
 				end;
 				JudgmentMessageCommand=cmd(queuecommand,"Set");
 		};
@@ -568,11 +582,14 @@ local t = Def.ActorFrame {
 					self:settext(0)
 				end;
 				SetCommand=function(self)
+					self:settext(getJudge(PLAYER_1,'TapNoteScore_Miss'))
+					--[[
 					if P1Fail == false then
 						local count = PJudge(PLAYER_1,'TapNoteScore_Miss')
 						judgestats["TapNoteScore_Miss"] = count
 						self:settext(count)
 					end;
+					--]]
 				end;
 				JudgmentMessageCommand=cmd(queuecommand,"Set");
 		};
@@ -583,11 +600,14 @@ local t = Def.ActorFrame {
 					self:settext(0)
 				end;
 				SetCommand=function(self)
+					self:settext(getJudge(PLAYER_1,'HoldNoteScore_Held'))
+					--[[
 					if P1Fail == false then
 						local count = PHJudge(PLAYER_1,'HoldNoteScore_Held')
 						judgestats["HoldNoteScore_Held"] = count
 						self:settext(count)
 					end;
+					--]]
 				end;
 				JudgmentMessageCommand=cmd(queuecommand,"Set");
         };
@@ -598,6 +618,8 @@ local t = Def.ActorFrame {
 					self:settext(0)
 				end;
 				SetCommand=function(self)
+					self:settext(getJudge(PLAYER_1,'HoldNoteScore_LetGo'))
+					--[[
 					if P1Fail == false then
 						local count = PHJudge(PLAYER_1,'HoldNoteScore_LetGo')
 						local misscount = PHJudge(PLAYER_1,'HoldNoteScore_LetGo')
@@ -605,6 +627,7 @@ local t = Def.ActorFrame {
 						judgestats["HoldNoteScore_Missed"] = misscount
 						self:settext(count)
 					end;
+					--]]
 				end;
 				JudgmentMessageCommand=cmd(queuecommand,"Set");
         };
@@ -612,13 +635,15 @@ local t = Def.ActorFrame {
 			Name="P1MineHitCount";
 			InitCommand=cmd();
 			SetCommand=function(self)
-				if P1Fail == false then
-					local count = PJudge(PLAYER_1,"TapNoteScore_HitMine")
-					judgestats["TapNoteScore_HitMine"] = count
-				end;
+				--if P1Fail == false then
+				local count = getJudge(PLAYER_1,"TapNoteScore_HitMine")
+					--local count = PJudge(PLAYER_1,"TapNoteScore_HitMine")
+				judgestats["TapNoteScore_HitMine"] = count
+				--end;
 			end;
 			JudgmentMessageCommand=cmd(queuecommand,"Set");
 		};
+		--[[
 		Def.Actor{ -- ScoreCalc
 			SetCommand=function(self)
 				if P1Fail == false then
@@ -654,19 +679,53 @@ local t = Def.ActorFrame {
 						end;
 					end;
 				end;
-				--halfassed attempt at fixing hold issue, might cause graph issues with songs with just holds at ending.
-				--to be removed after it's fixed.
-				--edit: fixed as of sm5b4
-				--[[
-				if totnotes == maxnotes then
-					if totholds ~= maxholds then
-						totholds = maxholds
-					end;
-				end;
-				--]]
 				self:queuecommand("Set");
 			end;
 		};
+		--]]
+		Def.Actor{ -- ScoreCalc
+			SetCommand=function(self)
+				if isFailing(PLAYER_1) == false then
+					dpscore = getCurScore(PLAYER_1,0)
+					percentscore = getCurScore(PLAYER_1,1)
+					migsscore = getCurScore(PLAYER_1,2)
+				end;
+				curmaxdp = getCurMaxScore(PLAYER_1,0)
+				curmaxps = getCurMaxScore(PLAYER_1,1)
+				curmaxmigs = getCurMaxScore(PLAYER_1,2)
+				dppercent = string.format("%.2f",dpscore/curmaxdp)
+				pspercent = string.format("%.2f",percentscore/curmaxps)
+				migspercent = string.format("%.2f",migsscore/curmaxmigs)
+				
+			end;
+			JudgmentMessageCommand=function(self,params)
+				if params.HoldNoteScore then
+					addJudge(PLAYER_1,params.HoldNoteScore,true)
+					judgetable = getJudgeTable(PLAYER_1)
+				elseif params.TapNoteScore == 'TapNoteScore_HitMine' or params.TapNoteScore == 'TapNoteScore_AvoidMine' then
+					addJudge(PLAYER_1,params.TapNoteScore,false)
+					totmines = getCurMaxMines(PLAYER_1)
+					judgetable = getJudgeTable(PLAYER_1)
+				else
+					addJudge(PLAYER_1,params.TapNoteScore,false)
+					totnotes = getCurMaxNotes(PLAYER_1)
+					judgetable = getJudgeTable(PLAYER_1)
+					if params.TapNoteScore ~= 'TapNoteScore_Miss' then
+						if not params.Early then
+							addOffset(PLAYER_1,params.TapNoteOffset)
+							protimingtable = getOffsetTable(PLAYER_1)
+							protimingsum = protimingsum - params.TapNoteOffset
+						else
+							addOffset(PLAYER_1,-params.TapNoteOffset)
+							protimingtable = getOffsetTable(PLAYER_1)
+							protimingsum = protimingsum + params.TapNoteOffset
+						end;
+					end;
+				end;
+				self:queuecommand("Set");
+			end;
+		};
+		--]]
 		LoadFont("Common Normal") .. { --grade
                 Name="curGrade";
                 InitCommand=cmd(x,framex+0;y,framey+80;zoom,0.45;horizalign,left);

@@ -5,6 +5,7 @@ local t = Def.ActorFrame{
 	--LoadActor("curtime");
 	--LoadActor("customlife")
 	--LoadActor("lifejudgedisplay")
+	--LoadActor("SULBRYYYYYYYYYYY")
 
 };
 

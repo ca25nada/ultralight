@@ -1,5 +1,6 @@
---Random quotes,phrases and memes from various rhythm gaming communities /o/
--- (mainly ossu, stepman and bms)
+--Random quotes,phrases and memes from various rhythm gaming communities /o/ 
+--(that you may or may not be familar with)
+--mainly from ossu, stepman and bms
 
 local show = true -- set to false to stop displaying quotes/phrases
 
@@ -22,9 +23,9 @@ local Phrases = {
         --"tropical storm more like tropical fart",
         --"protip: dolphins are not capable of playing music games, let alone make music for them.",
         "did you hear about this cool game called beatmani?",
-        --"to be honest, it's not ez to dj.",
-        --"at least we won't lose our source code.",
-        --"less woosh more drop",
+        "to be honest, it's not ez to dj.",
+        --"at least we won't lose our source code.", -- rip LR2
+        "less woosh more drop", -- SDVX
         "studies show that certain rhythm game communities contain more cancerous and autistic people than other communities.",
         --"hot new bonefir remix knife party",
         "i'll only date you if you're kaiden",
@@ -33,7 +34,7 @@ local Phrases = {
         "YOU GET 200 GOLD CROWNS! IT IS EXTRAORDINARY!! YOU ARE THE TRUE TATSUJIN",
         "ayy lmao",
         "nice meme",
-        --"S P A C E  T I M E",
+        "S P A C E  T I M E",
         "You gonna finish that ice cream sandwich?",
         "TWO DEE ECKS GOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOLD",
         "dude nice",
@@ -74,7 +75,7 @@ local Phrases = {
         "1.33 -> 0.33 -> 1.0 <=/=> 1.5 -> 0.5 -> 1.0",
         "rip words",
         "misses are bad",
-        --"aiae lmao",
+        "aiae lmao",
         "\"573 or nothing\"",
         "wats ur favrit 2hu",
         --"canmusic makes you ET",
@@ -91,10 +92,10 @@ local Phrases = {
         "i'm not a kaiden i'm a ninja gaiden",
         "\"did you seriously pay peppy 4$ to upload a fucking thomas the tank engine dump\"",
         "\"mania is a pile of unmanageblae shit i'm not fixing it\" - peppy",
-        "\"Korean Mmorpg\"",
-        "\"I had a SV change trauma this SV change requires my no response in flying ball towards me\"",
+        "\"Korean Mmorpg\"", -- For a free 42 hour silence and a potential ban 
+        "\"I had a SV change trauma this SV change requires my no response in flying ball towards me\"", -- ABCD
         "Re:apparantly wearing a fedora improves sightreading???",
-        "\"How does your osu have all notes go to one place?\"",
+        "\"How does your osu have all notes go to one place?\"", -- Taiko 
         "Fuga Fuuuga Fuuuuuckga Fuuuuuuuuckga Darkstar PAZO light TRASH ACE WOOD HELL", -- Fuga Hall of Shame
         "JESUS WON'T COME TO SAVE YOU IN RHYTHM GAME HELL SON",
         "slapping colorful hamburgers is one of my many hobbies",
@@ -104,14 +105,14 @@ local Phrases = {
         "\"I'LL NEVER PLAY 'BEAT-BEAT REVELATION' AGAIN!\"",
         "\"What is SOWS? I tried to Google it but all I get is pictures of female pigs\"",
         "To Abcdullah: your cheating is obvious, doing 100.00% on lv.26-28 maps from the first attempt is cheating, admit it.",
-        "konmai",
+        "konmai", -- konami
         "haha facerolling",
 		"gonz:pork",
 		"BMS = Button Mashing Simulator", -- Some yt comment... might have been doorknob
 		"leonid fucking hard", -- LUXURY"
 		"in Norway every girl is blonde, blue eyed and 300BPMs", -- Roar176
 		"vROFL",
-		"Sandbaggerrrrrrr",
+		"Sandbaggerrrrrrr", -- How to win FFR tourneys 
 		"\"I'm gonna suee your ass to pakistan\"", -- Gundam-Dude
 		"what is the romaji of 皿 : scratches", -- AKA: sarachan >~<
 		"solo rulz",
@@ -126,19 +127,19 @@ local Phrases = {
 		"Lovery Radio", 
 		"えいニャ！　えいニャ！", 
 		"Dat MA",
-		"IT HAS MEI IN IT", 
-		"J1L1",
-		"(KOOKY)",
+		"IT HAS MEI IN IT", -- Toy's march 
+		"J1L1", -- Pr0 settings 
+		"(KOOKY)", -- EVERY BMS DUMP
 		"bruh...",
 		"(^^)/★★", -- ABCD
-		"less apm for more swage",
+		"less apm for more swage", -- Roar
 		"\"people age at a rate of about 1 year per year\"", -- Choofers
 		"Overjoy in 6 months", -- Yume
 		"FDFD in 6 months", -- what Yume could've done if he didn't rq bms for popn
 		"FUCGELO", -- ↓YOU FUC 
 		"earbleed",
 		"にっこにっこにー☆", -- raburaibu
-		"%E3%83%96%E3%83%B3%E3%82%BF%E3%83%B3 ～Falling in \"B\" mix～",
+		"%E3%83%96%E3%83%B3%E3%82%BF%E3%83%B3 ～Falling in \"B\" mix～", -- buntan
 		"~koreastep~",
 		"solocock.png", -- "Mine is Bigger"
 		"Gigadelicious",
@@ -161,7 +162,7 @@ local Phrases = {
         "StepMania Detected", -- choof
         "\"listen to the music carefully. my jacks always have it own means\"", -- victorica_db
         "\"i dont think my sv is bad . i dont know how you use sv changes but my sv changes are actually comfortable.\"", -- victorica_db
-        "\"you will kill players\"",
+        "you will kill players", -- Spy killing players
         "\"standard is the only mod worth playing, the other mods require basically less than half the skill\"",
         "\"mania is the easiest I think.  I can clear a lot of ranked maps compare to standard.\"", -- entozer
         "\"you can't ask consistency in players because the next day they could be drunk while playing. or ate a lot of carbo and meat.\"",
@@ -176,8 +177,7 @@ local Phrases = {
         "\"I beat off to this background dancer in DDR Supernova once too\"",
         "\"Shut the fuck up Trance Core\"",
         "==Planet KARMA==",
-        "STOP FUCKING ARGUING OVER STEPMANIA",
-        "IT'S STEPMANIA, FUCKING DDR ON KEYBOARD", -- Xoon Drama Pack
+        "STOP FUCKING ARGUING OVER STEPMANIA -- IT'S STEPMANIA, FUCKING DDR ON KEYBOARD", -- Xoon Drama Pack
         "WookE Seal of Approval",
         "\"black people keep finding new and original ways of being black\"",
         "invisible 16th streams", -- QED
@@ -186,7 +186,17 @@ local Phrases = {
         "16th notes Stream file, fun factor based; \"Too generic, 2/10\"",
         "Color theory, Pirtech relevance, Technicality based; \"Masterpiece, I cried playing, 10/10\"", -- hipster stepmania
         "Oooooh yeah, Feel the notes....",
-        "can someone send me helvetica so i can make gfx"--for solo rulz 3 http://www.flashflashrevolution.com/vbz/showpost.php?p=4253999&postcount=13
+        "\"can someone send me helvetica so i can make gfx\"",--for solo rulz 3 http://www.flashflashrevolution.com/vbz/showpost.php?p=4253999&postcount=13
+        "\"I'm not gonna fight for anime titties, but I'm gonna fight for the right to know if my anime titties are rankable or not.\"", -- https://osu.ppy.sh/forum/p/3592977
+        "Human Sequencer", -- mei
+        "\"i am DEFGullah trust me\"", -- o2jam_guy
+        "\"you're not even WXYZullah\"", -- hazelnut in response to o2jam_guy
+        "\"just because you collect loli girls doesn't make it weeaboo\"", -- aqo
+        "\"are you a women xD your profile picture look like women\"", -- https://osu.ppy.sh/forum/p/3871389
+        "Everlasting Message", -- AKA: For UltraPlayers hoooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+        "\"And I'm not a noob I got 227 pp\"",
+        "whats more dense, a black hole or an icyworld file", -- choof
+        "fuk LN" -- Staiain's twitch chat
 }
 
 local temp;
