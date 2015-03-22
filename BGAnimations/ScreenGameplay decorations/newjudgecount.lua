@@ -55,8 +55,8 @@ local highlightColor = { -- Colors of Judgment highlights
 	HoldNoteScore_LetGo = color("0.85,0.33,0.33,0.5")
 }
 
-local center1P = PREFSMAN:GetPreference("Center1Player"); -- For relocating graph/judgecount frame
 local cols = GAMESTATE:GetCurrentStyle():ColumnsPerPlayer(); -- For relocating graph/judgecount frame
+local center1P = ((cols >= 6) or PREFSMAN:GetPreference("Center1Player")); -- For relocating graph/judgecount frame
 
 local frameX = 20 -- X position of the frame when center1player is on
 local frameXR = 50 -- X offset from the very right of the lane when center1player is off

@@ -1,6 +1,5 @@
 --[[ Screen Filter ]]
-local numPlayers = GAMESTATE:GetNumPlayersEnabled()
-local center1P = PREFSMAN:GetPreference("Center1Player")
+
 
 local padding = 8 -- 4px on each side
 local arrowWidth = 64 -- until noteskin metrics are implemented...
@@ -16,6 +15,10 @@ local t = Def.ActorFrame{};
 
 local style = GAMESTATE:GetCurrentStyle()
 local cols = style:ColumnsPerPlayer()
+
+local numPlayers = GAMESTATE:GetNumPlayersEnabled()
+local center1P = ((cols >= 6) or PREFSMAN:GetPreference("Center1Player"))
+
 local styleType = ToEnumShortString(style:GetStyleType())
 local filterWidth = (arrowWidth * cols) + padding
 

@@ -116,8 +116,8 @@ local judgestats = { -- Table containing the # of judgements made so far
 -----------------------------------------
 -- Variables for JudgeCount/PA Counter --
 -----------------------------------------
-local center1P = PREFSMAN:GetPreference("Center1Player"); -- For relocating graph/judgecount frame
 local cols = GAMESTATE:GetCurrentStyle():ColumnsPerPlayer(); -- For relocating graph/judgecount frame
+local center1P = ((cols >= 6) or PREFSMAN:GetPreference("Center1Player")); -- For relocating graph/judgecount frame
 
 --Position of JudgeCount, the values here assumes center1P being enabled. (Change values as needed)
 local framex = 20
