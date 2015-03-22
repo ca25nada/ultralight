@@ -68,19 +68,15 @@ local judgeFontSize = 0.40 -- Font sizes for different text elements
 local countFontSize = 0.35
 local gradeFontSize = 0.45
 
-
-
-
 --=========================================================================--
 --=========================================================================--
 --=========================================================================--
 
 if center1P == false then
-	framex = (SCREEN_CENTER_X/2)+(64*(cols/2))+frameXL
-end;
+	frameX = (SCREEN_CENTER_X/2)+(64*(cols/2))+frameXR
+end
 
 local judgeType = tonumber(GetUserPref("JudgeTypeP1"));
-
 
 local function judgeText(judge,index)
 	local t = LoadFont("Common normal")..{
