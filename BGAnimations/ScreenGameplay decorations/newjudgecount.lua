@@ -1,3 +1,5 @@
+-- Dependencies: Scoretracking.lua
+
 local t = Def.ActorFrame{}
 
 local judges = { -- do not edit
@@ -58,9 +60,6 @@ local highlightColor = { -- Colors of Judgment highlights
 local cols = GAMESTATE:GetCurrentStyle():ColumnsPerPlayer(); -- For relocating graph/judgecount frame
 local center1P = ((cols >= 6) or PREFSMAN:GetPreference("Center1Player")); -- For relocating graph/judgecount frame
 
-local frameX = 20 -- X position of the frame when center1player is on
-local frameXR = 50 -- X offset from the very right of the lane when center1player is off
-local frameY = (SCREEN_HEIGHT*0.62)-5 -- Y Position of the frame
 local spacing = 10 -- Spacing between the judgetypes
 local frameWidth = 55 -- Width of the Frame
 local frameHeight = ((#judges+1)*spacing)+8 -- Height of the Frame
@@ -68,17 +67,35 @@ local judgeFontSize = 0.40 -- Font sizes for different text elements
 local countFontSize = 0.35
 local gradeFontSize = 0.45
 
+local frameX1P = 20 -- X position of the frame when center1player is on
+local frameXR1P = 50 -- X offset from the very right of the lane when center1player is off
+local frameY1P = (SCREEN_HEIGHT*0.62)-5 -- Y Position of the frame
+
+local frameX2P = SCREEN_WIDTH-20-frameWidth -- X position of the frame when center1player is on
+local frameXR2P = 50 -- X offset from the very right of the lane when center1player is off
+local frameY2P = (SCREEN_HEIGHT*0.62)-5 -- Y Position of the frame
+
+
 --=========================================================================--
 --=========================================================================--
 --=========================================================================--
 
 if center1P == false then
-	frameX = (SCREEN_CENTER_X/2)+(64*(cols/2))+frameXR
+	frameX1P = (SCREEN_CENTER_X/2)+(64*(cols/2))+frameXR1P
 end
 
 local judgeType = tonumber(GetUserPref("JudgeTypeP1"));
 
-local function judgeText(judge,index)
+local function judgeText(pn,judge,index)
+	local frameX = 0
+	local frameY = 0
+	if pn == PLAYER_1 then
+		frameX = frameX1P
+		frameY = frameY1P
+	elseif pn == PLAYER_2 then
+		frameX = frameX2P
+		frameY = frameY2P
+	end
 	local t = LoadFont("Common normal")..{
 		InitCommand=cmd(xy,frameX+5,frameY+5+(index*spacing);zoom,judgeFontSize;halign,0);
 		BeginCommand=function(self)
@@ -90,7 +107,16 @@ local function judgeText(judge,index)
 end;
 
 
-local function judgeCount(judge,index)
+local function judgeCount(pn,judge,index)
+	local frameX = 0
+	local frameY = 0
+	if pn == PLAYER_1 then
+		frameX = frameX1P
+		frameY = frameY1P
+	elseif pn == PLAYER_2 then
+		frameX = frameX2P
+		frameY = frameY2P
+	end
 	local t = LoadFont("Common Normal") .. {
 		InitCommand=cmd(xy,frameWidth+frameX-5,frameY+5+(index*spacing);zoom,countFontSize;horizalign,right);
 		BeginCommand=function(self)
@@ -104,7 +130,16 @@ local function judgeCount(judge,index)
 	return t
 end
 
-local function judgeHighlight(judge,index)
+local function judgeHighlight(pn,judge,index)
+	local frameX = 0
+	local frameY = 0
+	if pn == PLAYER_1 then
+		frameX = frameX1P
+		frameY = frameY1P
+	elseif pn == PLAYER_2 then
+		frameX = frameX2P
+		frameY = frameY2P
+	end
 	local t = Def.Quad{ --JudgeHighlight
 		Name="JudgeHighlight/W1";
 		InitCommand=cmd(xy,frameX,frameY+5+(index*spacing);zoomto,frameWidth,5;diffuse,color("1,1,1,0.0");horizalign,left;vertalign,top;visible,true);
@@ -126,22 +161,22 @@ end
 
 if judgeType ~= 1 then
 	t[#t+1] = Def.Quad{ -- Judgecount Background
-		InitCommand=cmd(xy,frameX,frameY;zoomto,frameWidth,frameHeight;diffuse,color("0,0,0,0.4");horizalign,left;vertalign,top);
+		InitCommand=cmd(xy,frameX1P,frameY1P;zoomto,frameWidth,frameHeight;diffuse,color("0,0,0,0.4");horizalign,left;vertalign,top);
 	}
 
 	local index = 0 --purely for positional purposes
 	-- make judgecount thing
 	for k,v in pairs(judges) do
 		if judgeType == 3 then
-			t[#t+1] = judgeHighlight(v,index)
+			t[#t+1] = judgeHighlight(PLAYER_1,v,index)
 		end
-		t[#t+1] = judgeText(v,index)
-		t[#t+1] = judgeCount(v,index)
+		t[#t+1] = judgeText(PLAYER_1,v,index)
+		t[#t+1] = judgeCount(PLAYER_1,v,index)
 		index = index +1 
 	end
 
 	t[#t+1] = LoadFont("Common Normal") .. { --grade
-	        InitCommand=cmd(xy,frameX+5,frameY+6+(index*spacing);zoom,gradeFontSize;horizalign,left);
+	        InitCommand=cmd(xy,frameX1P+5,frameY1P+6+(index*spacing);zoom,gradeFontSize;horizalign,left);
 			BeginCommand=function(self)
 				self:settext(gradeString[getGrade(PLAYER_1)])
 			end;
