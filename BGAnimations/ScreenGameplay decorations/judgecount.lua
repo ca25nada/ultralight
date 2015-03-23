@@ -312,7 +312,7 @@ local t = Def.ActorFrame {
 							protimingtable = getOffsetTable(PLAYER_1)
 							protimingsum = protimingsum - params.TapNoteOffset
 						else
-							addOffset(PLAYER_1,-params.TapNoteOffset)
+							addOffset(PLAYER_1,params.TapNoteOffset)
 							protimingtable = getOffsetTable(PLAYER_1)
 							protimingsum = protimingsum + params.TapNoteOffset
 						end;

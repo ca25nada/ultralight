@@ -1,5 +1,6 @@
 
 
+
 local t = Def.ActorFrame{};
 
 if GAMESTATE:IsCourseMode() then
@@ -21,6 +22,8 @@ local gradeFrameHeight = 40;
 local gradeFrameBorderSize = 2;
 -- score/grade frames
 --
+
+
 t[#t+1] = Def.ActorFrame{
 	Name="P1ScoreFrame";
 	InitCommand=cmd(x,SCREEN_CENTER_X*0.3;y,SCREEN_TOP+106);
@@ -229,5 +232,6 @@ t[#t+1] = Def.ActorFrame{
 
 t[#t+1] = LoadActor("judgeBGs");
 t[#t+1] = LoadActor("scoreboard");
+t[#t+1] = LoadActor("stats");
 
 return t;
