@@ -13,10 +13,10 @@ local frameYP1 = SCREEN_CENTER_Y+25
 local frameYRP1 = (SCREEN_CENTER_X*0.57)+52
 
 local frameXP2 = SCREEN_CENTER_X+50
-local frameYP2 = SCREEN_CENTER_Y+25
+local frameYP2 = SCREEN_CENTER_Y+2
 local frameYRP2 = (SCREEN_CENTER_X*0.57)+52
 
-if center1p == false then
+if center1P == false then
 	frameXP1 = (SCREEN_CENTER_X*0.57)+52
 	frameXP2 = SCREEN_CENTER_X+(SCREEN_CENTER_X*0.57)+52
 end
