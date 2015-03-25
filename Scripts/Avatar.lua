@@ -13,6 +13,27 @@ local function ReadAvatarFile(path)
 	return contents
 end
 
+-- Returns a path to the avatar image (relative to the ultralight theme folder) for the specified player.
+function getAvatarPath(pn)
+	local profile
+	local profilePath = ""
+	local fileName = "generic.gif"
+	if GAMESTATE:IsPlayerEnabled(pn) then
+		profile = GetPlayerOrMachineProfile(pn)
+		profilePath = PROFILEMAN:GetProfileDir('ProfileSlot_Player1')
+		fileName = ReadAvatarFile(profilePath.."/avatar.txt")
+		if fileName == nil then
+			fileName = "generic.gif"
+		end
+	end
+
+	if FILEMAN:DoesFileExist("Themes/"..THEME:GetCurThemeName().."/Graphics/Player avatar/"..fileName) then
+		return "/Graphics/Player avatar/"..fileName
+	end
+	return "/Graphics/Player avatar/generic"
+end;
+
+-- Creates an actor with the avatar image.
 function getAvatar(pn)
 	local profile
 	local profilePath = ""

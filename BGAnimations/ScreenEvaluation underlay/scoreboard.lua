@@ -24,11 +24,14 @@ end;
 
 local lines = 9 -- number of scores to display
 local profileP1 = GetPlayerOrMachineProfile(PLAYER_1)
+local profileMa = PROFILEMAN:GetMachineProfile()
 local song = STATSMAN:GetCurStageStats():GetPlayedSongs()[1]
 local steps = STATSMAN:GetCurStageStats():GetPlayerStageStats(PLAYER_1):GetPlayedSteps()[1]
 local scoreP1 = STATSMAN:GetCurStageStats():GetPlayerStageStats(PLAYER_1):GetHighScore();
 local hstable = profileP1:GetHighScoreList(song,steps):GetHighScores()
+--local hstable = profileMa:GetHighScoreList(song,steps):GetHighScores()
 local scoreindex = STATSMAN:GetCurStageStats():GetPlayerStageStats(PLAYER_1):GetPersonalHighScoreIndex()+1
+--local scoreindex = STATSMAN:GetCurStageStats():GetPlayerStageStats(PLAYER_1):GetMachineHighScoreIndex()+1
 local framex = WideScale(350,400)
 local framey = 160
 local spacing = 35
