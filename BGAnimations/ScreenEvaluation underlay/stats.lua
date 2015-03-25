@@ -51,7 +51,9 @@ local highlightColor = { -- Colors of Judgment highlights
 
 local table = getOffsetTable(PLAYER_1)
 local max,min = maxmin(table)
-local bucket = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}
+max = 0.090
+min = -0.090
+local bucket = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,}
 local interval = (max-min)/#bucket
 local graphHeight = SCREEN_HEIGHT/3*2
 local graphWidth = 400
@@ -68,6 +70,12 @@ function graph(bucket)
 		BeginCommand=function(self)
 			self:settext("working"); 
 		end;
+	}
+
+	t[#t+1] = Def.Quad{
+		InitCommand=cmd(xy,graphX+graphWidth/2,graphY;zoomto,2,graphHeight;vertalign,top);
+
+
 	}
 
 	for k,v in ipairs(bucket) do

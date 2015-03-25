@@ -14,6 +14,7 @@ local t = Def.ActorFrame{
 		end;
 	};
 };
+t[#t+1] = getAvatar(PLAYER_1)
 
 t[#t+1] = StandardDecorationFromFile("SongTitle","SongTitle");
 t[#t+1] = StandardDecorationFromFile("ArtistAndGenre","ArtistAndGenre");

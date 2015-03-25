@@ -234,4 +234,6 @@ t[#t+1] = LoadActor("judgeBGs");
 t[#t+1] = LoadActor("scoreboard");
 t[#t+1] = LoadActor("stats");
 
+
+
 return t;
