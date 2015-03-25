@@ -232,7 +232,7 @@ t[#t+1] = Def.ActorFrame{
 
 t[#t+1] = LoadActor("judgeBGs");
 t[#t+1] = LoadActor("scoreboard");
-t[#t+1] = LoadActor("stats");
+--t[#t+1] = LoadActor("stats");
 
 
 
