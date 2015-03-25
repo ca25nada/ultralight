@@ -15,6 +15,7 @@ local t = Def.ActorFrame{
 	};
 };
 
+
 t[#t+1] = StandardDecorationFromFile("SongTitle","SongTitle");
 t[#t+1] = StandardDecorationFromFile("ArtistAndGenre","ArtistAndGenre");
 t[#t+1] = StandardDecorationFromFile("BPMDisplay","BPMDisplay");

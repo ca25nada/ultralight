@@ -19,6 +19,9 @@ Current (known) issues with scoregraph:
 	Errything is hardcoded for 1P atm so playing as 2P will "probably" crash the game at some point.
 --]]
 
+
+--Dependencies: scoretracking.lua
+resetJudge()
 ---------------------------------------
 -- Score Weights and Rank Conditions --
 ---------------------------------------
@@ -113,8 +116,8 @@ local judgestats = { -- Table containing the # of judgements made so far
 -----------------------------------------
 -- Variables for JudgeCount/PA Counter --
 -----------------------------------------
-local center1P = PREFSMAN:GetPreference("Center1Player"); -- For relocating graph/judgecount frame
 local cols = GAMESTATE:GetCurrentStyle():ColumnsPerPlayer(); -- For relocating graph/judgecount frame
+local center1P = ((cols >= 6) or PREFSMAN:GetPreference("Center1Player")); -- For relocating graph/judgecount frame
 
 --Position of JudgeCount, the values here assumes center1P being enabled. (Change values as needed)
 local framex = 20
@@ -268,7 +271,7 @@ local t = Def.ActorFrame {
 	----------------
 	-- Judgecount --
 	----------------
-
+	--[[]]
 	Def.ActorFrame{ -- Judge Count
 		InitCommand=cmd(visible,true);
 		BeginCommand=function(self)
@@ -276,359 +279,16 @@ local t = Def.ActorFrame {
 				self:visible(false);
 			end;
 		end;
-		Def.Quad{ -- Judgecount Background
-				Name="BackGround";
-				InitCommand=cmd(x,-5+framex;y,-5+framey;zoomto,55,95;diffuse,color("0,0,0,0.4");horizalign,left;vertalign,top);
-		};		
-		Def.Actor{ -- PlayerFail
-				Name="PlayerFail";
-				JudgmentMessageCommand=function(self)
-					P1Fail = STATSMAN:GetCurStageStats():GetPlayerStageStats(PLAYER_1):GetFailed();
-					P2Fail = STATSMAN:GetCurStageStats():GetPlayerStageStats(PLAYER_1):GetFailed();
-				end;
-		};	
-		Def.Quad{ --JudgeHighlight
-				Name="JudgeHighlight/W1";
-				InitCommand=cmd(x,-5+framex;y,0+framey;zoomto,55,5;diffuse,color("1,1,1,0.0");horizalign,left;vertalign,top;visible,true);
-				JudgmentMessageCommand=function(self,params)
-					if judgemode == 'On' and params.TapNoteScore == 'TapNoteScore_W1' then
-						self:stoptweening();
-						self:visible(true);
-						self:diffusealpha(0);
-						--self:y(framey+0);
-						self:linear(0.1);
-						self:diffuse(color("0.2,0.773,0.953,0.5"));
-						self:linear(0.5)
-						self:diffusealpha(0)
-					end;
-				end;
-		};
-		Def.Quad{ --JudgeHighlight W2
-				Name="JudgeHighlightW2";
-				InitCommand=cmd(x,-5+framex;y,10+framey;zoomto,55,5;diffuse,color("1,1,1,0.0");horizalign,left;vertalign,top;visible,true);
-				JudgmentMessageCommand=function(self,params)
-					if judgemode == 'On' and params.TapNoteScore == 'TapNoteScore_W2' then
-						self:stoptweening();
-						self:visible(true);
-						self:diffusealpha(0);
-						--self:y(framey+10);
-						self:linear(0.1);
-						self:diffuse(color("1,0.8,0,0.4"));
-						self:linear(0.5)
-						self:diffusealpha(0)
-						--judgestats["TapNoteScore_W2"] = judgestats["TapNoteScore_W2"] + 1
-					end;
-				end;
-		};
-		Def.Quad{ --JudgeHighlight W3
-				Name="JudgeHighlightW3";
-				InitCommand=cmd(x,-5+framex;y,20+framey;zoomto,55,5;diffuse,color("1,1,1,0.0");horizalign,left;vertalign,top;visible,true);
-				JudgmentMessageCommand=function(self,params)
-					if judgemode == 'On' and params.TapNoteScore == 'TapNoteScore_W3' then
-						self:stoptweening();
-						self:visible(true);
-						self:diffusealpha(0);
-						--self:y(framey+20);
-						self:linear(0.1);
-						self:diffuse(color("0.4,0.8,0.4,0.4"));
-						self:linear(0.5)
-						self:diffusealpha(0)
-						--judgestats["TapNoteScore_W3"] = judgestats["TapNoteScore_W3"] + 1
-					end;
-				end;
-		};
-		Def.Quad{ --JudgeHighlight W4
-				Name="JudgeHighlightW4";
-				InitCommand=cmd(x,-5+framex;y,30+framey;zoomto,55,5;diffuse,color("1,1,1,0.0");horizalign,left;vertalign,top;visible,true);
-				JudgmentMessageCommand=function(self,params)
-					if judgemode == 'On' and params.TapNoteScore == 'TapNoteScore_W4' then
-						self:stoptweening();
-						self:visible(true);
-						self:diffusealpha(0);
-						--self:y(framey+30);
-						self:linear(0.1);
-						self:diffuse(color("0.35,0.46,0.73,0.5"));
-						self:linear(0.5)
-						self:diffusealpha(0)
-						--judgestats["TapNoteScore_W4"] = judgestats["TapNoteScore_W4"] + 1
-					end;
-				end;
-		};
-		Def.Quad{ --JudgeHighlight W5
-				Name="JudgeHighlightW5";
-				InitCommand=cmd(x,-5+framex;y,40+framey;zoomto,55,5;diffuse,color("1,1,1,0.0");horizalign,left;vertalign,top;visible,true);
-				JudgmentMessageCommand=function(self,params)
-					if judgemode == 'On' and params.TapNoteScore == 'TapNoteScore_W5' then
-						self:stoptweening();
-						self:visible(true);
-						self:diffusealpha(0);
-						--self:y(framey+40);
-						self:linear(0.1);
-						self:diffuse(color("0.78,0.48,1,0.5"));
-						self:linear(0.5)
-						self:diffusealpha(0)
-						--judgestats["TapNoteScore_W5"] = judgestats["TapNoteScore_W5"] + 1
-					end;
-				end;
-		};
-		Def.Quad{ --JudgeHighlight Miss
-				Name="JudgeHighlightMiss";
-				InitCommand=cmd(x,-5+framex;y,50+framey;zoomto,55,5;diffuse,color("1,1,1,0.0");horizalign,left;vertalign,top;visible,true);
-				JudgmentMessageCommand=function(self,params)
-					if judgemode == 'On' and params.TapNoteScore == 'TapNoteScore_Miss' then
-						self:stoptweening();
-						self:visible(true);
-						self:diffusealpha(0);
-						--self:y(framey+50);
-						self:linear(0.1);
-						self:diffuse(color("0.85,0.33,0.33,0.5"));
-						self:linear(0.5)
-						self:diffusealpha(0)
-						--judgestats["TapNoteScore_Miss"] = judgestats["TapNoteScore_Miss"] + 1
-					end;
-				end;
-		};
-		Def.Quad{ --HoldHighlightOK
-				Name="HoldHighlightOK";
-				InitCommand=cmd(x,-5+framex;y,60+framey;zoomto,55,5;diffuse,color("1,1,1,0.0");horizalign,left;vertalign,top;visible,true);
-				JudgmentMessageCommand=function(self,params)
-					if judgemode == 'On' and params.HoldNoteScore == 'HoldNoteScore_Held' then
-						self:stoptweening();
-						self:visible(true);
-						self:diffusealpha(0);
-						--self:y(framey+60);
-						self:linear(0.1);
-						self:diffuse(color("1,0.8,0,0.4"));
-						self:linear(0.5)
-						self:diffusealpha(0)
-						--judgestats["HoldNoteScore_Held"] = judgestats["HoldNoteScore_Held"] + 1
-					end;
-				end;
-		};
-		Def.Quad{ --HoldHighlightNG
-				Name="HoldHighlightNG";
-				InitCommand=cmd(x,-5+framex;y,70+framey;zoomto,55,5;diffuse,color("1,1,1,0.0");horizalign,left;vertalign,top;visible,true);
-				JudgmentMessageCommand=function(self,params)
-					if judgemode == 'On' and params.HoldNoteScore == 'HoldNoteScore_LetGo' then
-						self:stoptweening();
-						self:visible(true);
-						self:diffusealpha(0);
-						--self:y(framey+70);
-						self:linear(0.1);
-						self:diffuse(color("0.85,0.33,0.33,0.5"));
-						self:linear(0.5)
-						self:diffusealpha(0)
-						--judgestats["HoldNoteScore_LetGo"] = judgestats["HoldNoteScore_LetGo"] + 1
-					end;
-				end;
-		};
-        LoadFont("Common Normal") .. { --JudgeLetters W1
-                Name="P1W1";
-				InitCommand=cmd(x,0+framex;y,0+framey;zoom,0.4;horizalign,left);
-				BeginCommand=function(self)
-					self:settext("MA")
-					self:diffuse(color("#99ccff"))
-				end;
-        };
-        LoadFont("Common Normal") .. { --JudgeLetters W2
-                Name="P1W2";
-                InitCommand=cmd(x,0+framex;y,10+framey;zoom,0.4;horizalign,left);
-				BeginCommand=function(self)
-					self:settext("PR")
-					self:diffuse(HSV(48,0.8,0.95))
-				end;
-        };
-		LoadFont("Common Normal") .. { --JudgeLetters W3
-                Name="P1W3";
-                InitCommand=cmd(x,0+framex;y,20+framey;zoom,0.4;horizalign,left);
-				BeginCommand=function(self)
-					self:settext("GR")
-					self:diffuse(HSV(160,0.9,0.8))
-				end;
-        };
-		LoadFont("Common Normal") .. { --JudgeLetters W4
-                Name="P1W4";
-                InitCommand=cmd(x,0+framex;y,30+framey;zoom,0.4;horizalign,left);
-				BeginCommand=function(self)
-					self:settext("GD")
-					self:diffuse(HSV(200,0.9,1))
-				end;
-        };
-		LoadFont("Common Normal") .. { --JudgeLetters W5
-                Name="P1W5";
-                InitCommand=cmd(x,0+framex;y,40+framey;zoom,0.4;horizalign,left);
-				BeginCommand=function(self)
-					self:settext("BD")
-					self:diffuse(HSV(320,0.9,1))
-				end;
-        };
-		LoadFont("Common Normal") .. { --JudgeLetters Miss
-                Name="P1Miss";
-                InitCommand=cmd(x,0+framex;y,50+framey;zoom,0.4;horizalign,left);
-				BeginCommand=function(self)
-					self:settext("MS")
-					self:diffuse(HSV(0,0.8,0.8))
-				end;
-        };
-		LoadFont("Common Normal") .. { --JudgeLetters OK
-                Name="P1OK";
-                InitCommand=cmd(x,0+framex;y,60+framey;zoom,0.4;horizalign,left);
-				BeginCommand=function(self)
-					self:settext("OK")
-					self:diffuse(HSV(48,0.8,0.95))
-				end;
-        };
-		LoadFont("Common Normal") .. { --JudgeLetters NG
-                Name="P1NG";
-                InitCommand=cmd(x,0+framex;y,70+framey;zoom,0.4;horizalign,left);
-				BeginCommand=function(self)
-					self:settext("NG")
-					self:diffuse(HSV(0,0.8,0.8))
-				end;
-        };
-        LoadFont("Common Normal") .. { --JudgeCount  W1
-                Name="P1W1count";
-				InitCommand=cmd(x,45+framex;y,0+framey;zoom,0.35;horizalign,right);
-				BeginCommand=function(self)
-					self:settext(0)
-				end;
-				SetCommand=function(self)
-					if P1Fail == false then
-						local count = PJudge(PLAYER_1,'TapNoteScore_W1')
-						judgestats["TapNoteScore_W1"] = count
-						self:settext(count)
-					end;
-				end;
-				JudgmentMessageCommand=cmd(queuecommand,"Set");
-		};
-        LoadFont("Common Normal") .. { --JudgeCount  W2
-                Name="P1W2count";
-                InitCommand=cmd(x,45+framex;y,10+framey;zoom,0.35;horizalign,right);
-				BeginCommand=function(self)
-					self:settext(0)
-				end;
-				SetCommand=function(self)
-					if P1Fail == false then
-						local count = PJudge(PLAYER_1,'TapNoteScore_W2')
-						judgestats["TapNoteScore_W2"] = count
-						self:settext(count)
-					end;
-				end;
-				JudgmentMessageCommand=cmd(queuecommand,"Set");
-		};
-		LoadFont("Common Normal") .. { --JudgeCount  W3
-                Name="P1W3count";
-                InitCommand=cmd(x,45+framex;y,20+framey;zoom,0.35;horizalign,right);
- 				BeginCommand=function(self)
-					self:settext(0)
-				end;
-				SetCommand=function(self)
-					if P1Fail == false then
-						local count = PJudge(PLAYER_1,'TapNoteScore_W3')
-						judgestats["TapNoteScore_W3"] = count
-						self:settext(count)
-					end;
-				end;
-				JudgmentMessageCommand=cmd(queuecommand,"Set");
-		};
-		LoadFont("Common Normal") .. { --JudgeCount  W4
-                Name="P1W4count";
-                InitCommand=cmd(x,45+framex;y,30+framey;zoom,0.35;horizalign,right);
-				BeginCommand=function(self)
-					self:settext(0)
-				end;
-				SetCommand=function(self)
-					if P1Fail == false then
-						local count = PJudge(PLAYER_1,'TapNoteScore_W4')
-						judgestats["TapNoteScore_W4"] = count
-						self:settext(count)
-					end;
-				end;
-				JudgmentMessageCommand=cmd(queuecommand,"Set");
-		};
-		LoadFont("Common Normal") .. { --JudgeCount  W5
-                Name="P1W5count";
-                InitCommand=cmd(x,45+framex;y,40+framey;zoom,0.35;horizalign,right);
-				BeginCommand=function(self)
-					self:settext(0)
-				end;
-				SetCommand=function(self)
-					if P1Fail == false then
-						local count = PJudge(PLAYER_1,'TapNoteScore_W5')
-						judgestats["TapNoteScore_W5"] = count
-						self:settext(count)
-					end;
-				end;
-				JudgmentMessageCommand=cmd(queuecommand,"Set");
-		};
-		LoadFont("Common Normal") .. { --JudgeCount  Miss
-                Name="P1Misscount";
-                InitCommand=cmd(x,45+framex;y,50+framey;zoom,0.35;horizalign,right);
-				BeginCommand=function(self)
-					self:settext(0)
-				end;
-				SetCommand=function(self)
-					if P1Fail == false then
-						local count = PJudge(PLAYER_1,'TapNoteScore_Miss')
-						judgestats["TapNoteScore_Miss"] = count
-						self:settext(count)
-					end;
-				end;
-				JudgmentMessageCommand=cmd(queuecommand,"Set");
-		};
-		LoadFont("Common Normal") .. { --JudgeCount  OK
-                Name="P1OKcount";
-                InitCommand=cmd(x,45+framex;y,60+framey;zoom,0.35;horizalign,right);
-				BeginCommand=function(self)
-					self:settext(0)
-				end;
-				SetCommand=function(self)
-					if P1Fail == false then
-						local count = PHJudge(PLAYER_1,'HoldNoteScore_Held')
-						judgestats["HoldNoteScore_Held"] = count
-						self:settext(count)
-					end;
-				end;
-				JudgmentMessageCommand=cmd(queuecommand,"Set");
-        };
-		LoadFont("Common Normal") .. { --JudgeCount  NG
-                Name="P1NGcount";
-                InitCommand=cmd(x,45+framex;y,70+framey;zoom,0.35;horizalign,right);
-				BeginCommand=function(self)
-					self:settext(0)
-				end;
-				SetCommand=function(self)
-					if P1Fail == false then
-						local count = PHJudge(PLAYER_1,'HoldNoteScore_LetGo')
-						local misscount = PHJudge(PLAYER_1,'HoldNoteScore_LetGo')
-						judgestats["HoldNoteScore_LetGo"] = count
-						judgestats["HoldNoteScore_Missed"] = misscount
-						self:settext(count)
-					end;
-				end;
-				JudgmentMessageCommand=cmd(queuecommand,"Set");
-        };
-		Def.Actor{ -- Minehit Count
-			Name="P1MineHitCount";
-			InitCommand=cmd();
-			SetCommand=function(self)
-				if P1Fail == false then
-					local count = PJudge(PLAYER_1,"TapNoteScore_HitMine")
-					judgestats["TapNoteScore_HitMine"] = count
-				end;
-			end;
-			JudgmentMessageCommand=cmd(queuecommand,"Set");
-		};
 		Def.Actor{ -- ScoreCalc
 			SetCommand=function(self)
-				if P1Fail == false then
-					dpscore = (judgestats["TapNoteScore_W1"]*scoreweight["TapNoteScore_W1"]+judgestats["TapNoteScore_W2"]*scoreweight["TapNoteScore_W2"]+judgestats["TapNoteScore_W3"]*scoreweight["TapNoteScore_W3"]+judgestats["TapNoteScore_W4"]*scoreweight["TapNoteScore_W4"]+judgestats["TapNoteScore_W5"]*scoreweight["TapNoteScore_W5"]+judgestats["TapNoteScore_Miss"]*scoreweight["TapNoteScore_Miss"]+judgestats["TapNoteScore_HitMine"]*scoreweight["TapNoteScore_HitMine"]+judgestats["HoldNoteScore_Held"]*scoreweight["HoldNoteScore_Held"]+judgestats["HoldNoteScore_LetGo"]*scoreweight["HoldNoteScore_LetGo"])
-					percentscore = (judgestats["TapNoteScore_W1"]*pweight["TapNoteScore_W1"]+judgestats["TapNoteScore_W2"]*pweight["TapNoteScore_W2"]+judgestats["TapNoteScore_W3"]*pweight["TapNoteScore_W3"]+judgestats["TapNoteScore_W4"]*pweight["TapNoteScore_W4"]+judgestats["TapNoteScore_W5"]*pweight["TapNoteScore_W5"]+judgestats["TapNoteScore_Miss"]*pweight["TapNoteScore_Miss"]+judgestats["TapNoteScore_HitMine"]*pweight["TapNoteScore_HitMine"]+judgestats["HoldNoteScore_Held"]*pweight["HoldNoteScore_Held"]+judgestats["HoldNoteScore_LetGo"]*pweight["HoldNoteScore_LetGo"])
-					migsscore = (judgestats["TapNoteScore_W1"]*migsweight["TapNoteScore_W1"]+judgestats["TapNoteScore_W2"]*migsweight["TapNoteScore_W2"]+judgestats["TapNoteScore_W3"]*migsweight["TapNoteScore_W3"]+judgestats["TapNoteScore_W4"]*migsweight["TapNoteScore_W4"]+judgestats["TapNoteScore_W5"]*migsweight["TapNoteScore_W5"]+judgestats["TapNoteScore_Miss"]*migsweight["TapNoteScore_Miss"]+judgestats["TapNoteScore_HitMine"]*migsweight["TapNoteScore_HitMine"]+judgestats["HoldNoteScore_Held"]*migsweight["HoldNoteScore_Held"]+judgestats["HoldNoteScore_LetGo"]*migsweight["HoldNoteScore_LetGo"])
+				if isFailing(PLAYER_1) == false then
+					dpscore = getCurScore(PLAYER_1,0)
+					percentscore = getCurScore(PLAYER_1,1)
+					migsscore = getCurScore(PLAYER_1,2)
 				end;
-				curmaxdp = (totnotes*scoreweight["TapNoteScore_W1"]+totholds*scoreweight["HoldNoteScore_Held"])
-				curmaxps = (totnotes*pweight["TapNoteScore_W1"]+totholds*pweight["HoldNoteScore_Held"])
-				curmaxmigs = (totnotes*migsweight["TapNoteScore_W1"]+totholds*migsweight["HoldNoteScore_Held"])
+				curmaxdp = getCurMaxScore(PLAYER_1,0)
+				curmaxps = getCurMaxScore(PLAYER_1,1)
+				curmaxmigs = getCurMaxScore(PLAYER_1,2)
 				dppercent = string.format("%.2f",dpscore/curmaxdp)
 				pspercent = string.format("%.2f",percentscore/curmaxps)
 				migspercent = string.format("%.2f",migsscore/curmaxmigs)
@@ -636,52 +296,31 @@ local t = Def.ActorFrame {
 			end;
 			JudgmentMessageCommand=function(self,params)
 				if params.HoldNoteScore then
-					totholds = totholds + 1;
-					judgetable[#judgetable+1] = params.HoldNoteScore
+					addJudge(PLAYER_1,params.HoldNoteScore,true)
+					judgetable = getJudgeTable(PLAYER_1)
 				elseif params.TapNoteScore == 'TapNoteScore_HitMine' or params.TapNoteScore == 'TapNoteScore_AvoidMine' then
-					totmines = totmines + 1;
-					judgetable[#judgetable+1] = params.TapNoteScore
+					addJudge(PLAYER_1,params.TapNoteScore,false)
+					totmines = getCurMaxMines(PLAYER_1)
+					judgetable = getJudgeTable(PLAYER_1)
 				else
-					totnotes = totnotes + 1;
-					judgetable[#judgetable+1] = params.TapNoteScore
+					addJudge(PLAYER_1,params.TapNoteScore,false)
+					totnotes = getCurMaxNotes(PLAYER_1)
+					judgetable = getJudgeTable(PLAYER_1)
 					if params.TapNoteScore ~= 'TapNoteScore_Miss' then
 						if not params.Early then
-							protimingtable[#protimingtable+1] = -params.TapNoteOffset
+							addOffset(PLAYER_1,params.TapNoteOffset)
+							protimingtable = getOffsetTable(PLAYER_1)
 							protimingsum = protimingsum - params.TapNoteOffset
 						else
-							protimingtable[#protimingtable+1] = -params.TapNoteOffset
+							addOffset(PLAYER_1,params.TapNoteOffset)
+							protimingtable = getOffsetTable(PLAYER_1)
 							protimingsum = protimingsum + params.TapNoteOffset
 						end;
 					end;
 				end;
-				--halfassed attempt at fixing hold issue, might cause graph issues with songs with just holds at ending.
-				--to be removed after it's fixed.
-				--edit: fixed as of sm5b4
-				--[[
-				if totnotes == maxnotes then
-					if totholds ~= maxholds then
-						totholds = maxholds
-					end;
-				end;
-				--]]
 				self:queuecommand("Set");
 			end;
 		};
-		LoadFont("Common Normal") .. { --grade
-                Name="curGrade";
-                InitCommand=cmd(x,framex+0;y,framey+80;zoom,0.45;horizalign,left);
-				BeginCommand=function(self)
-					self:settext(gradestring[GetGradeFromPercent(0)])
-				end;
-				SetCommand=function(self)
-					local temp = GetGradeFromPercent(0)
-					if curmaxdp ~= 0 then -- bunch of error messages pop up when getgradefrompercent is called with a undefined value
-						temp = curavggrade(dpscore,curmaxdp,percentscore,curmaxps,PLAYER_1)
-					end;
-					self:settext(gradestring[temp])
-				end;
-				JudgmentMessageCommand=cmd(queuecommand,"Set");
-        };
 	};
 
 	-----------------------------------------
@@ -1622,91 +1261,7 @@ local t = Def.ActorFrame {
 				end;
 			end;
 		};
-		LoadFont("Common Normal") .. { -- Target Difference / Ghost Score
-			Name="TargetDiff";
-			InitCommand=cmd(x,SCREEN_CENTER_X+52;y,SCREEN_CENTER_Y+23;zoom,0.45;diffuse,color("#ff9999");horizalign,left);
-			BeginCommand=function(self)
-				self:settext('+0')
-				self:visible(false)
-				if GAMESTATE:GetPlayerState(PLAYER_1):GetCurrentPlayerOptions():UsingReverse() == true then
-					self:y(SCREEN_CENTER_Y-36)
-				end;
-				if center1P == false then
-					self:x((SCREEN_CENTER_X*0.57)+52)
-				end;
-			end;
-			SetCommand=function(self,params)
-				if STATSMAN:GetCurStageStats():GetPlayerStageStats(PLAYER_1):GetCurrentCombo() > 1 then
-					self:visible(true);
-				else
-					self:visible(false);
-				end;
-				local targetdiff = 0
-				if graphmode == "DP" then
-					targetdiff = dpscore-(math.ceil(curmaxdp*target))
-				elseif graphmode == "PS" then
-					targetdiff = percentscore-(math.ceil(curmaxps*target))
-				elseif graphmode == "MIGS" then
-					targetdiff = migsscore-(math.ceil(curmaxmigs*target))
-				end;
-				if targetdiff > 0 then
-					self:settext('+'..targetdiff)
-					self:diffuse(color("#66ccff"))
-				elseif targetdiff == 0 then
-					self:settext('+'..targetdiff)
-					self:diffuse(color("#FFFFFF"))
-				else
-					self:settext('-'..(math.abs(targetdiff)))
-					self:diffuse(color("#FF9999"))
-				end;
-			end;
-			JudgmentMessageCommand=function(self,params)
-				self:queuecommand("Set");
-			end;
-		};
-		LoadFont("Common Normal") .. { -- Current/Average Percentage Score
-			Name="AvgScore";
-			InitCommand=cmd(x,SCREEN_CENTER_X+50;y,SCREEN_CENTER_Y+23;zoom,0.45;diffuse,color("#ffffff");horizalign,right);
-			BeginCommand=function(self)
-				self:settext('0.00%')
-				self:visible(false)
-				if GAMESTATE:GetPlayerState(PLAYER_1):GetCurrentPlayerOptions():UsingReverse() == true then
-					self:y(SCREEN_CENTER_Y-36)
-				end;
-				if center1P == false then
-					self:x((SCREEN_CENTER_X*0.57)+50)
-				end;
-			end;
-			SetCommand=function(self,params)
-				if STATSMAN:GetCurStageStats():GetPlayerStageStats(PLAYER_1):GetCurrentCombo() > 1 then
-					self:visible(true);
-				else
-					self:visible(false);
-				end;
-				if avgscoremode == "DP" then
-					if curmaxdp ~= 0 then
-						self:settextf("%.2f%%",(math.floor(dpscore/curmaxdp*10000))/100); 
-					else
-						self:settext('0.00%')
-					end;
-				elseif avgscoremode == "PS" then
-					if curmaxps ~= 0 then
-						self:settextf("%.2f%%",(math.floor(percentscore/curmaxps*10000))/100); 
-					else
-						self:settext('0.00%')
-					end;
-				elseif avgscoremode == "MIGS" then
-					if curmaxmigs ~= 0 then
-						self:settextf("%.2f%%",(math.floor(migsscore/curmaxmigs*10000))/100); 
-					else
-						self:settext('0.00%')
-					end;
-				end;
-			end;
-			JudgmentMessageCommand=function(self)
-				self:queuecommand("Set");
-			end;
-		};
+		
 		--[[
 		LoadFont("Common Normal") .. { -- Protiming
 			Name="Protiming";
