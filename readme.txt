@@ -1,3 +1,12 @@
+no longer developing/supporting this fork aside from minor bugfixes and testing random features to throw at the other theme.
+
+
+
+The original readme is below
+=======================================================
+
+
+
  ___________________
 |            SSC-ULT| spinal shark collective release information
 |                   | product    code: SSC-ULT
